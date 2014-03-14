@@ -6,11 +6,13 @@
 
 package Controller;
 
+import Model.User;
+
 /**
  * Makes security checks before forwarding data to the same method in the facade class
  * @author dst
  */
-public class SecurityController {
+public class SecurityController implements Controller {
     
     private static SecurityController controller = null;
 
@@ -18,7 +20,7 @@ public class SecurityController {
         
     }
     
-    public static SecurityController getInstance()
+    public static Controller getInstance()
     {
         if(controller==null)
             controller = new SecurityController();
@@ -29,5 +31,25 @@ public class SecurityController {
     public Model.User loadUser(String Username, String currentUser)
     {
         return Model.ModelFactory.getUser(Username);
+    }
+
+    @Override
+    public User getUser(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public User[] getAllUsers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean createUser(String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean updateUser(String username, String password, String name, String address, String hobbies, String friends) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

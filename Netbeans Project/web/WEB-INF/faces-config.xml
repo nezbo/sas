@@ -28,5 +28,10 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>SecurityBean</managed-bean-name>
+        <managed-bean-class>View.SecurityBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
     
 </faces-config>
