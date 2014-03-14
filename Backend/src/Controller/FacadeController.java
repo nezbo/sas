@@ -7,9 +7,9 @@
 package Controller;
 
 /**
- *
+ * Serves as the entry point to all other controllers, for the view class, through SecurityController
  * @author dst
  */
-public interface FacadeController {
+public class FacadeController implements Controller {
     
 }
