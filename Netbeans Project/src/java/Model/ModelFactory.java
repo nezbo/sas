@@ -6,13 +6,13 @@
 
 package Model;
 import java.util.HashMap;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author dst
  */
-import java.sql.ResultSet;
-import java.sql.SQLException;
 public class ModelFactory {
     
     private static HashMap<String, User> loadedUsers = new HashMap<String, User>();
