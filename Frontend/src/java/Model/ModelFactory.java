@@ -5,19 +5,17 @@
  */
 
 package Model;
-
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
-
+import java.util.HashMap;
+import java.sql.*;
 /**
  *
  * @author dst
  */
-@Dependent
-@Named
+import java.sql.ResultSet;
+import java.sql.SQLException;
 public class ModelFactory {
     
-    
+    private static HashMap<String, User> loadedUsers = new HashMap<String, User>();
     
     /**
      * Returns a specific user based on username
@@ -25,6 +23,28 @@ public class ModelFactory {
      */
     public static User getUser(String username)
     {
-        return new User(null, username, null, null);
+        if (!loadedUsers.containsKey(username))
+        {
+            ResultSet rs = null;
+            String name = ResultSetGetString(rs, "name");
+            String adress = ResultSetGetString(rs, "adress");
+            String hobbies = ResultSetGetString(rs, "hobbies");
+            User user = new User(name, username, adress, hobbies); //TODO: Load user from database
+            loadedUsers.put(username, user);
+        }
+
+        return loadedUsers.get(username);
+    }
+    
+    private static String ResultSetGetString(ResultSet rs, String s)
+    {
+        try
+        {
+            return rs.getString(s);
+        }
+        catch (SQLException e)
+        {
+            return "FUUUUUUCK"; //TODO: Remove FUUUUUUUCK
+        }
     }
 }
