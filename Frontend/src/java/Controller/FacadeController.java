@@ -11,13 +11,5 @@ package Controller;
  * @author dst
  */
 public class FacadeController implements Controller {
-    private static FacadeController Controller;
     
-    
-    public static Controller getInstance()
-    {
-        if(Controller==null)
-             Controller = new FacadeController();
-        return Controller;
-    }
 }

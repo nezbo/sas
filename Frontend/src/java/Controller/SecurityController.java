@@ -10,17 +10,19 @@ package Controller;
  * Makes security checks before forwarding data to the same method in the facade class
  * @author dst
  */
-public class SecurityController implements Controller {
+public class SecurityController {
     
-    private static SecurityController Controller = null;
+    private static SecurityController controller = null;
 
-    
+    private SecurityController() {
+        
+    }
     
     public static SecurityController getInstance()
     {
-        if(Controller==null)
-            Controller = new SecurityController();
-        return Controller;        
+        if(controller==null)
+            controller = new SecurityController();
+        return controller;        
     }
     
     
