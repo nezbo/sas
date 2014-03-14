@@ -7,14 +7,13 @@
     </h:head>
     <h:body>
         <h:form>
-            
             Username:
-            <h:inputText value="#{SecurityBean.name}" id="username" size="15" maxlength="31"/>
+            <h:inputText id="username" size="15" maxlength="31" value="#{SecurityBean.userName}"/>
             <br/>
             Password:
-            <h:inputText id="password" size="15" maxlength="256"/>
+            <h:inputText id="password" size="15" maxlength="255" value="#{SecurityBean.password}"/>
             <br/>
-            <h:commandButton id="btnLogin" value="Submit" action="user"/>
+            <h:commandButton id="btnLogin" value="Submit" action="#{SecurityBean.login}"/>
             <h:commandButton id="btnCreate" value="Create Profile" action="create"/>
         </h:form>
             

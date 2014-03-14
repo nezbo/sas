@@ -27,8 +27,17 @@ public class View {
     }
     public boolean login(String userName, String password)
     {
-        return false;
+        // TODO: Dummy code to see if it works, this should ask the 
+        // SecurityController for logging in (which should query the Model)
+        return userName.equals("admin") && password.equals("admin");
     }
     
-    
+    public boolean createUser(String userName, String password, String repPassword){
+        if(!password.equals(repPassword)) return false;
+        
+        // TODO: Dummy code to see if it works, this should ask the
+        // SecurityController for a sucessful creation and (somehow) rely any
+        // problems back to the UI.
+        return true;
+    }
 }

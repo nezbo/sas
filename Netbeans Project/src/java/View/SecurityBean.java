@@ -6,7 +6,6 @@
 
 package View;
 
-
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
@@ -40,14 +39,9 @@ public class SecurityBean implements java.io.Serializable {
         this.password = password;
     }
     
-    
-    
-    
-    
-    public boolean Login()
+    public String login()
     {
-        
-        return false;
+        return View.getInstance().login(userName, password) ? "user" : "index";
     }
     
     
