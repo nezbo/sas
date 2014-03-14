@@ -7,7 +7,11 @@
 *.properties
 *.DS_Store
 
-# Netbeans stuff #
-build
-*/nbproject/build-impl.xml*
-*/nbproject/build-impl.xml
+# NetBeans specific #
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
