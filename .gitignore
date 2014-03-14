@@ -6,3 +6,5 @@
 *.ear
 *.properties
 *.DS_Store
+
+build
