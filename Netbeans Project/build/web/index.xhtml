@@ -3,13 +3,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Sassy</title>
+        <title>Login</title>
     </h:head>
     <h:body>
-        
         <h:form>
-            <h:inputText id="userId" size="2" maxlength="2"/>
-            <h:commandButton id="btn" value="Submit" action="home"/>
+            Username:
+            <h:inputText id="username" size="15" maxlength="31"/>
+            <br/>
+            Password:
+            <h:inputText id="password" size="15" maxlength="256"/>
+            <br/>
+            <h:commandButton id="btnLogin" value="Submit" action="user"/>
+            <h:commandButton id="btnCreate" value="Create Profile" action="create"/>
         </h:form>
             
     </h:body>
