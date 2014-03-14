@@ -1,12 +1,3 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.properties
-*.DS_Store
-
 # NetBeans specific #
 nbproject/private/
 build/
@@ -15,3 +6,11 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
