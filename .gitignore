@@ -7,4 +7,6 @@
 *.properties
 *.DS_Store
 
+# Netbeans stuff #
 build
+nbproject/build-impl.xml~
