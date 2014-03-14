@@ -6,6 +6,10 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+genfiles.properties
+private.xml
+build-impl.xml
+build-impl.xml~
 
 # Class Files #
 *.class
@@ -16,7 +20,8 @@ nb-configuration.xml
 *.war
 *.ear
 
+# Mac OSX #
 .DS_Store
-private.xml
-build-impl.xml
-build-impl.xml~
+
+# Local configuration files #
+*.conf.xml
