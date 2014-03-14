@@ -17,3 +17,6 @@ nb-configuration.xml
 *.ear
 
 .DS_Store
+private.xml
+build-impl.xml
+build-impl.xml~

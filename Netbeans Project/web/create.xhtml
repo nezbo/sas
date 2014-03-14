@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Login</title>
+        <title>Create Profile</title>
     </h:head>
     <h:body>
         <h:form>
@@ -13,10 +13,11 @@
             Password:
             <h:inputText id="password" size="15" maxlength="256"/>
             <br/>
-            <h:commandButton id="btnLogin" value="Submit" action="user"/>
-            <h:commandButton id="btnCreate" value="Create Profile" action="create"/>
+            Repeat Password:
+            <h:inputText id="password2" size="15" maxlength="256"/>
+            <br/>
+            <h:commandButton id="btnCreate" value="Create" action="user"/>
         </h:form>
-            
     </h:body>
 </html>
 
