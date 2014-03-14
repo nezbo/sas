@@ -27,7 +27,7 @@ public class User {
         return name;
     }
 
-    public String getUserName() {
+    public String getUserName() {  
         return userName;
     }
 
@@ -38,7 +38,4 @@ public class User {
     public String getHobbies() {
         return hobbies;
     }
-        
-        
-        
 }
