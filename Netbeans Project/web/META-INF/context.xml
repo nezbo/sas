@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/ssasf14"/>
+<Context antiJARLocking="true" path="/ssasf14">
+    <Resource name="jdbc/login" auth="Container" type="javax.sql.DataSource"
+          maxActive="50" maxIdle="30" maxWait="10000"
+          username="sassy_login" password="trappehule" 
+          driverClassName="com.mysql.jdbc.Driver"
+          url="jdbc:mysql://localhost:3306/sassy"/>
+    <Resource name="jdbc/user" auth="Container" type="javax.sql.DataSource"
+          maxActive="50" maxIdle="30" maxWait="10000"
+          username="sassy_user" password="cactuscactus" 
+          driverClassName="com.mysql.jdbc.Driver"
+          url="jdbc:mysql://localhost:3306/sassy"/>
+    <Resource name="jdbc/admin" auth="Container" type="javax.sql.DataSource"
+          maxActive="50" maxIdle="30" maxWait="10000"
+          username="sassy_user" password="bonzaiantenne" 
+          driverClassName="com.mysql.jdbc.Driver"
+          url="jdbc:mysql://localhost:3306/sassy"/>
+    
+</Context>
