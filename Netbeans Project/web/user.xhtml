@@ -1,7 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <f:metadata>
+        <f:viewParam name="user" value="#{ViewUserBean.username}" />
+    </f:metadata>
     <h:head>
         <title>Your Page</title>
     </h:head>
@@ -9,11 +13,11 @@
         <h:form>
         This is Your VERY OWN Page! "Wow I am at ze interwebs!"<br/>
         Name:
-        <h:inputText id="name" size="15" maxlength="255"/><br/>
+        <h:inputText id="name" size="15" maxlength="255" value="#{ViewUserBean.name}" disabled="#{ViewUserBean.isMyself}"/><br/>
         Address:
-        <h:inputText id="address" size="15" maxlength="255"/><br/>
+        <h:inputText id="address" size="15" maxlength="255" value="#{ViewUserBean.address}" disabled="#{ViewUserBean.isMyself}"/><br/>
         Hobbies:
-        <h:inputText id="address" size="15" maxlength="255"/><br/>
+        <h:inputText id="hobbies" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" disabled="#{ViewUserBean.isMyself}"/><br/>
         </h:form>
     </h:body>
 </html>

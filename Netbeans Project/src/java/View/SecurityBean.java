@@ -48,16 +48,12 @@ public class SecurityBean implements java.io.Serializable {
         // TODO: Dummy code to see if it works, this should ask the 
         // SecurityController for logging in (which should query the Model)
         authed = ControllerFactory.getController().authenticate(userName,password);
+        password = "";
         return authed ? "user" : "index";
     }
     
-    public boolean createUser(String userName, String password, String repPassword){
-        if(!password.equals(repPassword)) return false;
-        
-        // TODO: Dummy code to see if it works, this should ask the
-        // SecurityController for a sucessful creation and (somehow) rely any
-        // problems back to the UI.
-        return true;
+    public boolean isLoggedIn(){
+        return authed;
     }
     
     // Add business logic below. (Right-click in editor and choose

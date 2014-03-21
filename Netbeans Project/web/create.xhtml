@@ -8,15 +8,15 @@
     <h:body>
         <h:form>
             Username:
-            <h:inputText id="username" size="15" maxlength="31"/>
+            <h:inputText id="username" size="15" maxlength="31" value="#{CreateBean.username}"/>
             <br/>
             Password:
-            <h:inputSecret id="password" size="15" maxlength="256"/>
+            <h:inputSecret id="password" size="15" maxlength="256" value="#{CreateBean.password}"/>
             <br/>
             Repeat Password:
-            <h:inputSecret id="password2" size="15" maxlength="256"/>
+            <h:inputSecret id="password2" size="15" maxlength="256" value="#{CreateBean.password2}"/>
             <br/>
-            <h:commandButton id="btnCreate" value="Create" action="user"/>
+            <h:commandButton id="btnCreate" value="Create" action="#{CreateBean.createUser}"/>
         </h:form>
     </h:body>
 </html>

@@ -33,5 +33,15 @@
         <managed-bean-class>View.SecurityBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>CreateBean</managed-bean-name>
+        <managed-bean-class>View.CreateBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ViewUserBean</managed-bean-name>
+        <managed-bean-class>View.ViewUserBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
     
 </faces-config>
