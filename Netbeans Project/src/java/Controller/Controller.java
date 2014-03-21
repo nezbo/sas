@@ -38,6 +38,6 @@ public interface Controller {
     
     public boolean createUser(String username, String password);
     
-    public boolean updateUser(String username, String password, String name, String address, String hobbies, String friends);
+    public boolean updateUser(String oldUsername, String password, String name, String address, String hobbies, String friends);
             
 }

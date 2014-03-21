@@ -16,7 +16,7 @@ public class User {
         private String address;
         private String hobbies;
 
-    protected User(String name, String username, String address, String hobbies) {
+    public User(String name, String username, String address, String hobbies) {
         this.name = name;
         this.username = username;
         this.address = address;
@@ -37,5 +37,9 @@ public class User {
 
     public String getHobbies() {
         return hobbies;
+    }
+    
+    public String toString(){
+        return username + ": ["+name+", "+address+", "+hobbies+"]";
     }
 }
