@@ -21,6 +21,8 @@ build-impl.xml~
 *.war
 *.ear
 
+!**/lib/*
+
 # Mac OSX #
 .DS_Store
 
