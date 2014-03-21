@@ -33,7 +33,7 @@ public class FacadeController implements Controller {
     
     @Override
     public User getUser(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DBConnection.getUser(username);
     }
 
     @Override
@@ -43,12 +43,12 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean createUser(String username, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DBConnection.createUser(username, password);
     }
 
     @Override
-    public boolean updateUser(String username, String password, String name, String address, String hobbies, String friends) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean updateUser(String oldUsername, String password, String name, String address, String hobbies, String friends) {
+        return DBConnection.updateUser(oldUsername, password, name, address, hobbies, friends);
     }
     
 }
