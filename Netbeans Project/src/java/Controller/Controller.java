@@ -15,8 +15,17 @@ import Model.User;
  */
 public interface Controller {    
     
+    /**
+     * Gets a specific user's profile data (address, hobbies, etc)
+     * @param username The wanted username.
+     * @return A User object with the information from the database.
+     */
     public User getUser(String username);
     
+    /**
+     * Gets information for all users in the database, for searching etc.
+     * @return An array of User objects.
+     */
     public User[] getAllUsers();
     
     public boolean createUser(String username, String password);

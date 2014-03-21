@@ -20,7 +20,7 @@ public class FacadeController implements Controller {
         
     }
     
-    public static Controller getInstance()
+    protected static Controller getInstance()
     {
         if(controller==null)
             controller = new FacadeController();

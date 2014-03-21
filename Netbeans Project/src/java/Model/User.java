@@ -12,13 +12,13 @@ package Model;
  */
 public class User {
         private String name;
-        private String userName;
+        //private String userName; // This information is not public
         private String address;
         private String hobbies;
 
     protected User(String name, String userName, String address, String hobbies) {
         this.name = name;
-        this.userName = userName;
+        //this.userName = userName;
         this.address = address;
         this.hobbies = hobbies;
     }
@@ -27,9 +27,9 @@ public class User {
         return name;
     }
 
-    public String getUserName() {  
+    /*public String getUserName() {  
         return userName;
-    }
+    }*/
 
     public String getAddress() {
         return address;

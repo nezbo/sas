@@ -20,7 +20,7 @@ public class SecurityController implements Controller {
         
     }
     
-    public static Controller getInstance()
+    protected static Controller getInstance()
     {
         if(controller==null)
             controller = new SecurityController();
