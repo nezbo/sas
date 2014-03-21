@@ -6,6 +6,7 @@
 
 package Controller;
 
+import Database.DBConnection;
 import Model.User;
 
 /**
@@ -27,7 +28,7 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean authenticate(String username, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DBConnection.validUserLogin(username, password);
     }
     
     @Override

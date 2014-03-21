@@ -40,6 +40,8 @@ public class DBConnection {
     private static Connection loginConnection;
     private static Connection  userConnection;
     private static Connection adminConnection;
+    
+    private static final String pLoginStmt = "SELECT COUNT(*) AS count FROM User WHERE username = ? AND password = MD5(?);";
 
     /* "Constructor" */
     static {
@@ -64,8 +66,10 @@ public class DBConnection {
     public static boolean validUserLogin(String username, String cleartextPassword){
         try {
             Connection conn = getLoginConnection();
-            Statement stmt = conn.createStatement();
-            stmt.executeQuery("SELECT COUNT(*) AS count FROM User WHERE username = '"+username+"' AND password = MD5('"+cleartextPassword+"');");
+            PreparedStatement stmt = conn.prepareStatement(pLoginStmt); //TODO: make this only once
+            stmt.setString(1, username);
+            stmt.setString(2, cleartextPassword);
+            stmt.executeQuery();
             stmt.getResultSet().next();
             int count = (int) (long)stmt.getResultSet().getObject(1);
             return count > 0;
