@@ -16,9 +16,7 @@ public class FacadeController implements Controller {
 
     private static FacadeController controller = null;
 
-    private FacadeController() {
-        
-    }
+    private FacadeController() {}
     
     protected static Controller getInstance()
     {
@@ -26,6 +24,12 @@ public class FacadeController implements Controller {
             controller = new FacadeController();
         return controller;        
     }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     public User getUser(String username) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

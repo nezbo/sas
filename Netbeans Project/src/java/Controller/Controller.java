@@ -13,7 +13,15 @@ import Model.User;
  *
  * @author dst
  */
-public interface Controller {    
+public interface Controller {
+    
+    /**
+     * Checks if a username and password matches
+     * @param username The username
+     * @param password The matching password
+     * @return True if the username exists and has the given password
+     */
+    public boolean authenticate(String username, String password);
     
     /**
      * Gets a specific user's profile data (address, hobbies, etc)

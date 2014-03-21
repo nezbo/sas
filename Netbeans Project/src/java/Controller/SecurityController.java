@@ -34,22 +34,32 @@ public class SecurityController implements Controller {
     }
 
     @Override
+    public boolean authenticate(String username, String password) {
+        // TODO SECURITY
+        return FacadeController.getInstance().authenticate(username, password);
+    }
+
+    @Override
     public User getUser(String username) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO SECURITY
+        return FacadeController.getInstance().getUser(username);
     }
 
     @Override
     public User[] getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO SECURITY
+        return FacadeController.getInstance().getAllUsers();
     }
 
     @Override
     public boolean createUser(String username, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO SECURITY
+        return FacadeController.getInstance().createUser(username, password);
     }
 
     @Override
     public boolean updateUser(String username, String password, String name, String address, String hobbies, String friends) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // TODO SECURITY
+        return FacadeController.getInstance().updateUser(username, password, name, address, hobbies, friends);
     }
 }

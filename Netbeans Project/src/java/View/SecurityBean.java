@@ -8,6 +8,7 @@ package View;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import Controller.ControllerFactory;
 
 /**
  *
@@ -19,6 +20,7 @@ public class SecurityBean implements java.io.Serializable {
 
     private String userName = "";
     private String password = "";
+    private boolean authed = false;
     
     private boolean UserLogin = false;
     private boolean AdminLogin = false;
@@ -41,12 +43,20 @@ public class SecurityBean implements java.io.Serializable {
     
     public String login()
     {
-        return View.getInstance().login(userName, password) ? "user" : "index";
+        // TODO: Dummy code to see if it works, this should ask the 
+        // SecurityController for logging in (which should query the Model)
+        authed = ControllerFactory.getController().authenticate(userName,password);
+        return authed ? "user" : "index";
     }
     
-    
-    
-
+    public boolean createUser(String userName, String password, String repPassword){
+        if(!password.equals(repPassword)) return false;
+        
+        // TODO: Dummy code to see if it works, this should ask the
+        // SecurityController for a sucessful creation and (somehow) rely any
+        // problems back to the UI.
+        return true;
+    }
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
