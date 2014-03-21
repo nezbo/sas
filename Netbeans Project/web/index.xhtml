@@ -11,7 +11,7 @@
             <h:inputText id="username" size="15" maxlength="31" value="#{SecurityBean.userName}"/>
             <br/>
             Password:
-            <h:inputText id="password" size="15" maxlength="255" value="#{SecurityBean.password}"/>
+            <h:inputSecret id="password" size="15" maxlength="255" value="#{SecurityBean.password}"/>
             <br/>
             <h:commandButton id="btnLogin" value="Submit" action="#{SecurityBean.login}"/>
             <h:commandButton id="btnCreate" value="Create Profile" action="create"/>

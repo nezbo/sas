@@ -30,7 +30,8 @@ public class SecurityBean implements java.io.Serializable {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        if(!authed)
+            this.userName = userName;
     }
 
     public String getPassword() {
@@ -38,7 +39,8 @@ public class SecurityBean implements java.io.Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if(!authed)
+            this.password = password;
     }
     
     public String login()
