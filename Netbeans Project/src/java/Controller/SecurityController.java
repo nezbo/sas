@@ -36,7 +36,13 @@ public class SecurityController implements Controller {
     @Override
     public boolean authenticate(String username, String password) {
         // TODO SECURITY
-        return FacadeController.getInstance().authenticate(username, password);
+         if(username.length() <= 31 
+                && password.length() <= 255 ) {
+              return FacadeController.getInstance().authenticate(username, password);
+        } else {
+             return false;
+        }
+       
     }
 
     @Override
@@ -54,6 +60,8 @@ public class SecurityController implements Controller {
     @Override
     public boolean createUser(String username, String password) {
         // TODO SECURITY
+        if(username.length()>252 ||password.length()>252) //dont want too large names into database
+            return false;
         return FacadeController.getInstance().createUser(username, password);
     }
 
@@ -69,5 +77,22 @@ public class SecurityController implements Controller {
         
         // TODO SECURITY
         return FacadeController.getInstance().updateUser(username, password, name, address, hobbies, friends);
+    }
+
+    @Override
+    public boolean updateUserInfo(String username, String name, String address, String hobbies, String friends) {
+        if(name==null 
+                || address==null 
+                || friends==null
+                || hobbies==null)
+            return false;
+        
+        if(name.length() > 255 
+                || address.length() > 255 
+                || friends.length() > 255)
+            return false;
+        
+        // TODO SECURITY
+        return FacadeController.getInstance().updateUserInfo(username, name, address, hobbies, friends);
     }
 }

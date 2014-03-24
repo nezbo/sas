@@ -54,11 +54,12 @@ public class CreateBean implements java.io.Serializable {
     public String createUser(){
         boolean result = ControllerFactory.getController().createUser(username, password);
         if(result){
-            loginBean.setUserName(username);
-            loginBean.setPassword(password);
-            loginBean.login();
-            return "user.xhtml?user="+username;
+            //loginBean.setUserName(username); //cannot do it this way
+            //loginBean.setPassword(password);
+            //loginBean.login();
+            return "index";
         }
-        return "index";
+        else            
+            return "index";
     }
 }

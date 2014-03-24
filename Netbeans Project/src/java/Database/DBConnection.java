@@ -44,6 +44,7 @@ public class DBConnection {
     private static PreparedStatement pLoginStmt;
     private static PreparedStatement pCreateUserStmt;
     private static PreparedStatement pUpdateUserStmt;
+    private static PreparedStatement pUpdateUserInfoStmt;
     private static PreparedStatement pGetUserStmt;
 
     /* "Constructor" */
@@ -68,11 +69,11 @@ public class DBConnection {
         System.out.println(getUser("user"));
     }
 
-    public static boolean validUserLogin(String username, String cleartextPassword) {
+    public static boolean validUserLogin(String username, String password) {
         try {
             PreparedStatement stmt = getUserLoginStatement();
             stmt.setString(1, username);
-            stmt.setString(2, cleartextPassword);
+            stmt.setString(2, password);
             stmt.executeQuery();
             stmt.getResultSet().next();
             int count = stmt.getResultSet().getInt(1);
@@ -113,17 +114,39 @@ public class DBConnection {
         }
     }
     
+    public static boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends) {
+     
+        try {
+            PreparedStatement stmt = getUpdateUserInfoStatement();                                        
+            stmt.setString(1, name);
+            stmt.setString(2, address);
+            stmt.setString(3, hobbies);
+            stmt.setString(4, userName);
+
+            return stmt.executeUpdate() == 1;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            //TODO: Error handling
+            return false;
+        }
+        
+        
+    }
     public static User getUser(String username) {
         try {
             PreparedStatement stmt = getGetUserStatement();
+            
             stmt.setString(1, username);
             ResultSet set = stmt.executeQuery();
-            set.first();
-            String name = set.getString("name");
-            username = set.getString("username");
-            String address = set.getString("address");
-            String hobbies = set.getString("hobbies");
-            return new User(name, username, address, hobbies);
+            if(set.first())//check if exists            
+            {   
+                String name = set.getString("name");
+                username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+                return new User(name, username, address, hobbies);
+            }
+            return null;
         } catch (SQLException ex) {
             //TODO: Error handling
             ex.printStackTrace();
@@ -171,6 +194,19 @@ public class DBConnection {
         return pUpdateUserStmt;
     }
 
+    private static PreparedStatement getUpdateUserInfoStatement() {
+        if (pUpdateUserInfoStmt == null) {
+            try {
+                Connection conn = getUserConnection();
+                pUpdateUserInfoStmt = conn.prepareStatement("UPDATE `sassy`.`User` SET `name` = ?,`address` = ?,`hobbies` = ? WHERE `username` = ?;");
+            } catch (SQLException ex) {
+                //TODO: Error handling 
+            }
+        }
+        return pUpdateUserInfoStmt;
+    }
+    
+    
     private static PreparedStatement getGetUserStatement() {
         if (pGetUserStmt == null) {
             try {
@@ -268,4 +304,6 @@ public class DBConnection {
             ex.printStackTrace();
         }
     }
+
+    
 }

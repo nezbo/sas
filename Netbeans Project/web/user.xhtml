@@ -3,8 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+
     <f:metadata>
-        <f:viewParam name="user" value="#{ViewUserBean.username}" />
+        <f:viewParam name="user" value="#{SecurityBean.userName}" />
+        <f:event type="preRenderView" listener="#{ViewUserBean.getUser(SecurityBean.userName)}"/>
     </f:metadata>
     <h:head>
         <title>Your Page</title>
@@ -13,11 +15,17 @@
         <h:form>
         This is Your VERY OWN Page! "Wow I am at ze interwebs!"<br/>
         Name:
-        <h:inputText id="name" size="15" maxlength="255" value="#{ViewUserBean.name}" <!--disabled="#{ViewUserBean.isMyself}"-->/><br/>
+        <h:inputText id="name" size="15" maxlength="255" value="#{ViewUserBean.name}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
         Address:
-        <h:inputText id="address" size="15" maxlength="255" value="#{ViewUserBean.address}" <!--disabled="#{ViewUserBean.isMyself}"-->/><br/>
+        <h:inputText id="address" size="15" maxlength="255" value="#{ViewUserBean.address}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
         Hobbies:
-        <h:inputText id="hobbies" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" <!--disabled="#{ViewUserBean.isMyself}"-->/><br/>
+        <h:inputText id="hobbies" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
+        <h:commandButton id="btnSaveUserInfo" value="Save" action="#{ViewUserBean.save}"/>
+        </h:form>
+        
+        <h:form>        
+        <h:inputText id="search" size="15" maxlength="255" value='#{ViewUserBean.showUser}' /><br/>
+        <h:commandButton id="btnSaveUserInfo" value="Save" action="#{ViewUserBean.search}"/>
         </h:form>
     </h:body>
 </html>

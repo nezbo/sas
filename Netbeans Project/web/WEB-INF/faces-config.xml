@@ -21,13 +21,37 @@
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/create.xhtml</from-view-id>
+        <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>user.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule> <!--adding 'search' feature-->
+        <from-view-id>/user.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>search</from-outcome>
+            <to-view-id>userInfo.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+        <navigation-rule>
+        <from-view-id>/create.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>user</from-outcome>
+            <to-view-id>index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        </navigation-rule>
+        <!--navigation-rule>
+            <from-view-id>/create.xhtml</from-view-id>
+            <navigation-case>
+                <from-outcome></from-outcome>
+                <to-view-id>user.xhtml</to-view-id>
+                <redirect/>
+            </navigation-case>
+    </navigation-rule-->    
     <managed-bean>
         <managed-bean-name>SecurityBean</managed-bean-name>
         <managed-bean-class>View.SecurityBean</managed-bean-class>
@@ -40,8 +64,24 @@
     </managed-bean>
     <managed-bean>
         <managed-bean-name>ViewUserBean</managed-bean-name>
-        <managed-bean-class>View.ViewUserBean</managed-bean-class>
+        <managed-bean-class>View.ViewUserBean</managed-bean-class> 
+    
         <managed-bean-scope>session</managed-bean-scope>
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
+        </managed-property>
     </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>ViewUserInfoBean</managed-bean-name>
+        <managed-bean-class>View.ViewUserInfoBean</managed-bean-class> 
+    
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
+        </managed-property>
+    </managed-bean> 
+    
     
 </faces-config>

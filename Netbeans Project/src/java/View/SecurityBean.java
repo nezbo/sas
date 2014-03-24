@@ -14,6 +14,7 @@ import Controller.ControllerFactory;
  *
  * @author dst
  */
+
 @Named("SecurityBean")
 @SessionScoped
 public class SecurityBean implements java.io.Serializable {
