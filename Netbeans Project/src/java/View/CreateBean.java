@@ -11,13 +11,14 @@ import javax.faces.bean.ManagedProperty;
 import javax.inject.Named;
 
 import Controller.ControllerFactory;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author Emil
  */
 @Named("CreateBean")
-@SessionScoped
+@RequestScoped
 public class CreateBean implements java.io.Serializable {
     
     @ManagedProperty(value="#{loginBean}")

@@ -46,7 +46,7 @@ public class DBConnection {
     private static PreparedStatement pUpdateUserStmt;
     private static PreparedStatement pUpdateUserInfoStmt;
     private static PreparedStatement pGetUserStmt;
-
+    private static PreparedStatement pGetAllUserStmt;
     /* "Constructor" */
     static {
         loadXML();
@@ -218,6 +218,17 @@ public class DBConnection {
         }
         return pGetUserStmt;
     }
+     private static PreparedStatement getGetAllUsersStatement() {
+        if (pGetAllUserStmt == null) {
+            try {
+                Connection conn = getUserConnection();
+                pGetAllUserStmt = conn.prepareStatement("SELECT * FROM `sassy`.`User`");
+            } catch (SQLException ex) {
+                //TODO: Error handling 
+            }
+        }
+        return pGetAllUserStmt;
+    }
     //</editor-fold>
     
     /*************************************
@@ -303,6 +314,36 @@ public class DBConnection {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static User[] getAllUsers() {
+          try {
+            PreparedStatement stmt = getGetAllUsersStatement();
+                        
+            ResultSet set = stmt.executeQuery();
+            ArrayList<User> usersArray = new ArrayList<User>();
+            
+            while(set.next())
+            {   
+                
+                String name = set.getString("name");
+                String username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+                
+                usersArray.add(new User(name, username, address, hobbies));
+                
+            }
+            User[] users = new User[usersArray.size()];
+            
+            users =usersArray.toArray(users);
+            return users;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+        
     }
 
     

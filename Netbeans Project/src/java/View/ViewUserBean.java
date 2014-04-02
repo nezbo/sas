@@ -9,6 +9,7 @@ package View;
 import Controller.ControllerFactory;
 import Model.User;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.inject.Named;
@@ -18,11 +19,13 @@ import javax.inject.Named;
  * @author Emil
  */
 @Named("ViewUserBean")
-@SessionScoped
+@RequestScoped
 public class ViewUserBean implements java.io.Serializable {
     
     @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; // +setter
+    @ManagedProperty(value="#{InformationBean}")
+    private InformationBean informationBean; // +setter
     private boolean isMyself;
     private boolean isNotMyself;
     private String showUser;
@@ -38,13 +41,25 @@ public class ViewUserBean implements java.io.Serializable {
         User user = ControllerFactory.getController().getUser(userName);
         if(user!=null)
         {
-            this.setName(user.getName());
-            this.setAddress(user.getAddress());
+            if(userName.equals(securityBean.getUserName())){
+                this.setName(user.getName());
+                this.setAddress(user.getAddress());
+            }
+           
             this.setHobbies(user.getHobbies());
         }
+        else{//remove the user found before if no user is found
+            userName="";
+            this.setName("");
+            this.setAddress("");
+            this.setHobbies("");
+        }
+        //perhaps show a no user page?
         
     }
     }
+    
+   
     
     public boolean isIsNotMyself() {                
         isNotMyself = !this.isIsMyself();
