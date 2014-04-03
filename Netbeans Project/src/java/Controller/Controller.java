@@ -40,6 +40,6 @@ public interface Controller {
     
     public boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends);
     
-    public boolean updateUser(String oldUsername, String password, String name, String address, String hobbies, String friends);
+    public boolean updatePassword(String userName, String password);
             
 }

@@ -66,17 +66,13 @@ public class SecurityController implements Controller {
     }
 
     @Override
-    public boolean updateUser(String username, String password, String name, String address, String hobbies, String friends) {
+    public boolean updatePassword(String username, String password) {
         // Check length of values
-        if(username.length() > 31 
-                || password.length() > 255 
-                || name.length() > 255 
-                || address.length() > 255 
-                || friends.length() > 255)
+        if(username.length() > 31 || password.length() > 255)
             return false;
         
         // TODO SECURITY
-        return FacadeController.getInstance().updateUser(username, password, name, address, hobbies, friends);
+        return FacadeController.getInstance().updatePassword(username, password);
     }
 
     @Override
