@@ -3,22 +3,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    
+
     <f:metadata>        
+        <f:event type="preRenderView" listener="#{ViewUserBean.getUser(InformationBean.showUser)}"/>
     </f:metadata>
-    <h:head>
-        <title>#{ViewUserBean.name}</title>
+    <h:head>        
+        <title>#{SecurityBean.userName}'s page</title>
+         <meta charset="utf-8"></meta>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+          <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
     </h:head>
     <h:body>
-        <h:form>
-        This is another user's page<br/>
-        Name:
-        <h:outputText value="#{ViewUserBean.name}"/><br/>
-        Address:
-        <h:outputText value="#{ViewUserBean.address}"/><br/>
-        Hobbies:
-        <h:outputText value="#{ViewUserBean.hobbies}"/><br/>        
-        </h:form>
-        
+                <!--topmenu-->
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+          <a class="navbar-brand" href="#">Sassy</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+              <li class="active"> <h:form><h:commandButton class="btn btn-lg btn-primary" id="btnMenuCreate" value="Log out" action="#{SecurityBean.logOut}"/></h:form></li>                          
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+        <div class="container theme-showcase" role="main" style="width: 30%">
+            <div class="jumbotron">
+                <div style="border-collapse:separate;border-spacing:10%;">
+                    
+                    <br/>
+                    <h2 class="form-signin-heading">Viewing #{ViewUserBean.name}'s profile</h2> 
+                    <h:form class="form-signin">        
+                            Name:
+                            <h:outputText id="name" class="form-control"  value="#{ViewUserBean.name}" /><br/>
+                            Address:
+                            <h:outputText id="address" class="form-control" value="#{ViewUserBean.address}"  /><br/>
+                            Hobbies:
+                            <h:outputText id="hobbies" class="form-control" value="#{ViewUserBean.hobbies}" /><br/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
     </h:body>
 </html>
+
+ 
+    
+        
+    
+
+

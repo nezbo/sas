@@ -50,7 +50,7 @@ public class FacadeController implements Controller {
 
     @Override
     public User[] getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DBConnection.getAllUsers();
     }
 
     @Override

@@ -22,9 +22,25 @@ public class SecurityBean implements java.io.Serializable {
     private String userName = "";
     private String password = "";
     private boolean authed = false;
-    
+    private String loginUserName = "";
     private boolean UserLogin = false;
     private boolean AdminLogin = false;
+    private String logOut = "loggedOut";
+
+    
+    public String logOut()
+    {
+       userName="";
+       authed=false;
+       return logOut;
+    }
+    public String getLoginUserName() {
+        return loginUserName;
+    }
+
+    public void setLoginUserName(String loginUserName) {
+        this.loginUserName = loginUserName;
+    }
 
     public String getUserName() {
         return userName;
@@ -48,7 +64,9 @@ public class SecurityBean implements java.io.Serializable {
     {
         // TODO: Dummy code to see if it works, this should ask the 
         // SecurityController for logging in (which should query the Model)
-        authed = ControllerFactory.getController().authenticate(userName,password);
+        authed = ControllerFactory.getController().authenticate(loginUserName,password);
+        if(authed)
+            userName=loginUserName;
         password = "";
         return authed ? "user" : "index";
     }

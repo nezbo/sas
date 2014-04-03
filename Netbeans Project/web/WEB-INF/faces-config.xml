@@ -5,6 +5,14 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
     <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>loggedOut</from-outcome>
+            <to-view-id>index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>create</from-outcome>
@@ -20,11 +28,27 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+<navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
     <navigation-rule>
         <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>user.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/user.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>findFriends</from-outcome>
+            <to-view-id>findFriends.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>
@@ -55,17 +79,27 @@
     <managed-bean>
         <managed-bean-name>SecurityBean</managed-bean-name>
         <managed-bean-class>View.SecurityBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean> 
+    
+        <managed-bean-scope>session</managed-bean-scope></managed-bean> 
     <managed-bean>
         <managed-bean-name>CreateBean</managed-bean-name>
         <managed-bean-class>View.CreateBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>ViewUserBean</managed-bean-name>
         <managed-bean-class>View.ViewUserBean</managed-bean-class> 
     
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
+        </managed-property>
+    </managed-bean>    
+     <managed-bean>
+        <managed-bean-name>HTMLBean</managed-bean-name>
+        <managed-bean-class>View.HTMLBean</managed-bean-class> 
+    
         <managed-bean-scope>session</managed-bean-scope>
         <managed-property> 
             <property-name>securityBean</property-name> 
@@ -73,14 +107,10 @@
         </managed-property>
     </managed-bean> 
     <managed-bean>
-        <managed-bean-name>ViewUserInfoBean</managed-bean-name>
-        <managed-bean-class>View.ViewUserInfoBean</managed-bean-class> 
+        <managed-bean-name>InformationBean</managed-bean-name>
+        <managed-bean-class>View.InformationBean</managed-bean-class> 
     
-        <managed-bean-scope>session</managed-bean-scope>
-        <managed-property> 
-            <property-name>securityBean</property-name> 
-            <value>#{SecurityBean}</value> 
-        </managed-property>
+        <managed-bean-scope>request</managed-bean-scope>        
     </managed-bean> 
     
     
