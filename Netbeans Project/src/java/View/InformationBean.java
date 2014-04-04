@@ -9,6 +9,8 @@ package View;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import Model.User;
+import java.util.List;
 
 /**
  *
@@ -20,7 +22,17 @@ import Controller.ControllerFactory;
 public class InformationBean implements java.io.Serializable {
 
     private String showUser="";
+    private List<User> currentListOfUsers;
 
+    public List<User> getCurrentListOfUsers() {
+        return currentListOfUsers;
+    }
+
+    public void setCurrentListOfUsers(List<User> currentListOfUsers) {
+        this.currentListOfUsers = currentListOfUsers;
+    }
+    
+    
     public String getShowUser() {
         return showUser;
     }
