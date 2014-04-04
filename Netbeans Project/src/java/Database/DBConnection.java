@@ -66,7 +66,7 @@ public class DBConnection {
         System.out.println(validUserLogin("usder", "password"));
         System.out.println(validUserLogin("user", "pasdsword"));
         System.out.println(validUserLogin("user", "password"));
-        System.out.println(updateUser("bingo", "password", "Sparta", "Spartacus", "Shouting 'THIS IS SPARTA!'", "whatever dude"));
+        System.out.println(updatePassword("bingo", "password2"));
         System.out.println(getUser("user"));
     }
 
@@ -98,14 +98,11 @@ public class DBConnection {
         }
     }
 
-    public static boolean updateUser(String oldUsername, String cleartextPassword, String name, String address, String hobbies, String friends) {
+    public static boolean updatePassword(String username, String cleartextPassword) {
         try {
-            PreparedStatement stmt = getUpdateUserStatement();
+            PreparedStatement stmt = getUpdatePasswordStatement();
             stmt.setString(1, cleartextPassword);
-            stmt.setString(2, name);
-            stmt.setString(3, address);
-            stmt.setString(4, hobbies);
-            stmt.setString(5, oldUsername);
+            stmt.setString(2, username);
 
             return stmt.executeUpdate() == 1;
         } catch (SQLException ex) {
@@ -215,11 +212,11 @@ public class DBConnection {
         return pCreateUserStmt;
     }
 
-    private static PreparedStatement getUpdateUserStatement() {
+    private static PreparedStatement getUpdatePasswordStatement() {
         if (pUpdateUserStmt == null) {
             try {
                 Connection conn = getUserConnection();
-                pUpdateUserStmt = conn.prepareStatement("UPDATE `sassy`.`User` SET `password` = MD5(?),`name` = ?,`address` = ?,`hobbies` = ? WHERE `username` = ?;");
+                pUpdateUserStmt = conn.prepareStatement("UPDATE `sassy`.`User` SET `password` = MD5(?) WHERE `username` = ?;");
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }

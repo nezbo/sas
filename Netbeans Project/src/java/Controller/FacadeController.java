@@ -78,13 +78,13 @@ public class FacadeController implements Controller {
             return new String(hash);
     }
     @Override
-    public boolean updateUser(String oldUsername, String password, String name, String address, String hobbies, String friends) {
-        return DBConnection.updateUser(oldUsername, password, name, address, hobbies, friends);
+    public boolean updateUserInfo(String oldUsername, String name, String address, String hobbies, String friends) {
+        return DBConnection.updateUserInfo(oldUsername, name, address, hobbies, friends);
     }
 
     @Override
-    public boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends) {
-        return DBConnection.updateUserInfo(userName, name, address, hobbies, friends);
+    public boolean updatePassword(String userName, String password) {
+        return DBConnection.updatePassword(userName, password);
     }
     
 }
