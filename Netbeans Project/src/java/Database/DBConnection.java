@@ -4,8 +4,7 @@
  */
 package Database;
 
-import Model.RelationshipType;
-import Model.User;
+import Model.*;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import java.io.IOException;
 import java.sql.*;
@@ -64,10 +63,11 @@ public class DBConnection {
         System.out.println(updatePassword("bingo", "password2"));
         System.out.println(getUser("user"));
         for (RelationshipType rt : getAllRelationshipTypes()) {
-            System.out.println("RelationshipType: [id: "+rt.getId()+", type: "+rt.getType()+"]");
+            System.out.println("RelationshipType: [id: " + rt.getId() + ", type: " + rt.getType() + "]");
         }
     }
 
+    //<editor-fold desc="Login">
     public static boolean validUserLogin(String username, String password) {
         try {
             PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`User`  WHERE `username` = ? AND `password` = MD5(?);", getLoginConnection());
@@ -83,7 +83,9 @@ public class DBConnection {
             return false;
         }
     }
+    //</editor-fold>
 
+    //<editor-fold desc="User">
     public static boolean createUser(String username, String cleartextPassword) {
         try {
             PreparedStatement stmt = getPreparedStatement("INSERT INTO  `sassy`.`User` (`username`,`password`,`name`,`address`,`hobbies`) VALUES ( ?, MD5( ? ) ,  '',  '',  '');", getLoginConnection());
@@ -93,6 +95,28 @@ public class DBConnection {
         } catch (SQLException ex) {
             //TODO: Error handling
             return false;
+        }
+    }
+
+    public static User getUser(String username) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `username` = ?;", getUserConnection());
+
+            stmt.setString(1, username);
+            ResultSet set = stmt.executeQuery();
+            if (set.first())//check if exists            
+            {
+                String name = set.getString("name");
+                username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+                return new User(name, username, address, hobbies);
+            }
+            return null;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
         }
     }
 
@@ -128,28 +152,6 @@ public class DBConnection {
 
     }
 
-    public static User getUser(String username) {
-        try {
-            PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `username` = ?;", getUserConnection());
-
-            stmt.setString(1, username);
-            ResultSet set = stmt.executeQuery();
-            if (set.first())//check if exists            
-            {
-                String name = set.getString("name");
-                username = set.getString("username");
-                String address = set.getString("address");
-                String hobbies = set.getString("hobbies");
-                return new User(name, username, address, hobbies);
-            }
-            return null;
-        } catch (SQLException ex) {
-            //TODO: Error handling
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
     public static List<User> getAllUsers() {
         try {
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`User`", getUserConnection());
@@ -175,7 +177,92 @@ public class DBConnection {
         }
 
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Relationship">
+    
+    /**
+     * Creates a new or alters an existing relationship between two users.
+     * @param fromUsername The username of the user, that has made the relationship.
+     * @param toUsername The username of the user, that the relationship is made to.
+     * @param relationshipTypeId The integer id of the relationship type (can be retrieved through {@link #getAllRelationshipTypes()}).
+     * @return True if success.
+     */
+    public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {
+        return false;
+    }
+    
+    /**
+     * Relationship between two given users.
+     * @param fromUsername The username of the user, that has made the relationship.
+     * @param toUsername The username of the user, that the relationship is made to.
+     * @return Relationship (duh!)
+     */
+    public static Relationship getRelationshipBetweenUsers(String fromUsername, String toUsername){
+        return null;
+    }
+
+    /**
+     * Deletes a relationship between two users.
+     * @param fromUsername The username of the user, that has made the relationship.
+     * @param toUsername The username of the user, that the relationship is made to.
+     * @return True if success.
+     */
+    public static boolean deleteRelationship(String fromUsername, String toUsername) {
+        return false;
+    }
+    
+    //<editor-fold desc="-Overview">
+    /**
+     * Relationships <em>from</em> a given user - i.e. relationships he has
+     * made.
+     *
+     * @param fromUsername The username of the user.
+     * @return A list of all relationships.
+     */
+    public static List<Relationship> getRelationshipsFromUser(String fromUsername) {
+        return null;
+    }
+
+    /**
+     * Relationships of a given type (friend/enemy/...) <em>from</em> a given
+     * user - i.e. relationships he has made.
+     *
+     * @param fromUsername The username of the user.
+     * @param relationshipTypeId The integer id of the relation type to get.
+     * @return A list of all relationships.
+     */
+    public static List<Relationship> getRelationshipsFromUserWithType(String fromUsername, int relationshipTypeId) {
+        return null;
+    }
+
+    /**
+     * Relationships <em>to</em> a given user - i.e. relationships others have
+     * made to him.
+     *
+     * @param toUsername The username of the user.
+     * @return A list of all relationships.
+     */
+    public static List<Relationship> getRelationshipsToUser(String toUsername) {
+        return null;
+    }
+
+    /**
+     * Relationships of a given type (friend/enemy/...) <em>to</em> a given user
+     * - i.e. relationships others have made to him.
+     *
+     * @param toUsername The username of the user.
+     * @param relationshipTypeId The integer id of the relation type to get.
+     * @return A list of all relationships.
+     */
+    public static List<Relationship> getRelationshipsToUserWithType(String toUsername, int relationshipTypeId) {
+        return null;
+    }
+    //</editor-fold>
+
+    //</editor-fold>
+
+    //<editor-fold desc="Relationship Type">
     public static List<RelationshipType> getAllRelationshipTypes() {
         try {
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`RelationshipType`", getUserConnection());
@@ -193,23 +280,9 @@ public class DBConnection {
             return null;
         }
     }
+    //</editor-fold>
 
-    public static boolean setRelationship(String fromUsername, String toUsername, int RelationshipTypeId) {
-        return false;
-    }
-    
-    private static PreparedStatement getPreparedStatement(String sql, Connection conn){
-        if (!preparedStmts.containsKey(sql)) {
-            try {
-                preparedStmts.put(sql, conn.prepareStatement(sql));
-            } catch (SQLException ex) {
-                //TODO: Error handling 
-            }
-        }
-        return preparedStmts.get(sql);
-    }
-
-    //<editor-fold desc="Connections">
+    //<editor-fold desc="Connections and prepared statement" defaultstate="collapsed">
     private static Connection getLoginConnection() {
         if (loginConnection == null) {
             try {
@@ -255,6 +328,17 @@ public class DBConnection {
             //TODO: Error handling
         }
         return con;
+    }
+
+    private static PreparedStatement getPreparedStatement(String sql, Connection conn) {
+        if (!preparedStmts.containsKey(sql)) {
+            try {
+                preparedStmts.put(sql, conn.prepareStatement(sql));
+            } catch (SQLException ex) {
+                //TODO: Error handling 
+            }
+        }
+        return preparedStmts.get(sql);
     }
     //</editor-fold>
 
