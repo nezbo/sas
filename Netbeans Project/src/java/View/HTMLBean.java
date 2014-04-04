@@ -12,7 +12,7 @@ import Controller.ControllerFactory;
 import Model.User;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 /**
  *
  * @author dst
@@ -58,7 +58,7 @@ public class HTMLBean implements java.io.Serializable {
                                 html+="<td>No name</td>"; //insert user with no name
               }
               else
-              {html+="<td>"+users[i].getName()+"</td>";} //insert user          with name
+              {html+="<td>"+escapeHtml4(users[i].getName())+"</td>";} //insert user          with name
 
               html+="<td><h:form><h:commandButton class='btn btn-lg btn-primary' id='addFriendBtn' value='AddFriend' action=''>"+"Add friend"+"</h:commandButton></h:form></td>";//add addfreind biutton //hash the number and use it as a lookupvalue for the actual value
               html+="</tr>";
