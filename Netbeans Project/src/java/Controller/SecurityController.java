@@ -7,6 +7,7 @@
 package Controller;
 
 import Model.User;
+import java.util.List;
 
 /**
  * Makes security checks before forwarding data to the same method in the facade class
@@ -52,7 +53,7 @@ public class SecurityController implements Controller {
     }
 
     @Override
-    public User[] getAllUsers() {
+    public List<User> getAllUsers() {
         // TODO SECURITY
         return FacadeController.getInstance().getAllUsers();
     }

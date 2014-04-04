@@ -4,6 +4,7 @@
  */
 package Database;
 
+import Model.RelationshipType;
 import Model.User;
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import java.io.IOException;
@@ -151,10 +152,42 @@ public class DBConnection {
         }
     }
 
-    /*************************************
-    *        Prepared Statements         *
-    *************************************/
-    //<editor-fold>
+    public static List<User> getAllUsers() {
+          try {
+            PreparedStatement stmt = getGetAllUsersStatement();
+                        
+            ResultSet set = stmt.executeQuery();
+            ArrayList<User> usersArray = new ArrayList<User>();
+            
+            while(set.next())
+            {   
+                
+                String name = set.getString("name");
+                String username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+                
+                usersArray.add(new User(name, username, address, hobbies));
+                
+            }
+            return usersArray;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+        
+    }
+    
+    public static List<RelationshipType> getAllRelationshipTypes(){
+        return null;
+    }
+
+    public static boolean setRelation(String fromUsername, String toUsername, int RelationshipTypeId) {
+        return false;
+    }
+    
+    //<editor-fold desc="Prepared statements">
     private static PreparedStatement getUserLoginStatement() {
         if (pLoginStmt == null) {
             try {
@@ -228,10 +261,7 @@ public class DBConnection {
     }
     //</editor-fold>
     
-    /*************************************
-    *             Connections            *
-    *************************************/
-    //<editor-fold>
+    //<editor-fold desc="Connections">
     private static Connection getLoginConnection() {
         if (loginConnection == null) {
             try {
@@ -279,6 +309,7 @@ public class DBConnection {
         return con;
     }
     //</editor-fold>
+    
     private static void loadXML() {
         try {
             DOMParser parser = new DOMParser();
@@ -311,36 +342,6 @@ public class DBConnection {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static User[] getAllUsers() {
-          try {
-            PreparedStatement stmt = getGetAllUsersStatement();
-                        
-            ResultSet set = stmt.executeQuery();
-            ArrayList<User> usersArray = new ArrayList<User>();
-            
-            while(set.next())
-            {   
-                
-                String name = set.getString("name");
-                String username = set.getString("username");
-                String address = set.getString("address");
-                String hobbies = set.getString("hobbies");
-                
-                usersArray.add(new User(name, username, address, hobbies));
-                
-            }
-            User[] users = new User[usersArray.size()];
-            
-            users =usersArray.toArray(users);
-            return users;
-        } catch (SQLException ex) {
-            //TODO: Error handling
-            ex.printStackTrace();
-            return null;
-        }
-        
     }
 
     

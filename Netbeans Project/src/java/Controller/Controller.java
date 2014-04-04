@@ -8,6 +8,7 @@
  */
 package Controller;
 import Model.User;
+import java.util.List;
 
 /**
  *
@@ -34,7 +35,7 @@ public interface Controller {
      * Gets information for all users in the database, for searching etc.
      * @return An array of User objects.
      */
-    public User[] getAllUsers();
+    public List<User> getAllUsers();
     
     public boolean createUser(String username, String password);
     

@@ -11,6 +11,7 @@ import Model.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Serves as the entry point to all other controllers, for the view class, through SecurityController
@@ -49,7 +50,7 @@ public class FacadeController implements Controller {
     }
 
     @Override
-    public User[] getAllUsers() {
+    public List<User> getAllUsers() {
         return DBConnection.getAllUsers();
     }
 
