@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -18,7 +18,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import quicktime.app.ui.ReleaseButton;
 
 /**
  *
@@ -42,12 +42,8 @@ public class DBConnection {
     private static Connection userConnection;
     private static Connection adminConnection;
 
-    private static PreparedStatement pLoginStmt;
-    private static PreparedStatement pCreateUserStmt;
-    private static PreparedStatement pUpdateUserStmt;
-    private static PreparedStatement pUpdateUserInfoStmt;
-    private static PreparedStatement pGetUserStmt;
-    private static PreparedStatement pGetAllUserStmt;
+    private static final Map<String, PreparedStatement> preparedStmts = new HashMap<>();
+
     /* "Constructor" */
     static {
         loadXML();
@@ -68,6 +64,9 @@ public class DBConnection {
         System.out.println(validUserLogin("user", "password"));
         System.out.println(updatePassword("bingo", "password2"));
         System.out.println(getUser("user"));
+        for (RelationshipType rt : getAllRelationshipTypes()) {
+            System.out.println("RelationshipType: [id: "+rt.getId()+", type: "+rt.getType()+"]");
+        }
     }
 
     public static boolean validUserLogin(String username, String password) {
@@ -111,11 +110,11 @@ public class DBConnection {
             return false;
         }
     }
-    
+
     public static boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends) {
-     
+
         try {
-            PreparedStatement stmt = getUpdateUserInfoStatement();                                        
+            PreparedStatement stmt = getUpdateUserInfoStatement();
             stmt.setString(1, name);
             stmt.setString(2, address);
             stmt.setString(3, hobbies);
@@ -127,17 +126,17 @@ public class DBConnection {
             //TODO: Error handling
             return false;
         }
-        
-        
+
     }
+
     public static User getUser(String username) {
         try {
             PreparedStatement stmt = getGetUserStatement();
-            
+
             stmt.setString(1, username);
             ResultSet set = stmt.executeQuery();
-            if(set.first())//check if exists            
-            {   
+            if (set.first())//check if exists            
+            {
                 String name = set.getString("name");
                 username = set.getString("username");
                 String address = set.getString("address");
@@ -153,22 +152,21 @@ public class DBConnection {
     }
 
     public static List<User> getAllUsers() {
-          try {
+        try {
             PreparedStatement stmt = getGetAllUsersStatement();
-                        
+
             ResultSet set = stmt.executeQuery();
-            ArrayList<User> usersArray = new ArrayList<User>();
-            
-            while(set.next())
-            {   
-                
+            ArrayList<User> usersArray = new ArrayList<>();
+
+            while (set.next()) {
+
                 String name = set.getString("name");
                 String username = set.getString("username");
                 String address = set.getString("address");
                 String hobbies = set.getString("hobbies");
-                
+
                 usersArray.add(new User(name, username, address, hobbies));
-                
+
             }
             return usersArray;
         } catch (SQLException ex) {
@@ -176,91 +174,123 @@ public class DBConnection {
             ex.printStackTrace();
             return null;
         }
-        
-    }
-    
-    public static List<RelationshipType> getAllRelationshipTypes(){
-        return null;
+
     }
 
-    public static boolean setRelation(String fromUsername, String toUsername, int RelationshipTypeId) {
+    public static List<RelationshipType> getAllRelationshipTypes() {
+        try {
+            PreparedStatement stmt = getGetAllRelationshipTypesStatement();
+            ResultSet set = stmt.executeQuery();
+            ArrayList<RelationshipType> usersArray = new ArrayList<>();
+
+            while (set.next()) {
+                int id = set.getInt("id");
+                String type = set.getString("type");
+                usersArray.add(new RelationshipType(id, type));
+            }
+            return usersArray;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            return null;
+        }
+    }
+
+    public static boolean setRelationship(String fromUsername, String toUsername, int RelationshipTypeId) {
         return false;
     }
-    
+
     //<editor-fold desc="Prepared statements">
+    //<editor-fold desc="-User statements">
     private static PreparedStatement getUserLoginStatement() {
-        if (pLoginStmt == null) {
+        if (!preparedStmts.containsKey("pLoginStmt")) {
             try {
                 Connection conn = getLoginConnection();
-                pLoginStmt = conn.prepareStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`User`  WHERE `username` = ? AND `password` = MD5(?);");
+                preparedStmts.put("pLoginStmt", conn.prepareStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`User`  WHERE `username` = ? AND `password` = MD5(?);"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pLoginStmt;
+        return preparedStmts.get("pLoginStmt");
     }
 
     private static PreparedStatement getCreateUserStatement() {
-        if (pCreateUserStmt == null) {
+        if (!preparedStmts.containsKey("pCreateUserStmt")) {
             try {
                 Connection conn = getLoginConnection();
-                pCreateUserStmt = conn.prepareStatement("INSERT INTO  `sassy`.`User` (`username`,`password`,`name`,`address`,`hobbies`) VALUES ( ?, MD5( ? ) ,  '',  '',  '');");
+                preparedStmts.put("pCreateUserStmt", conn.prepareStatement("INSERT INTO  `sassy`.`User` (`username`,`password`,`name`,`address`,`hobbies`) VALUES ( ?, MD5( ? ) ,  '',  '',  '');"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pCreateUserStmt;
+        return preparedStmts.get("pCreateUserStmt");
     }
 
     private static PreparedStatement getUpdatePasswordStatement() {
-        if (pUpdateUserStmt == null) {
+        if (!preparedStmts.containsKey("pUpdateUserStmt")) {
             try {
                 Connection conn = getUserConnection();
-                pUpdateUserStmt = conn.prepareStatement("UPDATE `sassy`.`User` SET `password` = MD5(?) WHERE `username` = ?;");
+                preparedStmts.put("pUpdateUserStmt", conn.prepareStatement("UPDATE `sassy`.`User` SET `password` = MD5(?) WHERE `username` = ?;"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pUpdateUserStmt;
+        return preparedStmts.get("pUpdateUserStmt");
     }
 
     private static PreparedStatement getUpdateUserInfoStatement() {
-        if (pUpdateUserInfoStmt == null) {
+        if (!preparedStmts.containsKey("pUpdateUserInfoStmt")) {
             try {
                 Connection conn = getUserConnection();
-                pUpdateUserInfoStmt = conn.prepareStatement("UPDATE `sassy`.`User` SET `name` = ?,`address` = ?,`hobbies` = ? WHERE `username` = ?;");
+                preparedStmts.put("pUpdateUserInfoStmt", conn.prepareStatement("UPDATE `sassy`.`User` SET `name` = ?,`address` = ?,`hobbies` = ? WHERE `username` = ?;"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pUpdateUserInfoStmt;
+        return preparedStmts.get("pUpdateUserInfoStmt");
     }
-    
-    
+
     private static PreparedStatement getGetUserStatement() {
-        if (pGetUserStmt == null) {
+        if (!preparedStmts.containsKey("pGetUserStmt")) {
             try {
                 Connection conn = getUserConnection();
-                pGetUserStmt = conn.prepareStatement("SELECT * FROM `sassy`.`User` WHERE `username` = ?;");
+                preparedStmts.put("pGetUserStmt", conn.prepareStatement("SELECT * FROM `sassy`.`User` WHERE `username` = ?;"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pGetUserStmt;
+        return preparedStmts.get("pGetUserStmt");
     }
-     private static PreparedStatement getGetAllUsersStatement() {
-        if (pGetAllUserStmt == null) {
+
+    private static PreparedStatement getGetAllUsersStatement() {
+        if (!preparedStmts.containsKey("pGetAllUserStmt")) {
             try {
                 Connection conn = getUserConnection();
-                pGetAllUserStmt = conn.prepareStatement("SELECT * FROM `sassy`.`User`");
+                preparedStmts.put("pGetAllUserStmt", conn.prepareStatement("SELECT * FROM `sassy`.`User`"));
             } catch (SQLException ex) {
                 //TODO: Error handling 
             }
         }
-        return pGetAllUserStmt;
+        return preparedStmts.get("pGetAllUserStmt");
     }
     //</editor-fold>
-    
+
+    //<editor-fold desc="-Relationship statements">
+    //</editor-fold>
+    //<editor-fold desc="-Relationship type statements">
+    private static PreparedStatement getGetAllRelationshipTypesStatement() {
+        if (!preparedStmts.containsKey("pGetAllRelationshipTypes")) {
+            try {
+                Connection conn = getUserConnection();
+                preparedStmts.put("pGetAllRelationshipTypes", conn.prepareStatement("SELECT * FROM `sassy`.`RelationshipType`"));
+            } catch (SQLException ex) {
+                //TODO: Error handling 
+            }
+        }
+        return preparedStmts.get("pGetAllRelationshipTypes");
+    }
+    //</editor-fold>
+
+    //</editor-fold>
     //<editor-fold desc="Connections">
     private static Connection getLoginConnection() {
         if (loginConnection == null) {
@@ -309,7 +339,7 @@ public class DBConnection {
         return con;
     }
     //</editor-fold>
-    
+
     private static void loadXML() {
         try {
             DOMParser parser = new DOMParser();
@@ -344,5 +374,4 @@ public class DBConnection {
         }
     }
 
-    
 }
