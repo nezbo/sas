@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
 import Model.User;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
 
@@ -39,7 +40,7 @@ public class HTMLBean implements java.io.Serializable {
      */
     public String getHTMLFriendUsers()
     {
-        User[] users =null;
+        List<User> users =null;
         if(securityBean.isLoggedIn())
         {
              users = ControllerFactory.getController().getAllUsers();
@@ -48,17 +49,17 @@ public class HTMLBean implements java.io.Serializable {
             return "not logged in";//error meesage
         String html="";
         html+="<div class='jumbotron' class='jumbotron'>";
-         html+="<div class='list-group' id='"+users.length+"'>";       
+         html+="<div class='list-group' id='"+users.size()+"'>";       
          html+="<table style='width=100%'><tr>";
-          for(int i =0; i<users.length;i++)
+          for(int i =0; i<users.size();i++)
           {
               html+="<tr>";
-              if(users[i].getName()==null || users[i].getName().equals(""))
+              if(users.get(i).getName()==null || users.get(i).getName().equals(""))
               {
                                 html+="<td>No name</td>"; //insert user with no name
               }
               else
-              {html+="<td>"+users[i].getName()+"</td>";} //insert user          with name
+              {html+="<td>"+users.get(i).getName()+"</td>";} //insert user          with name
 
               html+="<td><h:form><h:commandButton class='btn btn-lg btn-primary' id='addFriendBtn' value='AddFriend' action=''>"+"Add friend"+"</h:commandButton></h:form></td>";//add addfreind biutton //hash the number and use it as a lookupvalue for the actual value
               html+="</tr>";
