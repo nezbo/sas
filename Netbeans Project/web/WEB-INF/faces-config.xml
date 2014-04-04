@@ -100,10 +100,28 @@
         <managed-bean-name>HTMLBean</managed-bean-name>
         <managed-bean-class>View.HTMLBean</managed-bean-class> 
     
-        <managed-bean-scope>session</managed-bean-scope>
+        <managed-bean-scope>request</managed-bean-scope>
         <managed-property> 
             <property-name>securityBean</property-name> 
             <value>#{SecurityBean}</value> 
+        </managed-property>
+        <managed-property> 
+            <property-name>informationBean</property-name> 
+            <value>#{informationBean}</value> 
+        </managed-property>
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>RelationshipBean</managed-bean-name>
+        <managed-bean-class>View.HTMLBean</managed-bean-class> 
+    
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
+        </managed-property>
+        <managed-property> 
+            <property-name>informationBean</property-name> 
+            <value>#{informationBean}</value> 
         </managed-property>
     </managed-bean> 
     <managed-bean>
