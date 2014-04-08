@@ -7,6 +7,7 @@
 package Controller;
 
 import Database.DBConnection;
+import Model.RelationshipType;
 import Model.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -85,6 +86,18 @@ public class FacadeController implements Controller {
     @Override
     public boolean updatePassword(String userName, String password) {
         return DBConnection.updatePassword(userName, password);
+    }
+
+    @Override
+    public List<RelationshipType> getRelationShipTypes() {
+        try{
+            return DBConnection.getAllRelationshipTypes();
+            
+        }
+        catch(Exception e)
+        {
+            return null;//need better error handling
+        }
     }
     
 }

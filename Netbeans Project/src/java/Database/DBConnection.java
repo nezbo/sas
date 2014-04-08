@@ -18,7 +18,6 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import quicktime.app.ui.ReleaseButton;
 
 /**
  *

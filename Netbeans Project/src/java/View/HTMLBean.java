@@ -9,8 +9,10 @@ package View;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import Model.RelationshipType;
 import Model.User;
 import java.util.List;
+import java.util.HashMap;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
@@ -25,8 +27,14 @@ public class HTMLBean implements java.io.Serializable {
 
     @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; 
-    @ManagedProperty(value="#{InoformationBean}")
+    @ManagedProperty(value="#{InformationBean}")
     private InformationBean informationBean; 
+    private HashMap<String, Integer> relationTypes = new HashMap<String,Integer>();
+
+    public HashMap<String, Integer> getRelationTypes() {
+        return relationTypes;
+    }
+
 
     public InformationBean getInformationBean() {
         return informationBean;
@@ -45,6 +53,7 @@ public class HTMLBean implements java.io.Serializable {
         this.securityBean = securityBean;
     }
     
+	
     /**
      * returns the html for listing and addding users as friends
      * @return 
@@ -52,16 +61,23 @@ public class HTMLBean implements java.io.Serializable {
     public String getHTMLFriendUsers()
     {
         List<User> users =null;
-        //List<User> users =null;
+        
+        List<RelationshipType> relationTypesLocal =null;
         if(securityBean.isLoggedIn())
         {
              users = ControllerFactory.getController().getAllUsers();
              if(users!=null)
                  informationBean.setCurrentListOfUsers(users);
+             relationTypesLocal = ControllerFactory.getController().getRelationShipTypes();
              
         }
         else
             return "not logged in";//error meesage
+        
+        for(RelationshipType t : relationTypesLocal)
+        {
+            relationTypes.put(t.getType(), t.getId());
+        }
         String html="";
         html+="<div class='jumbotron' class='jumbotron'>";
          html+="<div class='list-group' id='"+users.size()+"'>";       
@@ -76,10 +92,10 @@ public class HTMLBean implements java.io.Serializable {
               }
               else
 
-              {html+="<td>"+escapeHtml4(users.get(i).getName())+"</td>";} //insert user          with name
-
-
-              html+="<td><h:commandButton class='btn btn-lg btn-primary' id='addFriendBtn' value='AddFriend' action=''>"+"Add friend"+"</h:commandButton></td>";//add addfreind biutton //hash the number and use it as a lookupvalue for the actual value
+              {html+="<td><h:link ='viewUser' value='"+escapeHtml4(users.get(i).getName())+"'</h:link></td>";} //insert user          with name
+              //Adding dropdown
+              
+             
               html+="</tr> </h:form>";
           }
          html+="</table>";
