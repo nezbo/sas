@@ -98,6 +98,12 @@ public class DBConnection {
         }
     }
 
+    /**
+     * 
+     * @param username
+     * @return Returns a User object if the username exists, null if it doesnt
+     * @throws SQLException If the prepared statement fails
+     */
     public static User getUser(String username) {
         try {
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `username` = ?;", getUserConnection());
@@ -189,17 +195,76 @@ public class DBConnection {
      * @return True if success.
      */
     public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {
-        return false;
+        User u1 = getUser(fromUsername);
+        User u2 = getUser(toUsername);
+        if (u1 == null || u2 == null) return false;
+        
+        try {
+            // Check if the new relationshiptype id exists in the table RelationshipType
+            PreparedStatement stmt = getPreparedStatement("SELECT * FROM RelationshipType WHERE id=?;", getUserConnection());
+            stmt.setString(1, relationshipTypeId + "");
+            if (!stmt.executeQuery().first()) return false;
+                    
+            // Update Relationship
+            stmt = getPreparedStatement(
+                        "UPDATE Relationship, RelationshipType "
+                      + "SET Relationship.relationship_type=?"
+                      + "WHERE Relationship.from_id = ?"
+                      + "AND Relationship.to_id = ?", getUserConnection());
+            int updated = stmt.executeUpdate();
+            
+            if (updated == 1) return true;
+            
+            // Create Relationship
+            stmt = getPreparedStatement(
+                    "INSERT INTO Relationship (from_id, to_id, relationship_type)"
+                  + "VALUES (?, ?, ?);", getUserConnection());
+            stmt.setString(1, fromUsername);
+            stmt.setString(2, toUsername);
+            stmt.setString(3, relationshipTypeId + "");
+            
+            return (stmt.executeUpdate() == 1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
     /**
      * Relationship between two given users.
      * @param fromUsername The username of the user, that has made the relationship.
      * @param toUsername The username of the user, that the relationship is made to.
-     * @return Relationship (duh!)
+     * @return Relationship (duh!). In the case that there is not a relationship between 
      */
     public static Relationship getRelationshipBetweenUsers(String fromUsername, String toUsername){
-        return null;
+        User u1 = getUser(fromUsername);
+        User u2 = getUser(toUsername);
+        if (u1 == null || u2 == null) return null;
+        
+        try { // Relationship.from_id = 1 AND Relationship.to_id = 2 AND Relationship.relationship_type = id;
+            PreparedStatement stmt = getPreparedStatement(
+                        "SELECT RelationshipType.id, RelationshipType.type "
+                        + "FROM `sassy`.`Relationship`, `sassy`.`RelationshipType`"
+                        + "WHERE `Relationship`.`from_id` = ? "
+                            + "AND `Relationship`.`to_id` = ?"
+                            + "AND `Relationship`.`relationship_type` = `id`;", getUserConnection());
+            stmt.setString(1, fromUsername);
+            stmt.setString(2, toUsername);
+            ResultSet result = stmt.executeQuery();
+            
+            if (!result.first()) return null; // if there are no relationship between these users
+            
+            int id = result.getInt("id");
+            String type = result.getString("type");
+            Relationship relationship = new Relationship(u1, u2, new RelationshipType(id, type));
+            return relationship;
+        }
+        catch (Exception e) {
+            // TODO: Handle error
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -209,7 +274,24 @@ public class DBConnection {
      * @return True if success.
      */
     public static boolean deleteRelationship(String fromUsername, String toUsername) {
-        return false;
+        User u1 = getUser(fromUsername);
+        User u2 = getUser(toUsername);
+        if (u1 == null || u2 == null) return false;
+        
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                            "DELETE FROM Relationship"
+                          + "WHERE from_id = ?"
+                          + "AND to_id = ?;", getUserConnection());
+            stmt.setString(1, fromUsername);
+            stmt.setString(2, toUsername);
+            
+            return stmt.executeUpdate() == 1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
     //<editor-fold desc="-Overview">
@@ -221,7 +303,32 @@ public class DBConnection {
      * @return A list of all relationships.
      */
     public static List<Relationship> getRelationshipsFromUser(String fromUsername) {
-        return null;
+        User u1 = getUser(fromUsername);
+        if (u1 == null) return null;
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                                "SELECT * FROM Relationship"
+                              + "WHERE from_id = ?;", getUserConnection());
+            stmt.setString(1, fromUsername);
+            ResultSet result = stmt.executeQuery();
+            
+            ArrayList<Relationship> relationshipArray = new ArrayList<>();
+
+            while (result.next()) {
+                
+                User u2 = getUser(result.getString("to_id"));
+                RelationshipType type = getRelationshipType(result.getString("type"));
+                
+                relationshipArray.add(new Relationship(u1, u2, type));
+            }
+            
+            return relationshipArray;
+        }
+        catch (Exception e) {
+            // TODO: error handling
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -230,10 +337,37 @@ public class DBConnection {
      *
      * @param fromUsername The username of the user.
      * @param relationshipTypeId The integer id of the relation type to get.
-     * @return A list of all relationships.
+     * @return A list of all relationships. Null if the username does not exist.
      */
     public static List<Relationship> getRelationshipsFromUserWithType(String fromUsername, int relationshipTypeId) {
-        return null;
+        User u1 = getUser(fromUsername);
+        if (u1 == null) return null;
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                                "SELECT * FROM Relationship"
+                              + "WHERE from_id = ?"
+                              + "AND type = ?;", getUserConnection());
+            stmt.setString(1, fromUsername);
+            stmt.setString(2, relationshipTypeId + "");
+            ResultSet result = stmt.executeQuery();
+            
+            ArrayList<Relationship> relationshipArray = new ArrayList<>();
+            
+            while (result.next()) {
+                
+                User u2 = getUser(result.getString("to_id"));
+                RelationshipType type = getRelationshipType(result.getString("type"));
+
+                relationshipArray.add(new Relationship(u1, u2, type));
+            }
+            
+            return relationshipArray;
+        }
+        catch (Exception e) {
+            // TODO: error handling
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -241,10 +375,36 @@ public class DBConnection {
      * made to him.
      *
      * @param toUsername The username of the user.
-     * @return A list of all relationships.
+     * @return A list of all relationships. Null if the username does not exist.
      */
     public static List<Relationship> getRelationshipsToUser(String toUsername) {
-        return null;
+        User u2 = getUser(toUsername);
+        if (u2 == null) return null;
+        
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                                "SELECT * FROM Relationship"
+                              + "WHERE to_id = ?;", getUserConnection());
+            stmt.setString(1, toUsername);
+            ResultSet result = stmt.executeQuery();
+            
+            ArrayList<Relationship> relationshipArray = new ArrayList<>();
+
+            while (result.next()) {
+                
+                User u1 = getUser(result.getString("from_id"));
+                RelationshipType type = getRelationshipType(result.getString("type"));
+
+                relationshipArray.add(new Relationship(u1, u2, type));
+            }
+            
+            return relationshipArray;
+        }
+        catch (Exception e) {
+            // TODO: error handling
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -253,10 +413,37 @@ public class DBConnection {
      *
      * @param toUsername The username of the user.
      * @param relationshipTypeId The integer id of the relation type to get.
-     * @return A list of all relationships.
+     * @return A list of all relationships. Null if the username does not exist.
      */
     public static List<Relationship> getRelationshipsToUserWithType(String toUsername, int relationshipTypeId) {
-        return null;
+        User u2 = getUser(toUsername);
+        if (u2 == null) return null;
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                                "SELECT * FROM Relationship"
+                              + "WHERE to_id = ?"
+                              + "AND type = ?;", getUserConnection());
+            stmt.setString(1, toUsername);
+            stmt.setString(2, relationshipTypeId + "");
+            ResultSet result = stmt.executeQuery();
+            
+            ArrayList<Relationship> relationshipArray = new ArrayList<>();
+            
+            while (result.next()) {
+                
+                User u1 = getUser(result.getString("from_id"));
+                RelationshipType type = getRelationshipType(result.getString("type"));
+
+                relationshipArray.add(new Relationship(u1, u2, type));
+            }
+            
+            return relationshipArray;
+        }
+        catch (Exception e) {
+            // TODO: error handling
+            e.printStackTrace();
+            return null;
+        }
     }
     //</editor-fold>
 
@@ -277,6 +464,28 @@ public class DBConnection {
             return usersArray;
         } catch (SQLException ex) {
             //TODO: Error handling
+            return null;
+        }
+    }
+    
+    private static RelationshipType getRelationshipType(String id)
+    {
+        try {
+            PreparedStatement stmt = getPreparedStatement(
+                                "SELECT * FROM RelationshipType"
+                              + "WHERE id = ?;", getUserConnection());
+            stmt.setString(1, id);
+            ResultSet result = stmt.executeQuery();
+            
+            if(!result.first()) return null;
+            int _id = result.getInt("id");
+            String type = result.getString("type");
+            return new RelationshipType(_id, type);
+        }
+        catch(SQLException e)
+        {
+            // TODO: Error handling
+            e.printStackTrace();
             return null;
         }
     }
