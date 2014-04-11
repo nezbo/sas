@@ -53,30 +53,7 @@
                         Repeat Password:
                         <h:inputSecret class="form-control" required='true'  id="password2" size="15" maxlength="255" value="#{CreateBean.password2}"/>
                         <br/>
-                        <!--GLOBAL PUBLIC KEY = 6LeujfESAAAAAA-v8so9623aYCBXqLi6uo1qhrsn -->
-                        <!-- NYT -->
-                        <h:outputLabel value="CAPTCHA" /> 
-                            <script type="text/javascript"
-                               src="https://www.google.com/recaptcha/api/challenge?k=6LeJQvESAAAAAOkeEZbUPDH4KxxTmkwg-uyVMw4g"> 
-                            </script>
-                            <noscript>
-                               <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LeJQvESAAAAAOkeEZbUPDH4KxxTmkwg-uyVMw4g"
-                                   height="300" width="500" frameborder="0"></iframe><br/>
-                               <textarea name="recaptcha_challenge_field" rows="3" cols="40">
-                               </textarea>
-                               <input type="hidden" name="recaptcha_response_field"
-                                   value="manual_challenge">
-                               </input>
-                            </noscript>
-                           
-                            <br/><br/>
- 
-                            <h:commandButton id="submit"  
-                                             class="btn btn-primary"
-                                             value="Create"
-                                             action="#{CreateBean.createUser}"/>
-                            <h:outputLink value="index.xhtml" class="btn btn-default pull-right">Back to login</h:outputLink>
-                        <h:messages id="createmess" globalOnly="true"/>
+                        <h:commandButton id="btnCreate" class="btn btn-lg btn-primary" value="Create" action="#{CreateBean.createUser}"/>
                         
                     </h:form>
                 </div>

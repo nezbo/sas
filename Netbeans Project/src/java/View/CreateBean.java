@@ -11,7 +11,16 @@ import javax.faces.bean.ManagedProperty;
 import javax.inject.Named;
 
 import Controller.ControllerFactory;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -20,6 +29,9 @@ import javax.enterprise.context.RequestScoped;
 @Named("CreateBean")
 @RequestScoped
 public class CreateBean implements java.io.Serializable {
+    
+    private static final String RECAPTCHA_GLOBAL_PRIVATE_KEY = "6LeujfESAAAAACW-Khc5YcWLg47XOW1r4KQgbp8K";
+    private static final String RECAPTCHA_PRIVATE_KEY = "6LeJQvESAAAAAAM4WMQUzf-3vBXCdHCx7chdu9YB";
     
     @ManagedProperty(value="#{loginBean}")
     private SecurityBean loginBean; // +setter
@@ -53,14 +65,48 @@ public class CreateBean implements java.io.Serializable {
     }
     
     public String createUser(){
-        boolean result = ControllerFactory.getController().createUser(username, password);
-        if(result){
-            //loginBean.setUserName(username); //cannot do it this way
-            //loginBean.setPassword(password);
-            //loginBean.login();
-            return "index";
+        try{
+            if(validateCaptcha()){
+                boolean result = ControllerFactory.getController().createUser(username, password);
+                if(result){
+                    //loginBean.setUserName(username); //cannot do it this way
+                    //loginBean.setPassword(password);
+                    //loginBean.login();
+                    return "index";
+                }
+            }
+        }catch(IOException e){
+            System.out.println(e.toString());
         }
-        else            
-            return "index";
+        return "create";
+    }
+    
+    private boolean validateCaptcha() throws IOException
+    {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();  
+        String ip = httpServletRequest.getRemoteAddr();
+        String challenge = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("recaptcha_challenge_field");
+        String response = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("recaptcha_response_field");
+ 
+        URL url = new URL("http://www.google.com/recaptcha/api/verify");
+        URLConnection urlcon = url.openConnection();
+        urlcon.setDoInput(true);
+        urlcon.setDoOutput(true);
+        urlcon.setUseCaches(false);
+ 
+        DataOutputStream dos = new DataOutputStream(urlcon.getOutputStream());
+        String content = "privatekey=" + RECAPTCHA_PRIVATE_KEY +
+                         "&remoteip=" + ip +
+                         "&challenge=" + URLEncoder.encode(challenge, "UTF-8") +
+                         "&response=" + URLEncoder.encode(response, "UTF-8");
+        dos.writeBytes(content);
+        dos.flush();
+        dos.close();
+ 
+        BufferedReader br = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
+        String result = br.readLine().toLowerCase();
+        br.close();
+       
+        return result.startsWith("true");
     }
 }
