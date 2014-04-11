@@ -181,7 +181,6 @@ public class DBConnection {
             ex.printStackTrace();
             return null;
         }
-
     }
     //</editor-fold>
 
@@ -211,6 +210,9 @@ public class DBConnection {
                       + "SET Relationship.relationship_type=?"
                       + "WHERE Relationship.from_id = ?"
                       + "AND Relationship.to_id = ?", getUserConnection());
+            stmt.setInt(1, relationshipTypeId);
+            stmt.setString(2, fromUsername);
+            stmt.setString(3, toUsername);
             int updated = stmt.executeUpdate();
             
             if (updated == 1) return true;
@@ -221,11 +223,12 @@ public class DBConnection {
                   + "VALUES (?, ?, ?);", getUserConnection());
             stmt.setString(1, fromUsername);
             stmt.setString(2, toUsername);
-            stmt.setString(3, relationshipTypeId + "");
+            stmt.setInt(3, relationshipTypeId);
             
             return (stmt.executeUpdate() == 1);
         }
         catch (Exception e) {
+            // TODO: Handle error
             e.printStackTrace();
             return false;
         }
@@ -452,7 +455,8 @@ public class DBConnection {
     //<editor-fold desc="Relationship Type">
     public static List<RelationshipType> getAllRelationshipTypes() {
         try {
-            PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`RelationshipType`", getUserConnection());
+            PreparedStatement stmt = getPreparedStatement(
+                    "SELECT * FROM `sassy`.`RelationshipType`", getUserConnection());
             ResultSet set = stmt.executeQuery();
             ArrayList<RelationshipType> usersArray = new ArrayList<>();
 
@@ -471,6 +475,7 @@ public class DBConnection {
     private static RelationshipType getRelationshipType(String id)
     {
         try {
+            // Find the relationshiptype where id = the given id
             PreparedStatement stmt = getPreparedStatement(
                                 "SELECT * FROM RelationshipType"
                               + "WHERE id = ?;", getUserConnection());
