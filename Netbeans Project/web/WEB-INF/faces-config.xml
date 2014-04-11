@@ -107,7 +107,7 @@
         </managed-property>
         <managed-property> 
             <property-name>informationBean</property-name> 
-            <value>#{informationBean}</value> 
+            <value>#{InformationBean}</value> 
         </managed-property>
     </managed-bean> 
     <managed-bean>
@@ -121,7 +121,7 @@
         </managed-property>
         <managed-property> 
             <property-name>informationBean</property-name> 
-            <value>#{informationBean}</value> 
+            <value>#{InformationBean}</value> 
         </managed-property>
     </managed-bean> 
     <managed-bean>

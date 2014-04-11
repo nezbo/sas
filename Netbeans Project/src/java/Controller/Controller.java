@@ -7,6 +7,7 @@
  * Defines the overall functions for Security controller and facade controller
  */
 package Controller;
+import Model.RelationshipType;
 import Model.User;
 import java.util.List;
 
@@ -42,5 +43,11 @@ public interface Controller {
     public boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends);
     
     public boolean updatePassword(String userName, String password);
+    
+    /**
+     * Returns a list of relationship types availble.
+     * @return 
+     */
+    public List<RelationshipType> getRelationShipTypes();
             
 }

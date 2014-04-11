@@ -6,6 +6,7 @@
 
 package Controller;
 
+import Model.RelationshipType;
 import Model.User;
 import java.util.List;
 
@@ -91,5 +92,10 @@ public class SecurityController implements Controller {
         
         // TODO SECURITY
         return FacadeController.getInstance().updateUserInfo(username, name, address, hobbies, friends);
+    }
+
+    @Override
+    public List<RelationshipType> getRelationShipTypes() {
+            return FacadeController.getInstance().getRelationShipTypes();
     }
 }
