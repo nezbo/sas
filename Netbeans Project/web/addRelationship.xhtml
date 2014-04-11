@@ -1,15 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Create Profile</title>
-        <meta charset="utf-8"></meta>
+
+    <f:metadata>                
+    </f:metadata>
+    <h:head>        
+        <title>User list</title>
+         <meta charset="utf-8"></meta>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link href="css/bootstrap.min.css" rel="stylesheet"></link>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+          <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -21,7 +24,7 @@
     <script src="js/bootstrap.min.js"></script>
     </h:head>
     <h:body>
-        <!--topmenu-->
+                <!--topmenu-->
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -32,7 +35,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-              <li class="active"> <h:form><h:commandButton class="btn btn-lg btn-primary" id="btnMenuCreate" value="Log in" action="create"/></h:form></li>                          
+              <li class="active"> <h:form><h:commandButton class="btn btn-lg btn-primary" id="btnMenuCreate" value="Log out" action="#{SecurityBean.logOut}"/></h:form></li>                          
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -42,31 +45,24 @@
                 <div style="border-collapse:separate;border-spacing:10%;">
                     
                     <br/>
-                    <h2 class="form-signin-heading">Please create user</h2> 
-                    <h:form class="form-signin">
-                        Username:
-                        <h:inputText  class="form-control" required='true' id="username" size="15" maxlength="31" value="#{CreateBean.username}"/>
-                        <br/>
-                        Password:
-                        <h:inputSecret class="form-control" required='true'  id="password" size="15" maxlength="255" value="#{CreateBean.password}"/>
-                        <br/>
-                        Repeat Password:
-                        <h:inputSecret class="form-control" required='true'  id="password2" size="15" maxlength="255" value="#{CreateBean.password2}"/>
-                        <br/>
-                        <h:commandButton id="btnCreate" class="btn btn-lg btn-primary" value="Create" action="#{CreateBean.createUser}"/>
-                        
+                    <h2 class="form-signin-heading" value="Specify your relationship type to #{RelationshipBean.person}"></h2> 
+                    <h:form binding="#{RelationshipBean.form}">        
+                            <h:outputText id="htmlStuff" value="#{HTMLBean.HTMLRelationshipTypeList}" escape="false"/>
+                            <h:commandButton id="btnSaveUserInfo" value="Add" action="#{RelationshipBean.addRelationship}"/>
                     </h:form>
+ 
+                    
+                    
                 </div>
             </div>
-        </div>
-           
-        
+        </div>      
+                
     </h:body>
 </html>
-
-
 
  
     
         
     
+
+

@@ -60,6 +60,14 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule> <!--adding 'search' feature-->
+        <from-view-id>/user.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>addRelationship</from-outcome>
+            <to-view-id>addRelationship.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
         <navigation-rule>
         <from-view-id>/create.xhtml</from-view-id>
         <navigation-case>
@@ -112,7 +120,7 @@
     </managed-bean> 
     <managed-bean>
         <managed-bean-name>RelationshipBean</managed-bean-name>
-        <managed-bean-class>View.HTMLBean</managed-bean-class> 
+        <managed-bean-class>View.RelationshipBean</managed-bean-class> 
     
         <managed-bean-scope>request</managed-bean-scope>
         <managed-property> 

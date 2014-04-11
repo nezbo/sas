@@ -49,5 +49,7 @@ public interface Controller {
      * @return 
      */
     public List<RelationshipType> getRelationShipTypes();
+    
+    public boolean addRelationship(String currentUserName, String otherUserName, int relationshipType);
             
 }

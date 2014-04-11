@@ -21,16 +21,39 @@ import java.util.List;
 @SessionScoped
 public class InformationBean implements java.io.Serializable {
 
+    private String addFriendRelationshipType ="";
+    private String addFriendRelationshipTypePerson="";
+    private int addFriendRelationshipTypePersonID;
+
+    
     private String showUser="";
-    private List<User> currentListOfUsers;
+    
 
-    public List<User> getCurrentListOfUsers() {
-        return currentListOfUsers;
+    public String getAddFriendRelationshipTypePerson() {
+        return addFriendRelationshipTypePerson;
     }
 
-    public void setCurrentListOfUsers(List<User> currentListOfUsers) {
-        this.currentListOfUsers = currentListOfUsers;
+    public void setAddFriendRelationshipTypePerson(String addFriendRelationshipTypePerson) {
+        this.addFriendRelationshipTypePerson = addFriendRelationshipTypePerson;
     }
+
+    public int getAddFriendRelationshipTypePersonID() {
+        return addFriendRelationshipTypePersonID;
+    }
+
+    public void setAddFriendRelationshipTypePersonID(int addFriendRelationshipTypePersonID) {
+        this.addFriendRelationshipTypePersonID = addFriendRelationshipTypePersonID;
+    }
+
+    
+    public String getAddFriendRelationshipType() {
+        return addFriendRelationshipType;
+    }
+
+    public void setAddFriendRelationshipType(String addFriendRelationshipType) {
+        this.addFriendRelationshipType = addFriendRelationshipType;
+    }
+
     
     
     public String getShowUser() {

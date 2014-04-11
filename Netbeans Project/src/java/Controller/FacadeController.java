@@ -99,5 +99,17 @@ public class FacadeController implements Controller {
             return null;//need better error handling
         }
     }
+
+    @Override
+    public boolean addRelationship(String currentUserName, String addedFriendUserName, int relationshipType) {
+        try{
+            return DBConnection.setRelationship(currentUserName, addedFriendUserName, relationshipType);
+            
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
     
 }

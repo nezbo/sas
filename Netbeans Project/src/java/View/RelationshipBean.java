@@ -6,10 +6,15 @@
 
 package View;
 
-import javax.enterprise.context.SessionScoped;
+
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import Model.User;
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.component.UIForm;
 
 /**
  *
@@ -17,14 +22,41 @@ import javax.faces.bean.ManagedProperty;
  */
 
 @Named("RelationshipBean")
-@SessionScoped
+@RequestScoped
 public class RelationshipBean implements java.io.Serializable {
     
      @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; 
      @ManagedProperty(value="#{InformationBean}")
     private InformationBean informationBean; 
+     private List<User> currentListOfUsers;
 
+    public List<User> getCurrentListOfUsers() {
+        
+        if(securityBean.isLoggedIn() && currentListOfUsers==null)
+        {
+             currentListOfUsers = ControllerFactory.getController().getAllUsers();             
+        }
+        if(securityBean.isLoggedIn())
+            return currentListOfUsers;
+        else
+            return new ArrayList<User>();
+    }
+
+    public void setCurrentListOfUsers(List<User> currentListOfUsers) {
+        this.currentListOfUsers = currentListOfUsers;
+    }
+     
+
+     
+     public void InitializeFriends()
+     {
+        
+     }
+     
+     
+    
+     
     public SecurityBean getSecurityBean() {
         return securityBean;
     }
@@ -43,10 +75,22 @@ public class RelationshipBean implements java.io.Serializable {
     
     
     
-    public String addFriend(int id)
-    {
-        //if(securityBean.isLoggedIn())
+    
+    
+    public String addRelationShip(User user)
+    {        
+        if(ControllerFactory.getController().addRelationship(securityBean.getUserName(), getCurrentListOfUsers().get(informationBean.getAddFriendRelationshipTypePersonID()).getUsername(),  1))
+        {
+            return "added";
+        }
+        else
+            return "notAdded";
+
+//if(securityBean.isLoggedIn()){
+        
             //ControllerFactory.getController().addRelationShip(securityBean.getUserName(), informationBean.getCurrentListOfUsers().get(id), )
-        return "true";
+        
     }
+    
+    
 }

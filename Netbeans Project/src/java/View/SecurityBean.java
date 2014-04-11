@@ -9,6 +9,7 @@ package View;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -32,6 +33,7 @@ public class SecurityBean implements java.io.Serializable {
     {
        userName="";
        authed=false;
+       FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
        return logOut;
     }
     public String getLoginUserName() {

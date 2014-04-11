@@ -98,4 +98,9 @@ public class SecurityController implements Controller {
     public List<RelationshipType> getRelationShipTypes() {
             return FacadeController.getInstance().getRelationShipTypes();
     }
+
+    @Override
+    public boolean addRelationship(String currentUserName, String otherUserName, int relationshipType) {
+        return FacadeController.getInstance().addRelationship(currentUserName, otherUserName, relationshipType);
+    }
 }
