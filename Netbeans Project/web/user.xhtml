@@ -57,18 +57,11 @@
                             Hobbies:
                             <h:inputText id="hobbies" class="form-control" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
                             <h:commandButton id="btnSaveUserInfo" class="btn btn-lg btn-primary" value="Save" action="#{ViewUserBean.save}"/>
-                    </h:form>
-                     <h:form class="form-signin">                                  
-                            <h:commandButton id="btnSaveUserInfo" class="btn btn-lg btn-primary" value="Save" action="findFriends"/>
+                            <h:commandButton id="btnFindFriends" class="btn btn-lg btn-primary" value="Find Others" action="findFriends"/>
                     </h:form>
                 </div>
             </div>
         </div>
-
-                            <h:form>        
-                            <h:inputText id="search" size="15" maxlength="255" value='#{InformationBean.showUser}' /><br/>
-                            <h:commandButton id="btnSaveUserInfo" value="Save" action="#{ViewUserBean.search}"/>
-                    </h:form>
     </h:body>
 </html>
 
