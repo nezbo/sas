@@ -95,7 +95,7 @@ public class CreateBean implements java.io.Serializable {
         urlcon.setUseCaches(false);
  
         DataOutputStream dos = new DataOutputStream(urlcon.getOutputStream());
-        String content = "privatekey=" + RECAPTCHA_PRIVATE_KEY +
+        String content = "privatekey=" + RECAPTCHA_GLOBAL_PRIVATE_KEY +
                          "&remoteip=" + ip +
                          "&challenge=" + URLEncoder.encode(challenge, "UTF-8") +
                          "&response=" + URLEncoder.encode(response, "UTF-8");
