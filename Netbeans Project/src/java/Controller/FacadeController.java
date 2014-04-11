@@ -7,10 +7,12 @@
 package Controller;
 
 import Database.DBConnection;
+import Model.RelationshipType;
 import Model.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Serves as the entry point to all other controllers, for the view class, through SecurityController
@@ -49,7 +51,7 @@ public class FacadeController implements Controller {
     }
 
     @Override
-    public User[] getAllUsers() {
+    public List<User> getAllUsers() {
         return DBConnection.getAllUsers();
     }
 
@@ -84,6 +86,18 @@ public class FacadeController implements Controller {
     @Override
     public boolean updatePassword(String userName, String password) {
         return DBConnection.updatePassword(userName, password);
+    }
+
+    @Override
+    public List<RelationshipType> getRelationShipTypes() {
+        try{
+            return DBConnection.getAllRelationshipTypes();
+            
+        }
+        catch(Exception e)
+        {
+            return null;//need better error handling
+        }
     }
     
 }

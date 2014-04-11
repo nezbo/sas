@@ -7,7 +7,9 @@
  * Defines the overall functions for Security controller and facade controller
  */
 package Controller;
+import Model.RelationshipType;
 import Model.User;
+import java.util.List;
 
 /**
  *
@@ -34,12 +36,18 @@ public interface Controller {
      * Gets information for all users in the database, for searching etc.
      * @return An array of User objects.
      */
-    public User[] getAllUsers();
+    public List<User> getAllUsers();
     
     public boolean createUser(String username, String password);
     
     public boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends);
     
     public boolean updatePassword(String userName, String password);
+    
+    /**
+     * Returns a list of relationship types availble.
+     * @return 
+     */
+    public List<RelationshipType> getRelationShipTypes();
             
 }

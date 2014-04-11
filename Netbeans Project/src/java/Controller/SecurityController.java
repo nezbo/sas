@@ -6,7 +6,9 @@
 
 package Controller;
 
+import Model.RelationshipType;
 import Model.User;
+import java.util.List;
 
 /**
  * Makes security checks before forwarding data to the same method in the facade class
@@ -52,7 +54,7 @@ public class SecurityController implements Controller {
     }
 
     @Override
-    public User[] getAllUsers() {
+    public List<User> getAllUsers() {
         // TODO SECURITY
         return FacadeController.getInstance().getAllUsers();
     }
@@ -90,5 +92,10 @@ public class SecurityController implements Controller {
         
         // TODO SECURITY
         return FacadeController.getInstance().updateUserInfo(username, name, address, hobbies, friends);
+    }
+
+    @Override
+    public List<RelationshipType> getRelationShipTypes() {
+            return FacadeController.getInstance().getRelationShipTypes();
     }
 }

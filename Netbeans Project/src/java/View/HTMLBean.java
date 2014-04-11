@@ -9,10 +9,13 @@ package View;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import Model.RelationshipType;
 import Model.User;
+import java.util.List;
+import java.util.HashMap;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 /**
  *
  * @author dst
@@ -24,7 +27,24 @@ public class HTMLBean implements java.io.Serializable {
 
     @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; 
+    @ManagedProperty(value="#{InformationBean}")
+    private InformationBean informationBean; 
+    private HashMap<String, Integer> relationTypes = new HashMap<String,Integer>();
+
+    public HashMap<String, Integer> getRelationTypes() {
+        return relationTypes;
+    }
+
+
+    public InformationBean getInformationBean() {
+        return informationBean;
+    }
+
+    public void setInformationBean(InformationBean informationBean) {
+        this.informationBean = informationBean;
+    }
     private String HTMLFriendUsers;
+    
     public SecurityBean getSecurityBean() {
         return securityBean;
     }
@@ -33,35 +53,50 @@ public class HTMLBean implements java.io.Serializable {
         this.securityBean = securityBean;
     }
     
+	
     /**
      * returns the html for listing and addding users as friends
      * @return 
      */
     public String getHTMLFriendUsers()
     {
-        User[] users =null;
+        List<User> users =null;
+        
+        List<RelationshipType> relationTypesLocal =null;
         if(securityBean.isLoggedIn())
         {
              users = ControllerFactory.getController().getAllUsers();
+             if(users!=null)
+                 informationBean.setCurrentListOfUsers(users);
+             relationTypesLocal = ControllerFactory.getController().getRelationShipTypes();
+             
         }
         else
             return "not logged in";//error meesage
+        
+        for(RelationshipType t : relationTypesLocal)
+        {
+            relationTypes.put(t.getType(), t.getId());
+        }
         String html="";
         html+="<div class='jumbotron' class='jumbotron'>";
-         html+="<div class='list-group' id='"+users.length+"'>";       
+         html+="<div class='list-group' id='"+users.size()+"'>";       
          html+="<table style='width=100%'><tr>";
-          for(int i =0; i<users.length;i++)
+          for(int i =0; i<users.size();i++)
           {
-              html+="<tr>";
-              if(users[i].getName()==null || users[i].getName().equals(""))
+              html+="<tr><h:form>";
+              
+              if(users.get(i).getName()==null || users.get(i).getName().equals(""))
               {
                                 html+="<td>No name</td>"; //insert user with no name
               }
               else
-              {html+="<td>"+users[i].getName()+"</td>";} //insert user          with name
 
-              html+="<td><h:form><h:commandButton class='btn btn-lg btn-primary' id='addFriendBtn' value='AddFriend' action=''>"+"Add friend"+"</h:commandButton></h:form></td>";//add addfreind biutton //hash the number and use it as a lookupvalue for the actual value
-              html+="</tr>";
+              {html+="<td><h:link ='viewUser' value='"+escapeHtml4(users.get(i).getName())+"'</h:link></td>";} //insert user          with name
+              //Adding dropdown
+              
+             
+              html+="</tr> </h:form>";
           }
          html+="</table>";
         /* html+="   <a href='#' class='list-group-item active'>";
