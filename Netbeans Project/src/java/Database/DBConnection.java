@@ -57,12 +57,22 @@ public class DBConnection {
         System.out.println(url);
         System.out.println(port);
         System.out.println(database);
-        System.out.println(validUserLogin("usder", "password"));
-        System.out.println(validUserLogin("user", "pasdsword"));
-        System.out.println(validUserLogin("user", "password"));
-        System.out.println(updatePassword("bingo", "password2"));
-        System.out.println(getUser("user"));
-        System.out.println(setRelationship("daniel", "daniel2", 1));
+        System.out.println("validUserLogin(\"usder\", \"password\"): "+validUserLogin("usder", "password"));
+        System.out.println("validUserLogin(\"user\", \"pasdsword\"): "+validUserLogin("user", "pasdsword"));
+        System.out.println("validUserLogin(\"user\", \"password\"): "+validUserLogin("user", "password"));
+        System.out.println("updatePassword(\"bingo\", \"password2\"): "+updatePassword("bingo", "password2"));
+        System.out.println("getUser(\"user\"): "+getUser("user"));
+        System.out.println("-----------");
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("createUser(\"testuser\", \"password\"): "+createUser("testuser", "password"));
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("deleteUser(\"testuser\"): "+deleteUser("testuser"));
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("-----------");
+        System.out.println("validAdminLogin(\"admin\", \"password\"): "+validAdminLogin("admin", "password"));
+        System.out.println("-----------");
+        System.out.println("setRelationship(\"daniel\", \"daniel2\", 1)"+setRelationship("daniel", "daniel2", 1));
+        System.out.println("-----------");
         
         
         for (RelationshipType rt : getAllRelationshipTypes()) {
@@ -83,6 +93,20 @@ public class DBConnection {
         } catch (SQLException ex) {
             //Unable to create prepared statement
             ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public static boolean validAdminLogin(String username, String password){
+        try {
+            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`Admin` WHERE `username` = ? AND `password` = MD5(?);", getLoginConnection());
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.executeQuery();
+            stmt.getResultSet().next();
+            int count = stmt.getResultSet().getInt(1);
+            return count > 0;
+        } catch (SQLException ex) {
             return false;
         }
     }
@@ -215,6 +239,19 @@ public class DBConnection {
             //TODO: Error handling
             ex.printStackTrace();
             return null;
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Admin">
+    public static boolean deleteUser(String username) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("DELETE FROM `sassy`.`User` WHERE `username` = ?;", getAdminConnection());
+            stmt.setString(1, username);
+
+            return stmt.executeUpdate() == 1;
+        } catch (SQLException ex) {
+            return false;
         }
     }
     //</editor-fold>
