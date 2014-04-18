@@ -632,37 +632,7 @@ public class DBConnection {
             return null;
         }
 }
-    /**
-     * gets all users not friends with this user
-     * @param userName
-     * @return 
-     */
-    public static List<User> getAllUsersNotFriends(String userName) {
-        try {
-            PreparedStatement stmt = getPreparedStatement("select user.* from user where user.username!=? and id not in (select to_id from relationship where from_id in (select id from user where username=?))", getUserConnection());
-            stmt.setString(1, userName);
-            stmt.setString(2, userName);
-            ResultSet set = stmt.executeQuery();
-            
-            ArrayList<User> usersArray = new ArrayList<>();
-
-            while (set.next()) {
-
-                String name = set.getString("name");
-                String username = set.getString("username");
-                String address = set.getString("address");
-                String hobbies = set.getString("hobbies");
-
-                usersArray.add(new User(name, username, address, hobbies));
-
-            }
-            return usersArray;
-        } catch (SQLException ex) {
-            //TODO: Error handling
-            ex.printStackTrace();
-            return null;
-        }
-    }
+   
     //</editor-fold>
 
     //<editor-fold desc="Connections and prepared statement" defaultstate="collapsed">
