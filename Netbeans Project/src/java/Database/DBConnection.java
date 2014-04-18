@@ -105,7 +105,6 @@ public class DBConnection {
      * 
      * @param username
      * @return Returns a User object if the username exists, null if it doesnt
-     * @throws SQLException If the prepared statement fails
      */
     public static User getUser(String username) {
         try {
@@ -221,12 +220,15 @@ public class DBConnection {
     //</editor-fold>
 
     //<editor-fold desc="Relationship">
-    
     /**
      * Creates a new or alters an existing relationship between two users.
-     * @param fromUsername The username of the user, that has made the relationship.
-     * @param toUsername The username of the user, that the relationship is made to.
-     * @param relationshipTypeId The integer id of the relationship type (can be retrieved through {@link #getAllRelationshipTypes()}).
+     *
+     * @param fromUsername The username of the user, that has made the
+     * relationship.
+     * @param toUsername The username of the user, that the relationship is made
+     * to.
+     * @param relationshipTypeId The integer id of the relationship type (can be
+     * retrieved through {@link #getAllRelationshipTypes()}).
      * @return True if success.
      */
     public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {
@@ -270,7 +272,7 @@ public class DBConnection {
             return false;
         }
     }
-    
+
     /**
      * Relationship between two given users.
      * @param fromUsername The username of the user, that has made the relationship.
@@ -309,8 +311,11 @@ public class DBConnection {
 
     /**
      * Deletes a relationship between two users.
-     * @param fromUsername The username of the user, that has made the relationship.
-     * @param toUsername The username of the user, that the relationship is made to.
+     *
+     * @param fromUsername The username of the user, that has made the
+     * relationship.
+     * @param toUsername The username of the user, that the relationship is made
+     * to.
      * @return True if success.
      */
     public static boolean deleteRelationship(String fromUsername, String toUsername) {
@@ -333,7 +338,7 @@ public class DBConnection {
             return false;
         }
     }
-    
+
     //<editor-fold desc="-Overview">
     /**
      * Relationships <em>from</em> a given user - i.e. relationships he has
@@ -488,7 +493,7 @@ public class DBConnection {
     //</editor-fold>
 
     //</editor-fold>
-
+    
     //<editor-fold desc="Relationship Type">
     public static List<RelationshipType> getAllRelationshipTypes() {
         try {
@@ -535,38 +540,41 @@ public class DBConnection {
 
     //<editor-fold desc="Connections and prepared statement" defaultstate="collapsed">
     private static Connection getLoginConnection() {
-        if (loginConnection == null) {
-            try {
+        try {
+            if (loginConnection == null || loginConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 loginConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/login")).getConnection();
-            } catch (Exception ex) {
-                loginConnection = getConnection("login");
             }
+        } catch (Exception ex) {
+            loginConnection = getConnection("login");
         }
+
         return loginConnection;
     }
 
     private static Connection getUserConnection() {
-        if (userConnection == null) {
-            try {
+        try {
+            if (userConnection == null || userConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 userConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/user")).getConnection();
-            } catch (Exception ex) {
-                userConnection = getConnection("user");
             }
+        } catch (Exception ex) {
+            userConnection = getConnection("user");
         }
+
         return userConnection;
     }
 
     private static Connection getAdminConnection() {
-        if (adminConnection == null) {
-            try {
+        try {
+            if (adminConnection == null || adminConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 adminConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/admin")).getConnection();
-            } catch (Exception ex) {
-                adminConnection = getConnection("admin");
             }
+        } catch (Exception ex) {
+            adminConnection = getConnection("admin");
         }
+
         return adminConnection;
     }
 
@@ -582,14 +590,21 @@ public class DBConnection {
     }
 
     private static PreparedStatement getPreparedStatement(String sql, Connection conn) {
-        if (!preparedStmts.containsKey(sql)) {
+        try {
+            return conn.prepareStatement(sql);
+            
+            /* OLD IMPLEMENTATION
+            if (!preparedStmts.containsKey(sql)) {
             try {
-                preparedStmts.put(sql, conn.prepareStatement(sql));
+            preparedStmts.put(sql, conn.prepareStatement(sql));
             } catch (SQLException ex) {
-                //TODO: Error handling 
+            //TODO: Error handling
             }
+            }
+            return preparedStmts.get(sql);*/
+        } catch (SQLException ex) {
+            return null; //TODO: Do something cleverer! But what?
         }
-        return preparedStmts.get(sql);
     }
     //</editor-fold>
 
