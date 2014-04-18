@@ -12,6 +12,7 @@ package Model;
  */
 public class User {
         private String name;
+        private int id;   
         private String username;
         private String address;
         private String hobbies;
@@ -22,7 +23,21 @@ public class User {
         this.address = address;
         this.hobbies = hobbies;
     }
+    
+    public User(String name, String username, String address, String hobbies, int id) {
+        this.name = name;
+        this.username = username;
+        this.address = address;
+        this.hobbies = hobbies;
+        this.id =id;
+    }
 
+    public int getId() {
+        return id;
+    }
+    
+    
+    
     public String getName() {
         return name;
     }

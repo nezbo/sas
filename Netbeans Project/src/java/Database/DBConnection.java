@@ -62,6 +62,9 @@ public class DBConnection {
         System.out.println(validUserLogin("user", "password"));
         System.out.println(updatePassword("bingo", "password2"));
         System.out.println(getUser("user"));
+        System.out.println(setRelationship("daniel", "daniel2", 1));
+        
+        
         for (RelationshipType rt : getAllRelationshipTypes()) {
             System.out.println("RelationshipType: [id: " + rt.getId() + ", type: " + rt.getType() + "]");
         }
@@ -116,7 +119,8 @@ public class DBConnection {
                 username = set.getString("username");
                 String address = set.getString("address");
                 String hobbies = set.getString("hobbies");
-                return new User(name, username, address, hobbies);
+                int id = set.getInt("id");
+                return new User(name, username, address, hobbies, id);
             }
             return null;
         } catch (SQLException ex) {
@@ -182,6 +186,38 @@ public class DBConnection {
             return null;
         }
     }
+    
+    /**
+     * gets all users not friends with this user
+     * @param userName
+     * @return 
+     */
+    public static List<User> getAllUsersNotFriends(String userName) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("select user.* from user where user.username!=? and id not in (select to_id from relationship where from_id in (select id from user where username=?))", getUserConnection());
+            stmt.setString(1, userName);
+            stmt.setString(2, userName);
+            ResultSet set = stmt.executeQuery();
+            
+            ArrayList<User> usersArray = new ArrayList<>();
+
+            while (set.next()) {
+
+                String name = set.getString("name");
+                String username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+
+                usersArray.add(new User(name, username, address, hobbies));
+
+            }
+            return usersArray;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+    }
     //</editor-fold>
 
     //<editor-fold desc="Relationship">
@@ -197,38 +233,39 @@ public class DBConnection {
         User u1 = getUser(fromUsername);
         User u2 = getUser(toUsername);
         if (u1 == null || u2 == null) return false;
-        
+        System.out.println(1);
         try {
             // Check if the new relationshiptype id exists in the table RelationshipType
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM RelationshipType WHERE id=?;", getUserConnection());
-            stmt.setString(1, relationshipTypeId + "");
+            stmt.setInt(1, relationshipTypeId);
             if (!stmt.executeQuery().first()) return false;
-                    
+                    System.out.println(2);
             // Update Relationship
             stmt = getPreparedStatement(
                         "UPDATE Relationship, RelationshipType "
-                      + "SET Relationship.relationship_type=?"
-                      + "WHERE Relationship.from_id = ?"
+                      + "SET Relationship.relationship_type=? "
+                      + "WHERE Relationship.from_id = ? "
                       + "AND Relationship.to_id = ?", getUserConnection());
             stmt.setInt(1, relationshipTypeId);
-            stmt.setString(2, fromUsername);
-            stmt.setString(3, toUsername);
+            stmt.setInt(2, u1.getId());
+            stmt.setInt(3, u2.getId());
             int updated = stmt.executeUpdate();
             
             if (updated == 1) return true;
-            
+            System.out.println(3);
             // Create Relationship
             stmt = getPreparedStatement(
                     "INSERT INTO Relationship (from_id, to_id, relationship_type)"
                   + "VALUES (?, ?, ?);", getUserConnection());
-            stmt.setString(1, fromUsername);
-            stmt.setString(2, toUsername);
+            stmt.setInt(1, u1.getId());
+            stmt.setInt(2, u2.getId());
             stmt.setInt(3, relationshipTypeId);
-            
+            System.out.println(4);
             return (stmt.executeUpdate() == 1);
         }
         catch (Exception e) {
             // TODO: Handle error
+            System.out.println("erro" + e.getMessage());
             e.printStackTrace();
             return false;
         }

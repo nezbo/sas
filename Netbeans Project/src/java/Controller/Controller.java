@@ -37,7 +37,7 @@ public interface Controller {
      * @return An array of User objects.
      */
     public List<User> getAllUsers();
-    
+    public List<User> getAllUsersNotFriends(String username);
     public boolean createUser(String username, String password);
     
     public boolean updateUserInfo(String userName, String name, String address, String hobbies, String friends);
@@ -50,6 +50,9 @@ public interface Controller {
      */
     public List<RelationshipType> getRelationShipTypes();
     
-    public boolean addRelationship(String currentUserName, String otherUserName, int relationshipType);
+    public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType);
+    
+    
+    
             
 }

@@ -42,12 +42,15 @@
     </div>
         <div class="container theme-showcase" role="main" style="width: 30%">
             <div class="jumbotron">
+        <div hidden="true" class="alert alert-success">
+            <strong>Well done!</strong> You successfully read this important alert message.
+      </div>
                 <div style="border-collapse:separate;border-spacing:10%;">
                     
                     <br/>
-                    <h2 class="form-signin-heading">Please find others here</h2> 
+                    <h2 class="form-signin-heading">Add your relationships here</h2> 
                     <h:form>
-                        <h:dataTable value="#{RelationshipBean.currentListOfUsers}" var="dataItem">
+                        <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="dataItem">
                             <h:column>
                                 <f:facet name="header">
                                     </f:facet>                                                                        
