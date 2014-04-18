@@ -100,7 +100,12 @@ public class SecurityController implements Controller {
     }
 
     @Override
-    public boolean addRelationship(String currentUserName, String otherUserName, int relationshipType) {
-        return FacadeController.getInstance().addRelationship(currentUserName, otherUserName, relationshipType);
+    public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType) {
+        return FacadeController.getInstance().setRelationship(currentUserName, otherUserName, relationshipType);
+    }
+
+    @Override
+    public List<User> getAllUsersNotFriends(String username) {
+       return FacadeController.getInstance().getAllUsersNotFriends(username);
     }
 }

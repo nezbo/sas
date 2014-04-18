@@ -12,6 +12,7 @@ import Model.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,7 +102,7 @@ public class FacadeController implements Controller {
     }
 
     @Override
-    public boolean addRelationship(String currentUserName, String addedFriendUserName, int relationshipType) {
+    public boolean setRelationship(String currentUserName, String addedFriendUserName, int relationshipType) {
         try{
             return DBConnection.setRelationship(currentUserName, addedFriendUserName, relationshipType);
             
@@ -109,6 +110,19 @@ public class FacadeController implements Controller {
         catch(Exception e)
         {
             return false;
+        }
+    }
+
+    @Override
+    public List<User> getAllUsersNotFriends(String username) {
+        try{
+            
+            return DBConnection.getAllUsersNotFriends(username);
+            
+        }
+        catch(Exception e)
+        {
+            return new ArrayList<User>();
         }
     }
     

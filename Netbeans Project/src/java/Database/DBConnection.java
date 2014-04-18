@@ -57,11 +57,24 @@ public class DBConnection {
         System.out.println(url);
         System.out.println(port);
         System.out.println(database);
-        System.out.println(validUserLogin("usder", "password"));
-        System.out.println(validUserLogin("user", "pasdsword"));
-        System.out.println(validUserLogin("user", "password"));
-        System.out.println(updatePassword("bingo", "password2"));
-        System.out.println(getUser("user"));
+        System.out.println("validUserLogin(\"usder\", \"password\"): "+validUserLogin("usder", "password"));
+        System.out.println("validUserLogin(\"user\", \"pasdsword\"): "+validUserLogin("user", "pasdsword"));
+        System.out.println("validUserLogin(\"user\", \"password\"): "+validUserLogin("user", "password"));
+        System.out.println("updatePassword(\"bingo\", \"password2\"): "+updatePassword("bingo", "password2"));
+        System.out.println("getUser(\"user\"): "+getUser("user"));
+        System.out.println("-----------");
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("createUser(\"testuser\", \"password\"): "+createUser("testuser", "password"));
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("deleteUser(\"testuser\"): "+deleteUser("testuser"));
+        System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
+        System.out.println("-----------");
+        System.out.println("validAdminLogin(\"admin\", \"password\"): "+validAdminLogin("admin", "password"));
+        System.out.println("-----------");
+        System.out.println("setRelationship(\"daniel\", \"daniel2\", 1)"+setRelationship("daniel", "daniel2", 1));
+        System.out.println("-----------");
+        
+        
         for (RelationshipType rt : getAllRelationshipTypes()) {
             System.out.println("RelationshipType: [id: " + rt.getId() + ", type: " + rt.getType() + "]");
         }
@@ -80,6 +93,20 @@ public class DBConnection {
         } catch (SQLException ex) {
             //Unable to create prepared statement
             ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public static boolean validAdminLogin(String username, String password){
+        try {
+            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`Admin` WHERE `username` = ? AND `password` = MD5(?);", getLoginConnection());
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            stmt.executeQuery();
+            stmt.getResultSet().next();
+            int count = stmt.getResultSet().getInt(1);
+            return count > 0;
+        } catch (SQLException ex) {
             return false;
         }
     }
@@ -102,7 +129,6 @@ public class DBConnection {
      * 
      * @param username
      * @return Returns a User object if the username exists, null if it doesnt
-     * @throws SQLException If the prepared statement fails
      */
     public static User getUser(String username) {
         try {
@@ -116,7 +142,8 @@ public class DBConnection {
                 username = set.getString("username");
                 String address = set.getString("address");
                 String hobbies = set.getString("hobbies");
-                return new User(name, username, address, hobbies);
+                int id = set.getInt("id");
+                return new User(name, username, address, hobbies, id);
             }
             return null;
         } catch (SQLException ex) {
@@ -182,58 +209,107 @@ public class DBConnection {
             return null;
         }
     }
+    
+    /**
+     * gets all users not friends with this user
+     * @param userName
+     * @return 
+     */
+    public static List<User> getAllUsersNotFriends(String userName) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("select user.* from user where user.username!=? and id not in (select to_id from relationship where from_id in (select id from user where username=?))", getUserConnection());
+            stmt.setString(1, userName);
+            stmt.setString(2, userName);
+            ResultSet set = stmt.executeQuery();
+            
+            ArrayList<User> usersArray = new ArrayList<>();
+
+            while (set.next()) {
+
+                String name = set.getString("name");
+                String username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+
+                usersArray.add(new User(name, username, address, hobbies));
+
+            }
+            return usersArray;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Admin">
+    public static boolean deleteUser(String username) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("DELETE FROM `sassy`.`User` WHERE `username` = ?;", getAdminConnection());
+            stmt.setString(1, username);
+
+            return stmt.executeUpdate() == 1;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
     //</editor-fold>
 
     //<editor-fold desc="Relationship">
-    
     /**
      * Creates a new or alters an existing relationship between two users.
-     * @param fromUsername The username of the user, that has made the relationship.
-     * @param toUsername The username of the user, that the relationship is made to.
-     * @param relationshipTypeId The integer id of the relationship type (can be retrieved through {@link #getAllRelationshipTypes()}).
+     *
+     * @param fromUsername The username of the user, that has made the
+     * relationship.
+     * @param toUsername The username of the user, that the relationship is made
+     * to.
+     * @param relationshipTypeId The integer id of the relationship type (can be
+     * retrieved through {@link #getAllRelationshipTypes()}).
      * @return True if success.
      */
     public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {
         User u1 = getUser(fromUsername);
         User u2 = getUser(toUsername);
         if (u1 == null || u2 == null) return false;
-        
+        System.out.println(1);
         try {
             // Check if the new relationshiptype id exists in the table RelationshipType
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM RelationshipType WHERE id=?;", getUserConnection());
-            stmt.setString(1, relationshipTypeId + "");
+            stmt.setInt(1, relationshipTypeId);
             if (!stmt.executeQuery().first()) return false;
-                    
+                    System.out.println(2);
             // Update Relationship
             stmt = getPreparedStatement(
                         "UPDATE Relationship, RelationshipType "
-                      + "SET Relationship.relationship_type=?"
-                      + "WHERE Relationship.from_id = ?"
+                      + "SET Relationship.relationship_type=? "
+                      + "WHERE Relationship.from_id = ? "
                       + "AND Relationship.to_id = ?", getUserConnection());
             stmt.setInt(1, relationshipTypeId);
-            stmt.setString(2, fromUsername);
-            stmt.setString(3, toUsername);
+            stmt.setInt(2, u1.getId());
+            stmt.setInt(3, u2.getId());
             int updated = stmt.executeUpdate();
             
             if (updated == 1) return true;
-            
+            System.out.println(3);
             // Create Relationship
             stmt = getPreparedStatement(
                     "INSERT INTO Relationship (from_id, to_id, relationship_type)"
                   + "VALUES (?, ?, ?);", getUserConnection());
-            stmt.setString(1, fromUsername);
-            stmt.setString(2, toUsername);
+            stmt.setInt(1, u1.getId());
+            stmt.setInt(2, u2.getId());
             stmt.setInt(3, relationshipTypeId);
-            
+            System.out.println(4);
             return (stmt.executeUpdate() == 1);
         }
         catch (Exception e) {
             // TODO: Handle error
+            System.out.println("erro" + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-    
+
     /**
      * Relationship between two given users.
      * @param fromUsername The username of the user, that has made the relationship.
@@ -272,8 +348,11 @@ public class DBConnection {
 
     /**
      * Deletes a relationship between two users.
-     * @param fromUsername The username of the user, that has made the relationship.
-     * @param toUsername The username of the user, that the relationship is made to.
+     *
+     * @param fromUsername The username of the user, that has made the
+     * relationship.
+     * @param toUsername The username of the user, that the relationship is made
+     * to.
      * @return True if success.
      */
     public static boolean deleteRelationship(String fromUsername, String toUsername) {
@@ -296,7 +375,7 @@ public class DBConnection {
             return false;
         }
     }
-    
+
     //<editor-fold desc="-Overview">
     /**
      * Relationships <em>from</em> a given user - i.e. relationships he has
@@ -451,7 +530,7 @@ public class DBConnection {
     //</editor-fold>
 
     //</editor-fold>
-
+    
     //<editor-fold desc="Relationship Type">
     public static List<RelationshipType> getAllRelationshipTypes() {
         try {
@@ -498,38 +577,41 @@ public class DBConnection {
 
     //<editor-fold desc="Connections and prepared statement" defaultstate="collapsed">
     private static Connection getLoginConnection() {
-        if (loginConnection == null) {
-            try {
+        try {
+            if (loginConnection == null || loginConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 loginConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/login")).getConnection();
-            } catch (Exception ex) {
-                loginConnection = getConnection("login");
             }
+        } catch (Exception ex) {
+            loginConnection = getConnection("login");
         }
+
         return loginConnection;
     }
 
     private static Connection getUserConnection() {
-        if (userConnection == null) {
-            try {
+        try {
+            if (userConnection == null || userConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 userConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/user")).getConnection();
-            } catch (Exception ex) {
-                userConnection = getConnection("user");
             }
+        } catch (Exception ex) {
+            userConnection = getConnection("user");
         }
+
         return userConnection;
     }
 
     private static Connection getAdminConnection() {
-        if (adminConnection == null) {
-            try {
+        try {
+            if (adminConnection == null || adminConnection.isClosed()) {
                 Context ctx = new InitialContext();
                 adminConnection = ((DataSource) ctx.lookup("java:comp/env/jdbc/admin")).getConnection();
-            } catch (Exception ex) {
-                adminConnection = getConnection("admin");
             }
+        } catch (Exception ex) {
+            adminConnection = getConnection("admin");
         }
+
         return adminConnection;
     }
 
@@ -545,14 +627,21 @@ public class DBConnection {
     }
 
     private static PreparedStatement getPreparedStatement(String sql, Connection conn) {
-        if (!preparedStmts.containsKey(sql)) {
+        try {
+            return conn.prepareStatement(sql);
+            
+            /* OLD IMPLEMENTATION
+            if (!preparedStmts.containsKey(sql)) {
             try {
-                preparedStmts.put(sql, conn.prepareStatement(sql));
+            preparedStmts.put(sql, conn.prepareStatement(sql));
             } catch (SQLException ex) {
-                //TODO: Error handling 
+            //TODO: Error handling
             }
+            }
+            return preparedStmts.get(sql);*/
+        } catch (SQLException ex) {
+            return null; //TODO: Do something cleverer! But what?
         }
-        return preparedStmts.get(sql);
     }
     //</editor-fold>
 

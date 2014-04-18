@@ -9,6 +9,7 @@ package View;
 
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import Model.Relationship;
 import Model.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +31,30 @@ public class RelationshipBean implements java.io.Serializable {
      @ManagedProperty(value="#{InformationBean}")
     private InformationBean informationBean; 
      private List<User> currentListOfUsers;
-
-    public List<User> getCurrentListOfUsers() {
+     private List<User> currentListOfUsersNotFriends;
+     private List<Relationship> relationships;
+     
+     
+     
+     
+    /**
+     * gets the current list users not allready in a relationship with 
+     * @return 
+     */
+    public List<User> getCurrentListOfUsersNotFriends() {
         
-        if(securityBean.isLoggedIn() && currentListOfUsers==null)
+        if(securityBean.isLoggedIn() && currentListOfUsersNotFriends==null)
         {
-             currentListOfUsers = ControllerFactory.getController().getAllUsers();             
+             currentListOfUsersNotFriends = ControllerFactory.getController().getAllUsersNotFriends(securityBean.getUserName());
         }
         if(securityBean.isLoggedIn())
-            return currentListOfUsers;
+            return currentListOfUsersNotFriends;
         else
             return new ArrayList<User>();
     }
 
-    public void setCurrentListOfUsers(List<User> currentListOfUsers) {
-        this.currentListOfUsers = currentListOfUsers;
+    public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
+        this.currentListOfUsersNotFriends = currentListOfUsersNotFriends;
     }
      
 
@@ -79,12 +89,12 @@ public class RelationshipBean implements java.io.Serializable {
     
     public String addRelationShip(User user)
     {        
-        if(ControllerFactory.getController().addRelationship(securityBean.getUserName(), getCurrentListOfUsers().get(informationBean.getAddFriendRelationshipTypePersonID()).getUsername(),  1))
+        if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  1))
         {
             return "added";
         }
         else
-            return "notAdded";
+            return securityBean.getUserName()+user.getUsername();
 
 //if(securityBean.isLoggedIn()){
         
