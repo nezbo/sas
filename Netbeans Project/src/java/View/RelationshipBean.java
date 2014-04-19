@@ -10,8 +10,12 @@ package View;
 import javax.inject.Named;
 import Controller.ControllerFactory;
 import Model.Relationship;
+import Model.RelationshipType;
 import Model.User;
+import com.sun.faces.util.CollectionsUtils;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
@@ -25,7 +29,7 @@ import javax.faces.component.UIForm;
 @Named("RelationshipBean")
 @RequestScoped
 public class RelationshipBean implements java.io.Serializable {
-    
+        
      @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; 
      @ManagedProperty(value="#{InformationBean}")
@@ -33,9 +37,8 @@ public class RelationshipBean implements java.io.Serializable {
      private List<User> currentListOfUsers;
      private List<User> currentListOfUsersNotFriends;
      private List<Relationship> relationships;
-     
-     
-     
+     private Map<String, Object> relationshipTypes;
+     private String selectedRelationshipType;
      
     /**
      * gets the current list users not allready in a relationship with 
@@ -51,6 +54,22 @@ public class RelationshipBean implements java.io.Serializable {
             return currentListOfUsersNotFriends;
         else
             return new ArrayList<User>();
+    }
+    
+    public Map<String, Object> getRelationshipTypes()
+    {
+        if (relationshipTypes == null){
+            relationshipTypes = new HashMap<String, Object>();
+            for(RelationshipType type : ControllerFactory.getController().getRelationShipTypes())
+                relationshipTypes.put(type.getType(), type);
+        }
+        System.out.println(relationshipTypes.size());
+        return relationshipTypes;
+    }
+    
+    public String getSelectedRelationshipType()
+    {
+        return selectedRelationshipType;
     }
 
     public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
@@ -82,10 +101,6 @@ public class RelationshipBean implements java.io.Serializable {
     public void setInformationBean(InformationBean informationBean) {
         this.informationBean = informationBean;
     }
-    
-    
-    
-    
     
     public String addRelationShip(User user)
     {        
