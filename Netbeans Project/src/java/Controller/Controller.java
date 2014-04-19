@@ -53,6 +53,25 @@ public interface Controller {
     public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType);
     
     
+    /**
+     * gets the hugs for a specific user
+     * @param username
+     * @return 
+     */
+    public List<User> getHugs(String username);
     
-            
+    /**
+     * gives a hug to a specific user.
+     * @param fromUsername
+     * @param toUsername
+     * @return 
+     */
+    public boolean giveHug(String fromUsername, String toUsername);
+    
+    /**
+     * Removes hugs from the database.
+     * Used in reference when hugs are recieved
+     */
+     public boolean removeHugs(String username, List<User> users);
+     
 }

@@ -101,11 +101,28 @@ public class SecurityController implements Controller {
 
     @Override
     public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType) {
+        //check if both users exists and relationship type exists
         return FacadeController.getInstance().setRelationship(currentUserName, otherUserName, relationshipType);
     }
 
     @Override
     public List<User> getAllUsersNotFriends(String username) {
+        //perhaps check if username exists?
        return FacadeController.getInstance().getAllUsersNotFriends(username);
+    }
+
+    @Override
+    public List<User> getHugs(String username) {
+        return ControllerFactory.getController().getHugs(username);
+    }
+
+    @Override
+    public boolean giveHug(String fromUsername, String toUsername) {
+        return ControllerFactory.getController().giveHug(fromUsername, toUsername);
+    }
+
+    @Override
+    public boolean removeHugs(String username, List<User> users) {
+        return ControllerFactory.getController().removeHugs(username, users);
     }
 }

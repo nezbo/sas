@@ -631,6 +631,51 @@ public class DBConnection {
             ex.printStackTrace();
             return null;
         }
+    }
+        
+        
+          /**
+     * removes the hugs to a user from these specific users
+     * @param username
+     * @return returns a list of users hugging the user.
+     * @throws SQLException If the prepared statement fails
+     */
+
+    /**
+     * removes the hugs to a user from these specific users
+     * @param username
+     * @param users
+     * @return returns a list of users hugging the user.
+     * @throws SQLException If the prepared statement fails
+     */
+    public static boolean removeHugs(String username, List<User> users) {
+        try {
+            User user = getUser(username);
+            String deletion=  "DELETE FROM sassy.hug where to_id=? and (";
+            String userID="from_id=";
+            int i =0;
+            for(User u : users)
+            {
+                i++;            
+                deletion+=userID+u.getId();
+                if(i<users.size())
+                {
+                    deletion +=" OR ";
+                }                
+            }
+                    deletion+=")";
+            PreparedStatement stmt = getPreparedStatement(deletion, getUserConnection());
+            
+
+            stmt.setInt(1, user.getId());
+            return stmt.execute();
+            
+            
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return false;
+        }
 }
    
     //</editor-fold>
