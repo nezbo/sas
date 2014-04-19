@@ -39,8 +39,36 @@ public class RelationshipBean implements java.io.Serializable {
      private List<Relationship> relationships;
      private Map<String, Object> relationshipTypes;
      private String selectedRelationshipType;
+     private List<User> currentListOfUsersInRelationshipWith;
+
+     public String hug(User user)
+     {
+         if(ControllerFactory.getController().giveHug(securityBean.getUserName(), user.getUsername()));
+         {
+             ArrayList<User> l = new ArrayList<User>();
+             l.add(user);
+             //ControllerFactory.getController().removeHugs(securityBean.getUserName(), l); //wanna delete it but does not work
+         }
+         return "user";
+     }
      
-    /**
+    public List<User> getCurrentListOfUsersInRelationshipWith() {
+        
+        currentListOfUsersInRelationshipWith = ControllerFactory.getController().getHugs(securityBean.getUserName());
+        if(currentListOfUsersInRelationshipWith.size()>0)
+        {
+            //ControllerFactory.getController().removeHugs(securityBean.getUserName(), currentListOfUsersInRelationshipWith);//seen hugs, now remove them, maybe wait with this
+        }
+        return currentListOfUsersInRelationshipWith;
+    }
+
+    public void setCurrentListOfUsersInRelationshipWith(List<User> currentListOfUsersInRelationshipWith) {
+        this.currentListOfUsersInRelationshipWith = currentListOfUsersInRelationshipWith;
+    }
+    
+     
+     
+     /**
      * gets the current list users not allready in a relationship with 
      * @return 
      */

@@ -113,16 +113,16 @@ public class SecurityController implements Controller {
 
     @Override
     public List<User> getHugs(String username) {
-        return ControllerFactory.getController().getHugs(username);
+        return FacadeController.getInstance().getHugs(username);
     }
 
     @Override
     public boolean giveHug(String fromUsername, String toUsername) {
-        return ControllerFactory.getController().giveHug(fromUsername, toUsername);
+        return FacadeController.getInstance().giveHug(fromUsername, toUsername);
     }
 
     @Override
     public boolean removeHugs(String username, List<User> users) {
-        return ControllerFactory.getController().removeHugs(username, users);
+        return FacadeController.getInstance().removeHugs(username, users);
     }
 }

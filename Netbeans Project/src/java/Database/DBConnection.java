@@ -575,7 +575,12 @@ public class DBConnection {
     }
     
     
-    
+    /**
+     * adds hugs
+     * @param username
+     * @param toUsername
+     * @return 
+     */
      public static boolean addHug(String username, String toUsername)
     {
         try{
@@ -589,6 +594,7 @@ public class DBConnection {
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             return false;
         }
     }
@@ -634,12 +640,7 @@ public class DBConnection {
     }
         
         
-          /**
-     * removes the hugs to a user from these specific users
-     * @param username
-     * @return returns a list of users hugging the user.
-     * @throws SQLException If the prepared statement fails
-     */
+
 
     /**
      * removes the hugs to a user from these specific users
