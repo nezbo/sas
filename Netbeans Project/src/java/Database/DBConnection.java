@@ -573,6 +573,66 @@ public class DBConnection {
             return null;
         }
     }
+    
+    
+    
+     public static boolean addHug(String username, String toUsername)
+    {
+        try{
+            int from = getUser(username).getId();
+            int to = getUser(toUsername).getId();
+            PreparedStatement stmt = getPreparedStatement("insert into hug(from_id, to_id) values (?,?)", getUserConnection());
+            stmt.setInt(1, from);
+            stmt.setInt(2, to);                    
+            return stmt.execute();
+            
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+    
+    
+    /**
+     * 
+     * @param username
+     * @return returns a list of users hugging the user.
+     * @throws SQLException If the prepared statement fails
+     */
+    public static List<User> getHugUsers(String username) {
+        try {
+            User user = getUser(username);
+            PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`hug` WHERE `to_id` = ?;", getUserConnection());
+
+            stmt.setInt(1, user.getId());
+            ResultSet set1 = stmt.executeQuery();
+            ArrayList<User> usersArray = new ArrayList<>();
+            while(set1.next())//check if exists            
+            {
+                PreparedStatement hugger = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `ID` = ?;", getUserConnection());
+                hugger.setInt(1, set1.getInt("from_id"));    
+                ResultSet set = hugger.executeQuery();
+                if(set.first())
+                {
+                    String name = set.getString("name");
+                    String username1 = set.getString("username");
+                    String address = set.getString("address");
+                    String hobbies = set.getString("hobbies");
+
+                    usersArray.add(new User(name, username1, address, hobbies));
+                }
+
+            }
+            return usersArray;                                             
+            
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+}
+   
     //</editor-fold>
 
     //<editor-fold desc="Connections and prepared statement" defaultstate="collapsed">
