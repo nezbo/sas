@@ -137,5 +137,38 @@ public class FacadeController implements Controller {
             return new ArrayList<User>();
         }
     }
+
+    @Override
+    public List<User> getHugs(String username) {
+        try{
+        return DBConnection.getHugUsers(username);
+        }
+        catch(Exception e)
+        {
+            return new ArrayList<User>();
+        }
+    }
+
+    @Override
+    public boolean giveHug(String fromUsername, String toUsername) {
+        try{
+            return DBConnection.addHug(fromUsername, toUsername);
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeHugs(String username, List<User> users) {
+        try{
+        return DBConnection.removeHugs(username, users);
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
     
 }
