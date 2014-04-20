@@ -46,6 +46,18 @@ public class FacadeController implements Controller {
     }
     
     @Override
+    public boolean authenticateAdmin(String username, String password){
+        try{
+            return DBConnection.validAdminLogin(username, password);
+        }
+        catch(Exception e)
+        {
+            //TODO: Proper error handling
+            return false;
+        }
+    }
+    
+    @Override
     public User getUser(String username) {
         //@todo: handle bad user
         return DBConnection.getUser(username);

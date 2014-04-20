@@ -26,6 +26,15 @@ public interface Controller {
     public boolean authenticate(String username, String password);
     
     /**
+     * Checks if a username and password is a valid admin account
+     * It is assumed that you come from the adminLogin page when calling this method
+     * @param username The admin username
+     * @param password The matching password
+     * @return  True if the username exists as an admin and has the given password
+     */
+    public boolean authenticateAdmin(String username, String password);
+    
+    /**
      * Gets a specific user's profile data (address, hobbies, etc)
      * @param username The wanted username.
      * @return A User object with the information from the database.
