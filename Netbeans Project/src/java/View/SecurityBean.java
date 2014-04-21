@@ -80,7 +80,7 @@ public class SecurityBean implements java.io.Serializable {
         authed = ControllerFactory.getController().authenticateAdmin(userName, password);
         if(authed) userName = loginUserName;
         password = "";
-        return authed ? "admin" : "index";
+        return authed ? "user" : "index"; // TODO: The login should lead to an "admin" page, not user.
     }
     
     public boolean isLoggedIn(){
