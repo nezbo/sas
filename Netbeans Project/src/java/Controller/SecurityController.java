@@ -46,18 +46,16 @@ public class SecurityController implements Controller {
         }
        
     }
-     @Override
+   
+    @Override
     public boolean authenticateAdmin(String username, String password) {
-        // TODO SECURITY
-         if(username.length() <= 31 
-                && password.length() <= 255 ) {
-              return FacadeController.getInstance().authenticate(username, password);
+        // TODO: Security
+        if(username.length() <= 31 && password.length() <= 255) {
+            return FacadeController.getInstance().authenticateAdmin(username, password);
         } else {
-             return false;
+            return false;
         }
-       
     }
-    
 
     @Override
     public User getUser(String username) {

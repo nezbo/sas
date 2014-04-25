@@ -74,6 +74,7 @@ public class SecurityBean implements java.io.Serializable {
     }
     
     public String adminLogin()
+
     {                
         authed = ControllerFactory.getController().authenticateAdmin(loginUserName,password);
         if(authed)
@@ -89,6 +90,7 @@ public class SecurityBean implements java.io.Serializable {
     
     
     
+
     public boolean isLoggedIn(){
         return authed;
     }

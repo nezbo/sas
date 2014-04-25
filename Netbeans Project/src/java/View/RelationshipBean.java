@@ -55,6 +55,11 @@ public class RelationshipBean implements java.io.Serializable {
     public List<User> getCurrentListOfUsersInRelationshipWith() {
         
         currentListOfUsersInRelationshipWith = ControllerFactory.getController().getHugs(securityBean.getUserName());
+        if (currentListOfUsersInRelationshipWith == null){
+            //TODO: HANDLE THIS CASE
+            currentListOfUsersInRelationshipWith = new ArrayList<>();
+        }
+        
         if(currentListOfUsersInRelationshipWith.size()>0)
         {
             //ControllerFactory.getController().removeHugs(securityBean.getUserName(), currentListOfUsersInRelationshipWith);//seen hugs, now remove them, maybe wait with this

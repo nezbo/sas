@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>        
-        <title>Login</title>
+        <title>Admin Login</title>
          <!-- Bootstrap -->
     <meta charset="utf-8"></meta>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
@@ -43,6 +43,7 @@
                     <br/>
                     <h:form class="form-signin">
                         <h2 class="form-signin-heading">Administrator, please sign in</h2>
+
                         Username: <h:inputText  class="form-control" required='true' id="username" size="15" maxlength="31" value="#{SecurityBean.loginUserName}"/>
                         <br/>                        
                         Password: <h:inputSecret class="form-control" required='true'  id="password" size="15" maxlength="255" value="#{SecurityBean.password}"/>
