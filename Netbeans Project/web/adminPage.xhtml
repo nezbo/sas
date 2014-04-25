@@ -1,16 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <f:metadata>        
+        <f:event type="preRenderView" listener="#{ViewUserBean.getUser(SecurityBean.userName)}"/>
+    </f:metadata>
     <h:head>        
-        <title>Admin Login</title>
-         <!-- Bootstrap -->
-    <meta charset="utf-8"></meta>
+        <title>Profile page</title>
+         <meta charset="utf-8"></meta>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link href="css/bootstrap.min.css" rel="stylesheet"></link>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+          <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -22,6 +25,7 @@
     <script src="js/bootstrap.min.js"></script>
     </h:head>
     <h:body>
+                <!--topmenu-->
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -32,31 +36,31 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-              <li class="active"> <h:form><h:commandButton class="btn btn-lg btn-primary" id="btnMenuCreate" value="Create Profile" action="create"/></h:form></li>                          
+              <li class="active"> <h:form><h:commandButton class="btn btn-lg btn-primary" id="btnMenuCreate" value="Log out" action="#{SecurityBean.logOut}"/></h:form></li>                          
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
+                
         <div class="container theme-showcase" role="main" style="width: 30%">
             <div class="jumbotron">
                 <div style="border-collapse:separate;border-spacing:10%;">
+                    
                     <br/>
-                    <h:form class="form-signin">
-                        <h2 class="form-signin-heading">Administrator, please sign in</h2>
-
-                        Username: <h:inputText  class="form-control" required='true' id="username" size="15" maxlength="31" value="#{SecurityBean.loginUserName}"/>
-                        <br/>                        
-                        Password: <h:inputSecret class="form-control" required='true'  id="password" size="15" maxlength="255" value="#{SecurityBean.password}"/>
-                        <br/>
-                        <h:commandButton id="btnLogin" class="btn btn-lg btn-primary" value="Login" action="#{SecurityBean.adminLogin()}"/>
-                       <!--h:commandButton class="btn btn-lg btn-primary" id="btnCreate" value="Create Profile" action="create"/-->
-                    </h:form>                          
-    
-
+                    <h2 class="form-signin-heading">Administrators Panel</h2> 
+                    <h:form class="form-signin">      
+                            <h:commandButton id="btnViewUsers" class="btn btn-lg btn-primary" value="View and edit users" action="users"/>
+                            <h:commandButton id="btnViewRelations" class="btn btn-lg btn-primary" value="View and edit relationships" action="findFriends"/>
+                    </h:form>
                 </div>
             </div>
         </div>
-            
+                
     </h:body>
 </html>
+
+ 
+    
+        
+    
 

@@ -46,7 +46,7 @@ public class SecurityController implements Controller {
         }
        
     }
-    
+   
     @Override
     public boolean authenticateAdmin(String username, String password) {
         // TODO: Security
@@ -134,5 +134,15 @@ public class SecurityController implements Controller {
     @Override
     public boolean removeHugs(String username, List<User> users) {
         return FacadeController.getInstance().removeHugs(username, users);
+    }
+
+    @Override
+    public boolean delete(String usernameToDelete, String admin, String password) {
+        if(authenticateAdmin(admin,password))
+        {
+            return FacadeController.getInstance().delete(usernameToDelete, admin, password);
+        }
+        else
+            return false;
     }
 }

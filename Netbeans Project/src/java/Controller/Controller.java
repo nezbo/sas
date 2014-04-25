@@ -24,7 +24,14 @@ public interface Controller {
      * @return True if the username exists and has the given password
      */
     public boolean authenticate(String username, String password);
+        
     
+    /**
+     * deletes a user, only admins are allowed to use this function
+     * @param username
+     * @return 
+     */
+    public boolean delete(String usernameToDelete, String admin, String password);
     /**
      * Checks if a username and password is a valid admin account
      * It is assumed that you come from the adminLogin page when calling this method
