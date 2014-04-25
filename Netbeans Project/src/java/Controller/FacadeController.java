@@ -46,6 +46,19 @@ public class FacadeController implements Controller {
     }
     
     @Override
+    public boolean authenticateAdmin(String username, String password) {
+        try{
+            String hashPassword = password;//hashPassword(password);
+        return DBConnection.validAdminLogin(username, hashPassword);
+        }
+        catch(Exception e)
+        {
+            return false;
+            //@TODO:missing proper errorhandling
+        }
+    }
+    
+    @Override
     public User getUser(String username) {
         //@todo: handle bad user
         return DBConnection.getUser(username);
@@ -152,6 +165,17 @@ public class FacadeController implements Controller {
     public boolean removeHugs(String username, List<User> users) {
         try{
         return DBConnection.removeHugs(username, users);
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(String usernameToDelete, String admin, String password) {
+        try{                      
+                return DBConnection.deleteUser(usernameToDelete);           
         }
         catch(Exception e)
         {

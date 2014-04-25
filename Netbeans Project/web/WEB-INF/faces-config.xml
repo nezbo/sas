@@ -28,6 +28,22 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
+     <navigation-rule>
+        <from-view-id>/adminLogin.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>adminPage.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/adminPage.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>users</from-outcome>
+            <to-view-id>adminUsers.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
 <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
@@ -120,7 +136,8 @@
     </managed-bean> 
     <managed-bean>
         <managed-bean-name>RelationshipBean</managed-bean-name>
-        <managed-bean-class>View.RelationshipBean</managed-bean-class> 
+        <managed-bean-class>View.RelationshipBean</managed-bean-class>
+     
     
         <managed-bean-scope>request</managed-bean-scope>
         <managed-property> 
@@ -130,8 +147,21 @@
         <managed-property> 
             <property-name>informationBean</property-name> 
             <value>#{InformationBean}</value> 
+        </managed-property></managed-bean> 
+        <managed-bean>
+        <managed-bean-name>AdminBean</managed-bean-name>
+        <managed-bean-class>View.AdminBean</managed-bean-class>
+     
+    
+        <managed-bean-scope>request</managed-bean-scope>
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
         </managed-property>
-    </managed-bean> 
+        <managed-property> 
+            <property-name>informationBean</property-name> 
+            <value>#{InformationBean}</value> 
+        </managed-property></managed-bean> 
     <managed-bean>
         <managed-bean-name>InformationBean</managed-bean-name>
         <managed-bean-class>View.InformationBean</managed-bean-class> 

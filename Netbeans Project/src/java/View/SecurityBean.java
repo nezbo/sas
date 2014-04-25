@@ -73,6 +73,22 @@ public class SecurityBean implements java.io.Serializable {
         return authed ? "user" : "index";
     }
     
+    public String adminLogin()
+    {                
+        authed = ControllerFactory.getController().authenticateAdmin(loginUserName,password);
+        if(authed)
+        {userName=loginUserName;
+            AdminLogin=true;
+        }
+        
+        password = "";
+        return authed ? "login" : "adminLogin";
+    }
+    
+    
+    
+    
+    
     public boolean isLoggedIn(){
         return authed;
     }

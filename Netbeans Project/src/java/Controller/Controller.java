@@ -25,6 +25,21 @@ public interface Controller {
      */
     public boolean authenticate(String username, String password);
     
+     /**
+     * Checks if a username and password matches to admin
+     * @param username The username
+     * @param password The matching password
+     * @return True if the username exists and has the given password
+     */
+    public boolean authenticateAdmin(String username, String password);
+    
+    
+    /**
+     * deletes a user, only admins are allowed to use this function
+     * @param username
+     * @return 
+     */
+    public boolean delete(String usernameToDelete, String admin, String password);
     /**
      * Gets a specific user's profile data (address, hobbies, etc)
      * @param username The wanted username.
