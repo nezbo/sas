@@ -12,14 +12,12 @@ import Controller.ControllerFactory;
 import Model.Relationship;
 import Model.RelationshipType;
 import Model.User;
-import com.sun.faces.util.CollectionsUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.component.UIForm;
 
 /**
  *

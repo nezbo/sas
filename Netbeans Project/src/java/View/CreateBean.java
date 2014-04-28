@@ -6,7 +6,6 @@
 
 package View;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.inject.Named;
 

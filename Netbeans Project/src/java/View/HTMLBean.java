@@ -6,19 +6,13 @@
 
 package View;
 
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
 import Model.RelationshipType;
-import Model.User;
 import java.util.List;
 import java.util.HashMap;
-import javax.el.MethodExpression;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 /**
  *
  * @author dst

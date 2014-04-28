@@ -105,8 +105,10 @@ public class DBConnection {
             stmt.executeQuery();
             stmt.getResultSet().next();
             int count = stmt.getResultSet().getInt(1);
+            System.out.println(count);
             return count > 0;
         } catch (SQLException ex) {
+            System.out.println(ex.toString());
             return false;
         }
     }
@@ -120,7 +122,7 @@ public class DBConnection {
             stmt.setString(2, cleartextPassword);
             return stmt.executeUpdate() == 1;
         } catch (SQLException ex) {
-            //TODO: Error handling
+            ex.printStackTrace();
             return false;
         }
     }
@@ -251,6 +253,7 @@ public class DBConnection {
 
             return stmt.executeUpdate() == 1;
         } catch (SQLException ex) {
+            System.err.println(ex.toString());
             return false;
         }
     }
