@@ -105,7 +105,6 @@ public class DBConnection {
             stmt.executeQuery();
             stmt.getResultSet().next();
             int count = stmt.getResultSet().getInt(1);
-            System.out.println(count);
             return count > 0;
         } catch (SQLException ex) {
             System.out.println(ex.toString());

@@ -29,9 +29,6 @@ public class AdminBeanTest {
     
     @BeforeClass
     public static void setUpClass() {
-        DBConnection.deleteUser("testUser");
-        boolean worked = DBConnection.createUser("testUser", "password");
-        assertTrue("AdminBeanTest setUp failed", worked);
     }
     
     @AfterClass
@@ -47,6 +44,10 @@ public class AdminBeanTest {
         
         ab.setSecurityBean(sb);
         ab.setInformationBean(ib);
+
+        DBConnection.deleteUser("testUser");
+        boolean worked = DBConnection.createUser("testUser", "password");
+        assertTrue("AdminBeanTest setUp failed", worked);
     }
     
     @After
@@ -60,7 +61,7 @@ public class AdminBeanTest {
     // public void hello() {}
     @Test
     public void testDeleteNotAuth(){
-        User user = new User("Mr Test User", "testUser", "Userroad 1337", "Unittesting");
+        User user = DBConnection.getUser("testUser");
         String result = ab.delete(user);
         
         assertEquals("Deleting user without admin auth", "usersFalse", result);
@@ -68,13 +69,11 @@ public class AdminBeanTest {
     
     @Test
     public void testDeleteSuccess(){
-        User user = new User("Mr Test User", "testUser", "Userroad 1337", "Unittesting");
+        User user = DBConnection.getUser("testUser");
         sb.setLoginUserName("testAdmin");
         sb.setPassword("password");
+        ab.setPassword("password");
         sb.adminLogin();
-        
-        
-   
         
         String result = ab.delete(user);
         
@@ -83,9 +82,10 @@ public class AdminBeanTest {
     
     @Test
     public void testDeleteNotExist(){
-        User user = new User("Mr Test User", "testUser", "Userroad 1337", "Unittesting");
+        User user = DBConnection.getUser("testUser");
         sb.setLoginUserName("testAdmin");
         sb.setPassword("password");
+        ab.setPassword("password");
         sb.adminLogin();
         
         ab.delete(user);

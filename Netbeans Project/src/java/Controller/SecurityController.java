@@ -51,7 +51,6 @@ public class SecurityController implements Controller {
     public boolean authenticateAdmin(String username, String password) {
         // TODO: Security
         if(username.length() <= 31 && password.length() <= 255) {
-            System.out.println("security: auth admin");
             return FacadeController.getInstance().authenticateAdmin(username, password);
         } else {
             return false;
@@ -139,14 +138,10 @@ public class SecurityController implements Controller {
 
     @Override
     public boolean delete(String usernameToDelete, String admin, String password) {
-        System.out.println("security: delete called");
         if(authenticateAdmin(admin,password))
         {
-            System.out.println("admin successfully authed");
             return FacadeController.getInstance().delete(usernameToDelete, admin, password);
-        }
-        else{
-            System.out.println("admin failed auth");
+        }else{
             return false;
         }
             
