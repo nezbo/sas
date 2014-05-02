@@ -25,7 +25,6 @@ public class InformationBean implements java.io.Serializable {
     private String addFriendRelationshipTypePerson="";
     private int addFriendRelationshipTypePersonID;
 
-    
     private String showUser="";
     
 

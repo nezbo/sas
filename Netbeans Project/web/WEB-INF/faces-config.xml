@@ -4,6 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
+    <!-- ################################################################### -->
+    <!-- #################### NAVIGATION RULES ############################# -->
+    <!-- ################################################################### -->
+    
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
@@ -44,7 +48,7 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
-<navigation-rule>
+    <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>login</from-outcome>
@@ -84,90 +88,116 @@
             <redirect/>
         </navigation-case>
     </navigation-rule>
-        <navigation-rule>
+    <navigation-rule>
         <from-view-id>/create.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>index.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        </navigation-rule>
-        <!--navigation-rule>
-            <from-view-id>/create.xhtml</from-view-id>
-            <navigation-case>
-                <from-outcome></from-outcome>
-                <to-view-id>user.xhtml</to-view-id>
-                <redirect/>
-            </navigation-case>
-    </navigation-rule-->    
+     </navigation-rule>
+    
+    <!-- ################################################################### -->
+    <!-- #################### MANAGED PROPERTIES ########################### -->
+    <!-- ################################################################### -->
+    
+    <!-- SecurityBean --> 
     <managed-bean>
         <managed-bean-name>SecurityBean</managed-bean-name>
         <managed-bean-class>View.SecurityBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
     
-        <managed-bean-scope>session</managed-bean-scope></managed-bean> 
+    <!-- CreateBean --> 
     <managed-bean>
         <managed-bean-name>CreateBean</managed-bean-name>
         <managed-bean-class>View.CreateBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
+        
+        <managed-property>
+            <property-name>loginBean</property-name>
+            <value>#{SecurityBean}</value>
+        </managed-property>
     </managed-bean>
+    
+    <!-- ViewUserBean --> 
     <managed-bean>
         <managed-bean-name>ViewUserBean</managed-bean-name>
         <managed-bean-class>View.ViewUserBean</managed-bean-class> 
-    
         <managed-bean-scope>request</managed-bean-scope>
+        
         <managed-property> 
             <property-name>securityBean</property-name> 
             <value>#{SecurityBean}</value> 
         </managed-property>
-    </managed-bean>    
-     <managed-bean>
+        
+        <managed-property>
+            <property-name>informationBean</property-name>
+            <value>#{InformationBean}</value>
+        </managed-property>
+        <!--
+        <managed-property>
+            <property-name>relationshipBean</property-name>
+            <value>#{RelationshipBean}</value>
+        </managed-property>
+        -->
+    </managed-bean>   
+     
+    <!-- HTMLBean -->  
+    <managed-bean>
         <managed-bean-name>HTMLBean</managed-bean-name>
         <managed-bean-class>View.HTMLBean</managed-bean-class> 
-    
         <managed-bean-scope>request</managed-bean-scope>
+        
         <managed-property> 
             <property-name>securityBean</property-name> 
             <value>#{SecurityBean}</value> 
         </managed-property>
+        
         <managed-property> 
             <property-name>informationBean</property-name> 
             <value>#{InformationBean}</value> 
         </managed-property>
     </managed-bean> 
+    
+    <!-- RelationshipBean --> 
     <managed-bean>
         <managed-bean-name>RelationshipBean</managed-bean-name>
         <managed-bean-class>View.RelationshipBean</managed-bean-class>
-     
-    
         <managed-bean-scope>request</managed-bean-scope>
+        
         <managed-property> 
             <property-name>securityBean</property-name> 
             <value>#{SecurityBean}</value> 
         </managed-property>
+        
         <managed-property> 
             <property-name>informationBean</property-name> 
             <value>#{InformationBean}</value> 
-        </managed-property></managed-bean> 
-        <managed-bean>
+        </managed-property>
+    </managed-bean>
+    
+    <!-- AdminBean --> 
+    <managed-bean>
         <managed-bean-name>AdminBean</managed-bean-name>
         <managed-bean-class>View.AdminBean</managed-bean-class>
-     
-    
         <managed-bean-scope>request</managed-bean-scope>
+        
         <managed-property> 
             <property-name>securityBean</property-name> 
             <value>#{SecurityBean}</value> 
         </managed-property>
+        
         <managed-property> 
             <property-name>informationBean</property-name> 
             <value>#{InformationBean}</value> 
-        </managed-property></managed-bean> 
-    <managed-bean>
-        <managed-bean-name>InformationBean</managed-bean-name>
-        <managed-bean-class>View.InformationBean</managed-bean-class> 
-    
-        <managed-bean-scope>request</managed-bean-scope>        
+        </managed-property>
     </managed-bean> 
     
-    
+    <!-- InformationBean --> 
+    <managed-bean>
+        <managed-bean-name>InformationBean</managed-bean-name>
+        <managed-bean-class>View.InformationBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>        
+    </managed-bean> 
 </faces-config>

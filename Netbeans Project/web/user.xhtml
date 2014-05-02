@@ -70,7 +70,7 @@
                     <br/>
                     <h2 class="form-signin-heading">The following users has hugged you. Wanna hug them back? ;)</h2> 
                     
-                        <h:form>
+                    <h:form>
                         <h:dataTable value="#{RelationshipBean.currentListOfUsersInRelationshipWith}" var="dataItem">
                             <h:column>
                                 <f:facet name="header"/>                                                                   
@@ -79,7 +79,6 @@
                                 <h:commandButton value="Hug!" action="#{RelationshipBean.hug(dataItem)}" />
                             </h:column>
                         </h:dataTable>
-                        
                     </h:form>             
                     
                 </div>
