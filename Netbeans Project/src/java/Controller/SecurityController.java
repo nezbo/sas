@@ -141,8 +141,9 @@ public class SecurityController implements Controller {
         if(authenticateAdmin(admin,password))
         {
             return FacadeController.getInstance().delete(usernameToDelete, admin, password);
-        }
-        else
+        }else{
             return false;
+        }
+            
     }
 }

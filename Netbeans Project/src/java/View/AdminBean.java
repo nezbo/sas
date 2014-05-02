@@ -55,12 +55,8 @@ public class AdminBean implements java.io.Serializable {
 
     //</editor-fold>
     public List<User> getCurrentListOfUsers() {        
-        currentListOfUsers =ControllerFactory.getController().getAllUsers();
+        currentListOfUsers = ControllerFactory.getController().getAllUsers();
         return currentListOfUsers;
-    }
-
-    public void setCurrentListOfUsers(List<User> currentListOfUsers) {
-        this.currentListOfUsers = currentListOfUsers;
     }
 
     public String getPassword() {
