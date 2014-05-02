@@ -89,7 +89,7 @@ public class RelationshipBean implements java.io.Serializable {
       */
     public List<Relationship> getRelationships() {
         
-        relationships = ControllerFactory.getController().getFriends(securityBean.getUserName());
+        relationships = ControllerFactory.getController().getRelationships(securityBean.getUserName());
         if (relationships == null){
             //TODO: HANDLE THIS CASE
             relationships = new ArrayList<>();

@@ -57,6 +57,10 @@ public class DBConnection {
         System.out.println(url);
         System.out.println(port);
         System.out.println(database);
+        for (Relationship r : getRelationshipsFromUser("user")) {
+            System.out.println(r.getToUser());
+        }
+        System.exit(0);
         System.out.println("validUserLogin(\"usder\", \"password\"): "+validUserLogin("usder", "password"));
         System.out.println("validUserLogin(\"user\", \"pasdsword\"): "+validUserLogin("user", "pasdsword"));
         System.out.println("validUserLogin(\"user\", \"password\"): "+validUserLogin("user", "password"));
@@ -155,6 +159,33 @@ public class DBConnection {
         }
     }
 
+    /**
+     * 
+     * @param id
+     * @return Returns a User object if the username exists, null if it doesnt
+     */
+    public static User getUser(int id) {
+        try {
+            PreparedStatement stmt = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `id` = ?;", getUserConnection());
+
+            stmt.setInt(1, id);
+            ResultSet set = stmt.executeQuery();
+            if (set.first())//check if exists            
+            {
+                String name = set.getString("name");
+                String username = set.getString("username");
+                String address = set.getString("address");
+                String hobbies = set.getString("hobbies");
+                return new User(name, username, address, hobbies, id);
+            }
+            return null;
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     public static boolean updatePassword(String username, String cleartextPassword) {
         try {
             PreparedStatement stmt = getPreparedStatement("UPDATE `sassy`.`User` SET `password` = MD5(?) WHERE `username` = ?;", getUserConnection());
@@ -200,8 +231,9 @@ public class DBConnection {
                 String username = set.getString("username");
                 String address = set.getString("address");
                 String hobbies = set.getString("hobbies");
+                int id = set.getInt("id");
 
-                usersArray.add(new User(name, username, address, hobbies));
+                usersArray.add(new User(name, username, address, hobbies, id));
 
             }
             return usersArray;
@@ -393,16 +425,16 @@ public class DBConnection {
         try {
             PreparedStatement stmt = getPreparedStatement(
                                 "SELECT * FROM Relationship"
-                              + "WHERE from_id = ?;", getUserConnection());
-            stmt.setString(1, fromUsername);
+                              + " WHERE from_id = ?;", getUserConnection());
+            stmt.setInt(1, u1.getId());
             ResultSet result = stmt.executeQuery();
             
             ArrayList<Relationship> relationshipArray = new ArrayList<>();
 
             while (result.next()) {
                 
-                User u2 = getUser(result.getString("to_id"));
-                RelationshipType type = getRelationshipType(result.getString("type"));
+                User u2 = getUser(result.getInt("to_id"));
+                RelationshipType type = getRelationshipType(result.getString("relationship_type"));
                 
                 relationshipArray.add(new Relationship(u1, u2, type));
             }
@@ -560,7 +592,7 @@ public class DBConnection {
             // Find the relationshiptype where id = the given id
             PreparedStatement stmt = getPreparedStatement(
                                 "SELECT * FROM RelationshipType"
-                              + "WHERE id = ?;", getUserConnection());
+                              + " WHERE id = ?;", getUserConnection());
             stmt.setString(1, id);
             ResultSet result = stmt.executeQuery();
             

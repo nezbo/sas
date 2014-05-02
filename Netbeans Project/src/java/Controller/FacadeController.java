@@ -63,6 +63,12 @@ public class FacadeController implements Controller {
         //@todo: handle bad user
         return DBConnection.getUser(username);
     }
+    
+    @Override
+    public User getUser(int id) {
+        //@todo: handle bad user
+        return DBConnection.getUser(id);
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -127,7 +133,7 @@ public class FacadeController implements Controller {
     }
     
     @Override
-    public List<Relationship> getFriends(String username) {
+    public List<Relationship> getRelationships(String username) {
         try {
             return DBConnection.getRelationshipsFromUser(username);
         }

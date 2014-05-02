@@ -50,11 +50,18 @@ public interface Controller {
     public User getUser(String username);
     
     /**
+     * Gets a specific user's profile data (address, hobbies, etc)
+     * @param id The id of the wanted user.
+     * @return A User object with the information from the database.
+     */
+    public User getUser(int id);
+    
+    /**
      * Gets information for all users in the database, for searching etc.
      * @return An array of User objects.
      */
     public List<User> getAllUsers();
-    public List<Relationship> getFriends(String username);
+    public List<Relationship> getRelationships(String username);
     public List<User> getAllUsersNotFriends(String username);
     public boolean createUser(String username, String password);
     

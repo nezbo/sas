@@ -59,6 +59,12 @@ public class SecurityController implements Controller {
     }
 
     @Override
+    public User getUser(int id) {
+        // TODO SECURITY
+        return FacadeController.getInstance().getUser(id);
+    }
+
+    @Override
     public List<User> getAllUsers() {
         // TODO SECURITY
         return FacadeController.getInstance().getAllUsers();
@@ -111,9 +117,9 @@ public class SecurityController implements Controller {
     }
     
     @Override
-    public List<Relationship> getFriends(String username) {
+    public List<Relationship> getRelationships(String username) {
         //check if username exists?
-        return FacadeController.getInstance().getFriends(username);
+        return FacadeController.getInstance().getRelationships(username);
     }
 
     @Override
