@@ -29,4 +29,4 @@ build-impl.xml~
 # Local configuration files #
 *.conf.xml
 
-**/META-INF/context.xml
+context.xml
