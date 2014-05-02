@@ -24,8 +24,6 @@ public class ViewUserBean implements java.io.Serializable {
     
     @ManagedProperty(value="#{SecurityBean}")
     private SecurityBean securityBean; // +setter
-    @ManagedProperty(value="#{InformationBean}")
-    private InformationBean informationBean; // +setter
     private boolean isMyself;
     private boolean isNotMyself;
     private String showUser;
@@ -38,31 +36,31 @@ public class ViewUserBean implements java.io.Serializable {
     public void getUser(String userName)
     {        
         if(userName!=null){
-        User user = ControllerFactory.getController().getUser(userName);
-        if(user!=null)
-        {
-            if(userName.equals(securityBean.getUserName())){
+            User user = ControllerFactory.getController().getUser(userName);
+            if(user!=null)
+            {
+                if(userName.equals(securityBean.getUserName())){
+                    this.setAddress(user.getAddress());
+                }
+
                 this.setName(user.getName());
-                this.setAddress(user.getAddress());
+                this.setUsername(user.getUsername());
+                this.setHobbies(user.getHobbies());
             }
-           
-            this.setHobbies(user.getHobbies());
+            else{//remove the user found before if no user is found
+                userName="";
+                this.setName("");
+                this.setAddress("");
+                this.setHobbies("");
+            }
+            //perhaps show a no user page?
+
         }
-        else{//remove the user found before if no user is found
-            userName="";
-            this.setName("");
-            this.setAddress("");
-            this.setHobbies("");
-        }
-        //perhaps show a no user page?
-        
-    }
     }
     
    
     
-    public boolean isIsNotMyself() {                
-        isNotMyself = !this.isIsMyself();
+    public boolean isIsNotMyself() {
         return isNotMyself;
     }
 
@@ -110,9 +108,7 @@ public class ViewUserBean implements java.io.Serializable {
     }
 
     public String getName() {
-        if(this.isIsMyself())
         return name;
-        return "";
     }
 
     public void setName(String name) {
@@ -130,9 +126,7 @@ public class ViewUserBean implements java.io.Serializable {
     }
 
     public String getHobbies() {
-        if(this.isIsMyself())
         return hobbies;
-        return "";
     }
 
     public void setHobbies(String hobbies) {

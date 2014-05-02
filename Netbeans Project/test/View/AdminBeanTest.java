@@ -77,7 +77,7 @@ public class AdminBeanTest {
         
         String result = ab.delete(user);
         
-        assertEquals("Deleting user correctly", "usersTrue", result);
+        assertEquals("Deleting user correctly (testAdmin must exist)", "usersTrue", result);
     }
     
     @Test
@@ -91,6 +91,6 @@ public class AdminBeanTest {
         ab.delete(user);
         String result = ab.delete(user);
         
-        assertEquals("Deleting non-existing user", "usersFalse", result);
+        assertEquals("Deleting non-existing user (testAdmin must exist)", "usersFalse", result);
     }
 }

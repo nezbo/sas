@@ -146,6 +146,7 @@ public class DBConnection {
                 int id = set.getInt("id");
                 return new User(name, username, address, hobbies, id);
             }
+
             return null;
         } catch (SQLException ex) {
             //TODO: Error handling

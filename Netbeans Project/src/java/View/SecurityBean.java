@@ -64,8 +64,6 @@ public class SecurityBean implements java.io.Serializable {
     
     public String login()
     {
-        // TODO: Dummy code to see if it works, this should ask the 
-        // SecurityController for logging in (which should query the Model)
         authed = ControllerFactory.getController().authenticate(loginUserName,password);
         if(authed)
             userName=loginUserName;
@@ -74,7 +72,6 @@ public class SecurityBean implements java.io.Serializable {
     }
     
     public String adminLogin()
-
     {                
         authed = ControllerFactory.getController().authenticateAdmin(loginUserName,password);
         if(authed)

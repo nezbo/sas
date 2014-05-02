@@ -28,12 +28,6 @@ public class SecurityController implements Controller {
             controller = new SecurityController();
         return controller;        
     }
-    
-    
-    public Model.User loadUser(String Username, String currentUser)
-    {
-        return Model.ModelFactory.getUser(Username);
-    }
 
     @Override
     public boolean authenticate(String username, String password) {
