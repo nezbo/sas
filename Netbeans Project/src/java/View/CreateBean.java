@@ -108,4 +108,14 @@ public class CreateBean implements java.io.Serializable {
        
         return result.startsWith("true");
     }
+    
+    public SecurityBean getLoginBean()
+    {
+        return loginBean;
+    }
+    
+    public void setLoginBean(SecurityBean loginBean)
+    {
+        this.loginBean = loginBean;
+    }
 }

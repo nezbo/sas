@@ -25,9 +25,7 @@ public class InformationBean implements java.io.Serializable {
     private String addFriendRelationshipTypePerson="";
     private int addFriendRelationshipTypePersonID;
 
-    
-    private String showUser="";
-    
+    private User showUser;
 
     public String getAddFriendRelationshipTypePerson() {
         return addFriendRelationshipTypePerson;
@@ -56,11 +54,11 @@ public class InformationBean implements java.io.Serializable {
 
     
     
-    public String getShowUser() {
+    public User getShowUser() {
         return showUser;
     }
 
-    public void setShowUser(String showUser) {
+    public void setShowUser(User showUser) {
         this.showUser = showUser;
     }
 

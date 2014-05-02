@@ -62,24 +62,40 @@
                 </div>
             </div>
         </div>
-                        
-                <div class="container theme-showcase" role="main" style="width: 30%">
+                
+        <!-- ############################# RELATIONSHIPS ################################# --> 
+        <div class="container theme-showcase" role="main" style="width: 30%">
+            <div class="jumbotron">
+                <div style="border-collapse: separate; border-spacing: 10%;">
+                    <h2 class="form-signin-heading">Friendlist</h2>
+                    <h:form>
+                        <h:dataTable value="#{RelationshipBean.relationships}" var="relationship">
+                            <h:column>
+                                <f:facet name="header"/>
+                                <h:commandLink value="#{relationship.toUser.name} (#{relationship.relationshipType.type})" action="#{ViewUserBean.goToFriend(relationship.toUser)}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ############################# HUGS ################################# --> 
+        <div class="container theme-showcase" role="main" style="width: 30%">
             <div class="jumbotron">
                 <div style="border-collapse:separate;border-spacing:10%;">
                     
                     <br/>
                     <h2 class="form-signin-heading">The following users has hugged you. Wanna hug them back? ;)</h2> 
                     
-                        <h:form>
-                        <h:dataTable value="#{RelationshipBean.currentListOfUsersInRelationshipWith}" var="dataItem">
+                    <h:form>
+                        <h:dataTable value="#{RelationshipBean.usersWhoHuggedMe}" var="user">
                             <h:column>
                                 <f:facet name="header"/>                                                                   
-                                <!--<h:commandLink value="#{dataItem.username}" action="#{RelationshipBean.addRelationShip(dataItem)}"/>    -->
-                                <h:outputText value="#{dataItem.name}"/>
-                                <h:commandButton value="Hug!" action="#{RelationshipBean.hug(dataItem)}" />
+                                <h:outputText value="#{user.name}"/>
+                                <h:commandButton value="Hug!" action="#{RelationshipBean.hug(user)}" />
                             </h:column>
                         </h:dataTable>
-                        
                     </h:form>             
                     
                 </div>

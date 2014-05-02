@@ -23,7 +23,9 @@ import javax.inject.Named;
 public class ViewUserBean implements java.io.Serializable {
     
     @ManagedProperty(value="#{SecurityBean}")
-    private SecurityBean securityBean; // +setter
+    private SecurityBean securityBean;
+    @ManagedProperty(value="#{InformationBean}")
+    private InformationBean informationBean;
     private boolean isMyself;
     private boolean isNotMyself;
     private String showUser;
@@ -45,6 +47,7 @@ public class ViewUserBean implements java.io.Serializable {
 
                 this.setName(user.getName());
                 this.setUsername(user.getUsername());
+
                 this.setHobbies(user.getHobbies());
             }
             else{//remove the user found before if no user is found
@@ -58,7 +61,11 @@ public class ViewUserBean implements java.io.Serializable {
         }
     }
     
-   
+   public String goToFriend(User user)
+   {
+       informationBean.setShowUser(user);
+       return "user";
+   }
     
     public boolean isIsNotMyself() {
         return isNotMyself;
@@ -67,12 +74,23 @@ public class ViewUserBean implements java.io.Serializable {
     public void setIsNotMyself(boolean isNotMyself) {
         this.isNotMyself = isNotMyself;
     }
+    
     public SecurityBean getSecurityBean() {
         return securityBean;
     }
 
     public void setSecurityBean(SecurityBean SecurityBean) {
         this.securityBean = SecurityBean;
+    }
+    
+    public InformationBean getInformationBean()
+    {
+        return informationBean;
+    }
+    
+    public void setInformationBean(InformationBean informationBean)
+    {
+        this.informationBean = informationBean;
     }
     
     

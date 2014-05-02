@@ -7,6 +7,7 @@
 package Controller;
 
 import Model.RelationshipType;
+import Model.Relationship;
 import Model.User;
 import java.util.List;
 
@@ -107,6 +108,12 @@ public class SecurityController implements Controller {
     public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType) {
         //check if both users exists and relationship type exists
         return FacadeController.getInstance().setRelationship(currentUserName, otherUserName, relationshipType);
+    }
+    
+    @Override
+    public List<Relationship> getFriends(String username) {
+        //check if username exists?
+        return FacadeController.getInstance().getFriends(username);
     }
 
     @Override
