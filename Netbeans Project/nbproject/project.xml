@@ -3,9 +3,7 @@
     <type>org.netbeans.modules.web.project</type>
     <configuration>
         <buildExtensions xmlns="http://www.netbeans.org/ns/ant-build-extender/1">
-            <extension file="rest-build.xml" id="rest.4">
-                <dependency dependsOn="generate-rest-config" target="-pre-pre-compile"/>
-            </extension>
+            <extension file="rest-build.xml" id="rest.4"/>
         </buildExtensions>
         <data xmlns="http://www.netbeans.org/ns/web-project/3">
             <name>Sassy</name>

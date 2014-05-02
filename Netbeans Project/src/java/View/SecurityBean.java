@@ -71,7 +71,6 @@ public class SecurityBean implements java.io.Serializable {
             userName=loginUserName;
         password = "";
         
-        if (true) return authed + " - " + (ControllerFactory.getController().getRelationShipTypes() == null);
         return authed ? "user" : "index";
     }
     
