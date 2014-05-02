@@ -57,7 +57,6 @@ public class ViewUserBean implements java.io.Serializable {
                 this.setHobbies("");
             }
             //perhaps show a no user page?
-
         }
     }
     
