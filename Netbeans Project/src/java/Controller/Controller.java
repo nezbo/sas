@@ -8,6 +8,7 @@
  */
 package Controller;
 import Model.RelationshipType;
+import Model.Relationship;
 import Model.User;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public interface Controller {
      * @return An array of User objects.
      */
     public List<User> getAllUsers();
+    public List<Relationship> getFriends(String username);
     public List<User> getAllUsersNotFriends(String username);
     public boolean createUser(String username, String password);
     

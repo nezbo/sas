@@ -8,6 +8,7 @@ package Controller;
 
 import Database.DBConnection;
 import Model.RelationshipType;
+import Model.Relationship;
 import Model.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -35,8 +36,7 @@ public class FacadeController implements Controller {
     @Override
     public boolean authenticate(String username, String password) {
         try{
-        String hashPassword = password;//hashPassword(password);
-        return DBConnection.validUserLogin(username, hashPassword);
+            return DBConnection.validUserLogin(username, password);
         }
         catch(Exception e)
         {
@@ -123,6 +123,18 @@ public class FacadeController implements Controller {
         catch(Exception e)
         {
             return false;
+        }
+    }
+    
+    @Override
+    public List<Relationship> getFriends(String username) {
+        try {
+            return DBConnection.getRelationshipsFromUser(username);
+        }
+        catch(Exception e)
+        {
+            // TODO: ERROR HANDLING
+            return new ArrayList<Relationship>();
         }
     }
 

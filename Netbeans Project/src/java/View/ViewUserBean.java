@@ -38,28 +38,31 @@ public class ViewUserBean implements java.io.Serializable {
     public void getUser(String userName)
     {        
         if(userName!=null){
-        User user = ControllerFactory.getController().getUser(userName);
-        if(user!=null)
-        {
-            if(userName.equals(securityBean.getUserName())){
-                this.setName(user.getName());
-                this.setAddress(user.getAddress());
+            User user = ControllerFactory.getController().getUser(userName);
+            if(user!=null)
+            {
+                if(userName.equals(securityBean.getUserName())){
+                    this.setName(user.getName());
+                    this.setAddress(user.getAddress());
+                }
+
+                this.setHobbies(user.getHobbies());
             }
-           
-            this.setHobbies(user.getHobbies());
+            else{//remove the user found before if no user is found
+                userName="";
+                this.setName("");
+                this.setAddress("");
+                this.setHobbies("");
+            }
+            //perhaps show a no user page?
         }
-        else{//remove the user found before if no user is found
-            userName="";
-            this.setName("");
-            this.setAddress("");
-            this.setHobbies("");
-        }
-        //perhaps show a no user page?
-        
-    }
     }
     
-   
+   public String goToFriend(User user)
+   {
+       informationBean.setShowUser(user);
+       return "user";
+   }
     
     public boolean isIsNotMyself() {                
         isNotMyself = !this.isIsMyself();
@@ -121,9 +124,9 @@ public class ViewUserBean implements java.io.Serializable {
     }
 
     public String getName() {
-        if(this.isIsMyself())
+        //if(this.isIsMyself())
         return name;
-        return "";
+        //return "";
     }
 
     public void setName(String name) {

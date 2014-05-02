@@ -12,6 +12,7 @@ import Controller.ControllerFactory;
 import Model.Relationship;
 import Model.RelationshipType;
 import Model.User;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,52 +28,82 @@ import javax.faces.bean.ManagedProperty;
 @Named("RelationshipBean")
 @RequestScoped
 public class RelationshipBean implements java.io.Serializable {
-        
+     // Properties
      @ManagedProperty(value="#{SecurityBean}")
-    private SecurityBean securityBean; 
+     private SecurityBean securityBean; 
      @ManagedProperty(value="#{InformationBean}")
-    private InformationBean informationBean; 
+     private InformationBean informationBean; 
+     
+     // Hugs
+     private List<User> usersWhoHuggedMe;
+    
+     // Users
      private List<User> currentListOfUsers;
      private List<User> currentListOfUsersNotFriends;
-     private List<Relationship> relationships;
+     
+     // Relationships
+     private List<Relationship> relationships;          // All relationship this user has to other users
      private Map<String, Object> relationshipTypes;
      private String selectedRelationshipType;
-     private List<User> currentListOfUsersInRelationshipWith;
 
+     /**
+      * Adds a hug from the current user to 'user'
+      * @param user
+      * @return Refreshes the page when terminating
+      */
      public String hug(User user)
      {
          if(ControllerFactory.getController().giveHug(securityBean.getUserName(), user.getUsername()));
          {
              ArrayList<User> l = new ArrayList<User>();
              l.add(user);
+             // TODO: REMOVE A HUG YOU HAVE "RE-HUGGED"
              //ControllerFactory.getController().removeHugs(securityBean.getUserName(), l); //wanna delete it but does not work
          }
          return "user";
      }
      
-    public List<User> getCurrentListOfUsersInRelationshipWith() {
-        
-        currentListOfUsersInRelationshipWith = ControllerFactory.getController().getHugs(securityBean.getUserName());
-        if (currentListOfUsersInRelationshipWith == null){
-            //TODO: HANDLE THIS CASE
-            currentListOfUsersInRelationshipWith = new ArrayList<>();
-        }
-        
-        if(currentListOfUsersInRelationshipWith.size()>0)
-        {
-            //ControllerFactory.getController().removeHugs(securityBean.getUserName(), currentListOfUsersInRelationshipWith);//seen hugs, now remove them, maybe wait with this
-        }
-        return currentListOfUsersInRelationshipWith;
-    }
-
-    public void setCurrentListOfUsersInRelationshipWith(List<User> currentListOfUsersInRelationshipWith) {
-        this.currentListOfUsersInRelationshipWith = currentListOfUsersInRelationshipWith;
-    }
-    
+     /**
+      * Get a list of all users who have hugged me
+      * @return 
+      */
+     public List<User> getUsersWhoHuggedMe() 
+     {
+         usersWhoHuggedMe = ControllerFactory.getController().getHugs(securityBean.getUserName());
+         if (usersWhoHuggedMe == null){
+             // TODO: HANDLE THIS CASE
+             usersWhoHuggedMe = new ArrayList<User>();
+         }
+         
+         return usersWhoHuggedMe;
+     }
      
+     public void setUsersWhoHuggedMe(List<User> usersWhoHuggedMe) 
+     {
+         this.usersWhoHuggedMe = usersWhoHuggedMe;
+     }
      
      /**
-     * gets the current list users not allready in a relationship with 
+      * Get a list of all users I have a relationship with
+      * @return 
+      */
+    public List<Relationship> getRelationships() {
+        
+        relationships = ControllerFactory.getController().getFriends(securityBean.getUserName());
+        if (relationships == null){
+            //TODO: HANDLE THIS CASE
+            relationships = new ArrayList<>();
+        }
+        
+        return relationships;
+    }
+
+    public void setRelationships(List<Relationship> relationships) {
+        this.relationships = relationships;
+    }
+    
+     /**
+     * Get the current list users not already in a relationship with 
      * @return 
      */
     public List<User> getCurrentListOfUsersNotFriends() {
@@ -106,16 +137,6 @@ public class RelationshipBean implements java.io.Serializable {
     public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
         this.currentListOfUsersNotFriends = currentListOfUsersNotFriends;
     }
-     
-
-     
-     public void InitializeFriends()
-     {
-        
-     }
-     
-     
-    
      
     public SecurityBean getSecurityBean() {
         return securityBean;
