@@ -38,7 +38,7 @@ public class SecurityBeanTest {
         sb = new SecurityBean();
         
         DBConnection.deleteUser("testUser");
-        boolean worked = DBConnection.createUser("testUser", "password");
+        boolean worked = DBConnection.createUser("testUser", "password",123456);
         assertTrue("AdminBeanTest setUp failed", worked);
     }
     

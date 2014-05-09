@@ -46,7 +46,7 @@ public class AdminBeanTest {
         ab.setInformationBean(ib);
 
         DBConnection.deleteUser("testUser");
-        boolean worked = DBConnection.createUser("testUser", "password");
+        boolean worked = DBConnection.createUser("testUser", "password", 123456);
         assertTrue("AdminBeanTest setUp failed", worked);
     }
     

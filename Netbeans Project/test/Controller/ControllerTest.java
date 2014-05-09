@@ -45,8 +45,8 @@ public class ControllerTest {
         
         DBConnection.deleteUser("testUser");
         DBConnection.deleteUser("testOtherUser");
-        boolean worked = DBConnection.createUser("testUser", "password");
-        boolean worked2 = DBConnection.createUser("testOtherUser", "password2");
+        boolean worked = DBConnection.createUser("testUser", "password",123456);
+        boolean worked2 = DBConnection.createUser("testOtherUser", "password2",123456);
         boolean worked3 = DBConnection.updateUserInfo("testUser", "testName", "testAddress", "testHobbies", "testFriends");
         boolean worked4 = DBConnection.updateUserInfo("testOtherUser", "testOtherName", "testOtherAddress", "testOtherHobbies", "testOtherFriends");
         

@@ -36,10 +36,13 @@ public class FacadeController implements Controller {
     @Override
     public boolean authenticate(String username, String password) {
         try{
+            int salt = DBConnection.getSalt(username);
+            String hashPassword =hashPassword(salt,password);
             return DBConnection.validUserLogin(username, password);
         }
         catch(Exception e)
         {
+            //no such user and cannot authenticate
             return false;
             //@TODO:missing proper errorhandling
         }
@@ -48,7 +51,9 @@ public class FacadeController implements Controller {
     @Override
     public boolean authenticateAdmin(String username, String password) {
         try{
-            String hashPassword = password;//hashPassword(password);
+            int salt = DBConnection.getAdminSalt(username);
+            String hashPassword = hashPassword(salt,password);
+            
         return DBConnection.validAdminLogin(username, hashPassword);
         }
         catch(Exception e)
@@ -81,23 +86,18 @@ public class FacadeController implements Controller {
             //hash password
             //@Todo: use salts https://crackstation.net/hashing-security.htm#properhashing
             //for now:
-           String passwordHash = password;//hashPassword(password);
+           int salt = (int)(Math.random()*Integer.MAX_VALUE);
+           String passwordHash = hashPassword(salt,password);
             
             password="";
-        return DBConnection.createUser(username, passwordHash);
+        return DBConnection.createUser(username, passwordHash, salt);
         }
         catch(Exception e)
         {//@TODO: : missisng proper errorhandling
             return false;
         }                
     }
-    public String hashPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
-        
-         MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(password.getBytes("UTF-8"));
-            return new String(hash);
-    }
+   
     @Override
     public boolean updateUserInfo(String oldUsername, String name, String address, String hobbies, String friends) {
         return DBConnection.updateUserInfo(oldUsername, name, address, hobbies, friends);
@@ -200,5 +200,11 @@ public class FacadeController implements Controller {
             return false;
         }
     }
-    
+    public String hashPassword(int salt, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        
+         MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest((salt+password).getBytes("UTF-8"));
+            return new String(hash);
+    } 
 }

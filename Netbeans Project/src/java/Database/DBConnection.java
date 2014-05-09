@@ -68,7 +68,7 @@ public class DBConnection {
         System.out.println("getUser(\"user\"): "+getUser("user"));
         System.out.println("-----------");
         System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
-        System.out.println("createUser(\"testuser\", \"password\"): "+createUser("testuser", "password"));
+        System.out.println("createUser(\"testuser\", \"password\"): "+createUser("testuser", "password", 12345678));
         System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
         System.out.println("deleteUser(\"testuser\"): "+deleteUser("testuser"));
         System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
@@ -87,7 +87,7 @@ public class DBConnection {
     //<editor-fold desc="Login">
     public static boolean validUserLogin(String username, String password) {
         try {
-            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`User`  WHERE `username` = ? AND `password` = MD5(?);", getLoginConnection());
+            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`User`  WHERE `username` = ? AND `password` = ?;", getLoginConnection());
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.executeQuery();
@@ -103,7 +103,7 @@ public class DBConnection {
     
     public static boolean validAdminLogin(String username, String password){
         try {
-            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`Admin` WHERE `username` = ? AND `password` = MD5(?);", getLoginConnection());
+            PreparedStatement stmt = getPreparedStatement("SELECT COUNT(*) AS `count` FROM `sassy`.`Admin` WHERE `username` = ? AND `password` = ?;", getLoginConnection());
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.executeQuery();
@@ -118,11 +118,12 @@ public class DBConnection {
     //</editor-fold>
 
     //<editor-fold desc="User">
-    public static boolean createUser(String username, String cleartextPassword) {
+    public static boolean createUser(String username, String hashPassword, int salt) {
         try {
-            PreparedStatement stmt = getPreparedStatement("INSERT INTO  `sassy`.`User` (`username`,`password`,`name`,`address`,`hobbies`) VALUES ( ?, MD5( ? ) ,  '',  '',  '');", getLoginConnection());
+            PreparedStatement stmt = getPreparedStatement("INSERT INTO  `sassy`.`User` (`username`,`password`,`salt`,`name`,`address`,`hobbies`) VALUES ( ?, ?, ? ,  '',  '',  '');", getLoginConnection());
             stmt.setString(1, username);
-            stmt.setString(2, cleartextPassword);
+            stmt.setString(2, hashPassword);
+            stmt.setInt(3, salt);
             return stmt.executeUpdate() == 1;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -817,6 +818,52 @@ public class DBConnection {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static int getSalt(String username) throws Exception {
+        try {
+            
+            PreparedStatement stmt = getPreparedStatement("SELECT salt FROM `sassy`.`User` WHERE `username` = ?;", getUserConnection());
+
+            stmt.setString(1, username);
+            ResultSet set1 = stmt.executeQuery();
+            if(set1.first())
+            {
+                int salt = set1.getInt("salt");
+                return salt;
+                       
+            }
+            else
+                throw new Exception("Cannot retrieve salt due to: no such user");
+            
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            throw new Exception("Cannot retrieve salt due to: " +ex.getMessage());
+        }
+    }
+    
+    public static int getAdminSalt(String username) throws Exception {
+        try {
+            
+            PreparedStatement stmt = getPreparedStatement("SELECT salt FROM `Admin`.`User` WHERE `username` = ?;", getUserConnection());
+
+            stmt.setString(1, username);
+            ResultSet set1 = stmt.executeQuery();
+            if(set1.first())
+            {
+                int salt = set1.getInt("salt");
+                return salt;
+                       
+            }
+            else
+                throw new Exception("Cannot retrieve salt due to: no such user");
+            
+        } catch (SQLException ex) {
+            //TODO: Error handling
+            ex.printStackTrace();
+            throw new Exception("Cannot retrieve salt due to: " +ex.getMessage());
         }
     }
 
