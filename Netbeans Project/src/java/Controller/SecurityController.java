@@ -34,9 +34,9 @@ public class SecurityController implements Controller {
 
     @Override
     public boolean authenticate(String username, String password) {
-        // TODO SECURITY
-         if(username.length() <= 31 
-                && password.length() <= 255 ) {
+        // invalid input
+         if(username != null && username.length() <= 31 
+                && password != null && password.length() <= 255 ) {
               return FacadeController.getInstance().authenticate(username, password);
         } else {
              return false;
@@ -46,8 +46,8 @@ public class SecurityController implements Controller {
    
     @Override
     public boolean authenticateAdmin(String username, String password) {
-        // TODO: Security
-        if(username.length() <= 31 && password.length() <= 255) {
+        // invalid input
+        if(username != null && username.length() <= 31 && password != null && password.length() <= 255) {
             return FacadeController.getInstance().authenticateAdmin(username, password);
         } else {
             return false;
@@ -56,12 +56,17 @@ public class SecurityController implements Controller {
 
     @Override
     public User getUser(String username) {
-        // TODO SECURITY
+        // invalid input
+        if(username == null) return null;
+        
         return FacadeController.getInstance().getUser(username);
     }
 
     @Override
     public User getUser(int id) {
+        // invalid input
+        if(id < 0) return null;
+        
         return FacadeController.getInstance().getUser(id);
     }
 
@@ -93,10 +98,7 @@ public class SecurityController implements Controller {
 
     @Override
     public boolean updateUserInfo(String username, String name, String address, String hobbies, String friends) {
-        if(name==null 
-                || address==null 
-                || friends==null
-                || hobbies==null)
+        if(name==null || address==null || friends==null || hobbies==null)
             return false;
         
         if(name.length() > 255 
@@ -104,7 +106,6 @@ public class SecurityController implements Controller {
                 || friends.length() > 255)
             return false;
         
-        // TODO SECURITY
         return FacadeController.getInstance().updateUserInfo(username, name, address, hobbies, friends);
     }
 
