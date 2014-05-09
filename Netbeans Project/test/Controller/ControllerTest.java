@@ -201,7 +201,7 @@ public class ControllerTest {
         
         assertTrue("update password success",result);
         assertTrue("update password changed",c.authenticate("testUser", "password2"));
-        assertFalse("update password changed",c.authenticate("testUser", "password"));
+        assertFalse("update password not same",c.authenticate("testUser", "password"));
     }
     
     @Test
@@ -252,7 +252,8 @@ public class ControllerTest {
     
     @Test
     public void testSetRelSuccess(){
-        boolean result = c.setRelationship("testUser", "testOtherUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        boolean result = c.setRelationship("testUser", "testOtherUser", relID);
         
         assertTrue("set relationship success",result);
         assertTrue("relationship exists",DBConnection.getRelationshipBetweenUsers("testUser", "testOtherUser") != null);
@@ -260,20 +261,23 @@ public class ControllerTest {
     
     @Test
     public void testSetRelDuplicate(){
-        c.setRelationship("testUser", "testOtherUser", 1);
-        boolean result = c.setRelationship("testUser", "testOtherUser", 1);
+        List<RelationshipType> types = DBConnection.getAllRelationshipTypes();
+        c.setRelationship("testUser", "testOtherUser", types.get(0).getId());
+        boolean result = c.setRelationship("testUser", "testOtherUser", types.get(1).getId());
         
-        assertFalse("set relationship duplicate",result);
-        assertTrue("relationship exists",DBConnection.getRelationshipBetweenUsers("testUser", "testOtherUser") != null);
+        assertTrue("set relationship duplicate",result);
+        assertTrue("relationship exists and changed",DBConnection.getRelationshipBetweenUsers("testUser", "testOtherUser").getRelationshipType().getId() == types.get(1).getId());
     }
     
     @Test
     public void testSetRelDuplicateOpposite(){
-        c.setRelationship("testUser", "testOtherUser", 1);
-        boolean result = c.setRelationship("testOtherUser", "testUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        c.setRelationship("testUser", "testOtherUser", relID);
+        boolean result = c.setRelationship("testOtherUser", "testUser", relID);
         
-        assertFalse("set relationship duplicate backwards",result);
-        assertTrue("relationship exists",DBConnection.getRelationshipBetweenUsers("testUser", "testOtherUser") != null);
+        assertTrue("set relationship duplicate backwards",result);
+        assertTrue("relationship not opposite",DBConnection.getRelationshipBetweenUsers("testOtherUser", "testUser") != null);
+        assertTrue("relationship not opposite",DBConnection.getRelationshipBetweenUsers("testUser", "testOtherUser") != null);
     }
     
     @Test
@@ -286,8 +290,9 @@ public class ControllerTest {
     
     @Test
     public void testSetRelNullUsers(){
-        boolean result = c.setRelationship(null, "testOtherUser", 1);
-        boolean result2 = c.setRelationship("testOtherUser","testUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        boolean result = c.setRelationship(null, "testOtherUser", relID);
+        boolean result2 = c.setRelationship("testOtherUser","testUser", relID);
         
         assertFalse("set relationship null user",result && result2);
     }
@@ -303,7 +308,8 @@ public class ControllerTest {
     
     @Test 
     public void testGetRelSuccess(){
-        DBConnection.setRelationship("testUser", "testOtherUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        DBConnection.setRelationship("testUser", "testOtherUser", relID);
         List<Relationship> result = c.getRelationships("testUser");
         
         assertEquals("get relationships success",1,result.size());
@@ -311,7 +317,8 @@ public class ControllerTest {
     
     @Test 
     public void testGetRelSuccessOpposite(){ // relationships are one directional
-        DBConnection.setRelationship("testOtherUser", "testUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        DBConnection.setRelationship("testOtherUser", "testUser", relID);
         List<Relationship> result = c.getRelationships("testUser");
         
         assertEquals("get relationships none success",0,result.size());
@@ -339,7 +346,8 @@ public class ControllerTest {
     
     @Test
     public void testGetNotFriendsIsNot(){
-        DBConnection.setRelationship("testUser", "testOtherUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        DBConnection.setRelationship("testUser", "testOtherUser", relID);
         List<User> result = c.getAllUsersNotFriends("testUser");
         
         boolean found = false;
@@ -374,7 +382,8 @@ public class ControllerTest {
     
     @Test 
     public void testGetHugSuccess(){
-        DBConnection.setRelationship("testUser", "testOtherUser", 1);
+        int relID = DBConnection.getAllRelationshipTypes().get(0).getId();
+        DBConnection.setRelationship("testUser", "testOtherUser", relID);
         DBConnection.addHug("testOtherUser", "testUser");
         List<Relationship> result = c.getRelationships("testUser");
         
@@ -384,14 +393,12 @@ public class ControllerTest {
     @Test 
     public void testGetHugNullUser(){ 
         List<User> result = c.getHugs(null);
-        System.out.println(result);
         assertNull("get hugs null user",result);
     }
     
     @Test 
     public void testGetHugWrongUser(){ 
         List<User> result = c.getHugs("nonExistingUser");
-        System.out.println(result);
         assertNull("get hugs wrong user",result);
     }
     
@@ -400,8 +407,10 @@ public class ControllerTest {
     public void testGiveHugSuccess(){
         boolean result = c.giveHug("testUser", "testOtherUser");
         
+        List<User> hugs = DBConnection.getHugUsers("testOtherUser");
+        
         assertTrue("give hug success",result);
-        assertTrue("give hug success exists",DBConnection.getHugUsers("testOtherUser").size() > 0);
+        assertTrue("give hug success exists",hugs.size() > 0);
     }
     
     // give twice (fail)

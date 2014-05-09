@@ -86,16 +86,15 @@ public class FacadeController implements Controller {
             //hash password
             //@Todo: use salts https://crackstation.net/hashing-security.htm#properhashing
             //for now:
-           int salt = (int)(Math.random()*Integer.MAX_VALUE);
-           String passwordHash = hashPassword(salt,password);
+            int salt = (int)(Math.random()*Integer.MAX_VALUE);
+            String passwordHash = hashPassword(salt,password);
             
             password="";
-        return DBConnection.createUser(username, passwordHash, salt);
-        }
-        catch(Exception e)
-        {//@TODO: : missisng proper errorhandling
+            return DBConnection.createUser(username, passwordHash, salt);
+            
+        }catch(NoSuchAlgorithmException | UnsupportedEncodingException e){
             return false;
-        }                
+        }
     }
    
     @Override
@@ -105,7 +104,16 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean updatePassword(String userName, String password) {
-        return DBConnection.updatePassword(userName, password);
+        try{
+            int salt = (int)(Math.random()*Integer.MAX_VALUE);
+            String passwordHash = hashPassword(salt,password);
+            password = "";
+        
+            return DBConnection.updatePassword(userName, passwordHash, salt);
+        
+        }catch(NoSuchAlgorithmException | UnsupportedEncodingException e){
+            return false;
+        }
     }
 
     @Override
@@ -175,6 +183,7 @@ public class FacadeController implements Controller {
         }
         catch(Exception e)
         {
+            System.out.println(e);
             return false;
         }
     }

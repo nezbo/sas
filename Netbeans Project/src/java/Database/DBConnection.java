@@ -64,7 +64,7 @@ public class DBConnection {
         System.out.println("validUserLogin(\"usder\", \"password\"): "+validUserLogin("usder", "password"));
         System.out.println("validUserLogin(\"user\", \"pasdsword\"): "+validUserLogin("user", "pasdsword"));
         System.out.println("validUserLogin(\"user\", \"password\"): "+validUserLogin("user", "password"));
-        System.out.println("updatePassword(\"bingo\", \"password2\"): "+updatePassword("bingo", "password2"));
+        System.out.println("updatePassword(\"bingo\", \"password2\"): "+updatePassword("bingo", "password2",1337));
         System.out.println("getUser(\"user\"): "+getUser("user"));
         System.out.println("-----------");
         System.out.println("validUserLogin(\"testuser\", \"password\"): "+validUserLogin("testuser", "password"));
@@ -187,11 +187,12 @@ public class DBConnection {
         }
     }
 
-    public static boolean updatePassword(String username, String cleartextPassword) {
+    public static boolean updatePassword(String username, String passwordHash, int newSalt) {
         try {
-            PreparedStatement stmt = getPreparedStatement("UPDATE `sassy`.`User` SET `password` = MD5(?) WHERE `username` = ?;", getUserConnection());
-            stmt.setString(1, cleartextPassword);
-            stmt.setString(2, username);
+            PreparedStatement stmt = getPreparedStatement("UPDATE `sassy`.`User` SET `password` = ?, `salt` = ? WHERE `username` = ?;", getUserConnection());
+            stmt.setString(1, passwordHash);
+            stmt.setInt(2, newSalt);
+            stmt.setString(3, username);
 
             return stmt.executeUpdate() == 1;
         } catch (SQLException ex) {
@@ -304,20 +305,19 @@ public class DBConnection {
      * retrieved through {@link #getAllRelationshipTypes()}).
      * @return True if success.
      */
-    public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {
-        User u1 = getUser(fromUsername);
-        User u2 = getUser(toUsername);
-        if (u1 == null || u2 == null) return false;
-        System.out.println(1);
+    public static boolean setRelationship(String fromUsername, String toUsername, int relationshipTypeId) {        
         try {
-            // Check if the new relationshiptype id exists in the table RelationshipType
+            User u1 = getUser(fromUsername);
+            User u2 = getUser(toUsername);
+            /*// Check if the new relationshiptype id exists in the table RelationshipType
             PreparedStatement stmt = getPreparedStatement("SELECT * FROM RelationshipType WHERE id=?;", getUserConnection());
             stmt.setInt(1, relationshipTypeId);
             if (!stmt.executeQuery().first()) return false;
-                    System.out.println(2);
+                    System.out.println(2);*/
+            
             // Update Relationship
-            stmt = getPreparedStatement(
-                        "UPDATE Relationship, RelationshipType "
+            PreparedStatement stmt = getPreparedStatement(
+                        "UPDATE Relationship "
                       + "SET Relationship.relationship_type=? "
                       + "WHERE Relationship.from_id = ? "
                       + "AND Relationship.to_id = ?", getUserConnection());
@@ -327,7 +327,7 @@ public class DBConnection {
             int updated = stmt.executeUpdate();
             
             if (updated == 1) return true;
-            System.out.println(3);
+            
             // Create Relationship
             stmt = getPreparedStatement(
                     "INSERT INTO Relationship (from_id, to_id, relationship_type)"
@@ -335,12 +335,13 @@ public class DBConnection {
             stmt.setInt(1, u1.getId());
             stmt.setInt(2, u2.getId());
             stmt.setInt(3, relationshipTypeId);
-            System.out.println(4);
+            
             return (stmt.executeUpdate() == 1);
         }
         catch (Exception e) {
             // TODO: Handle error
-            System.out.println("erro" + e.getMessage());
+            System.out.println(fromUsername +" -> "+toUsername+" = "+relationshipTypeId);
+            System.out.println("error: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -360,14 +361,13 @@ public class DBConnection {
         try { // Relationship.from_id = 1 AND Relationship.to_id = 2 AND Relationship.relationship_type = id;
             PreparedStatement stmt = getPreparedStatement(
                         "SELECT RelationshipType.id, RelationshipType.type "
-                        + "FROM `sassy`.`Relationship`, `sassy`.`RelationshipType`"
-                        + "WHERE `Relationship`.`from_id` = ? "
-                            + "AND `Relationship`.`to_id` = ?"
-                            + "AND `Relationship`.`relationship_type` = `id`;", getUserConnection());
-            stmt.setString(1, fromUsername);
-            stmt.setString(2, toUsername);
+                                + "FROM `sassy`.`Relationship`, `sassy`.`RelationshipType` "
+                                + "WHERE `Relationship`.`from_id` = ? "
+                                + "AND `Relationship`.`to_id` = ? "
+                                + "AND `Relationship`.`relationship_type` = `RelationshipType`.`id`;", getUserConnection());
+            stmt.setInt(1, u1.getId());
+            stmt.setInt(2, u2.getId());
             ResultSet result = stmt.executeQuery();
-            
             if (!result.first()) return null; // if there are no relationship between these users
             
             int id = result.getInt("id");
@@ -625,8 +625,7 @@ public class DBConnection {
             PreparedStatement stmt = getPreparedStatement("insert into hug(from_id, to_id) values (?,?)", getUserConnection());
             stmt.setInt(1, from);
             stmt.setInt(2, to);                    
-            return stmt.execute();
-            
+            return stmt.executeUpdate() == 1;
         }
         catch(Exception e)
         {
@@ -652,19 +651,7 @@ public class DBConnection {
             ArrayList<User> usersArray = new ArrayList<>();
             while(set1.next())//check if exists            
             {
-                PreparedStatement hugger = getPreparedStatement("SELECT * FROM `sassy`.`User` WHERE `ID` = ?;", getUserConnection());
-                hugger.setInt(1, set1.getInt("from_id"));    
-                ResultSet set = hugger.executeQuery();
-                if(set.first())
-                {
-                    String name = set.getString("name");
-                    String username1 = set.getString("username");
-                    String address = set.getString("address");
-                    String hobbies = set.getString("hobbies");
-
-                    usersArray.add(new User(name, username1, address, hobbies));
-                }
-
+                usersArray.add(getUser(set1.getInt("from_id")));
             }
             return usersArray;                                             
             
@@ -674,8 +661,6 @@ public class DBConnection {
             return null;
         }
     }
-        
-        
 
 
     /**
@@ -705,7 +690,7 @@ public class DBConnection {
             
 
             stmt.setInt(1, user.getId());
-            return stmt.execute();
+            return stmt.executeUpdate() == 1;
             
             
         } catch (SQLException ex) {
@@ -713,7 +698,7 @@ public class DBConnection {
             ex.printStackTrace();
             return false;
         }
-}
+    }
    
     //</editor-fold>
 

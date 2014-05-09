@@ -43,11 +43,4 @@ public class HTMLBeanTest {
     //
     // @Test
     // public void hello() {}
-    @Test
-    public void testHTMLRelDataGenerated(){
-        HTMLBean hb = new HTMLBean();
-        String result = hb.getHTMLRelationshipTypeList();
-        
-        assertTrue("HTML Relationship Types larger than zero",result.length() > 0);
-    }
 }

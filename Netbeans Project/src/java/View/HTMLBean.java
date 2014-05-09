@@ -48,19 +48,7 @@ public class HTMLBean implements java.io.Serializable {
 
     public void setSecurityBean(SecurityBean securityBean) {
         this.securityBean = securityBean;
-    }
-    public String getHTMLRelationshipTypeList()
-    {
-        List<RelationshipType> relationTypesLocal = ControllerFactory.getController().getRelationShipTypes();
-        String html ="";
-        /* Add dropdown
-        html+="<h:selectOneMenu value='#{InformationBean.addFriendRelationshipType}'>";
-        
-        html+="</h:selectOneMenu>";
-        */
-        return html;
-    }
-	
+    }	
 }
     
         

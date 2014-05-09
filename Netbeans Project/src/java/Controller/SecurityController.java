@@ -6,6 +6,8 @@
 
 package Controller;
 
+import Database.DBConnection;
+import static Database.DBConnection.getUser;
 import Model.RelationshipType;
 import Model.Relationship;
 import Model.User;
@@ -60,31 +62,32 @@ public class SecurityController implements Controller {
 
     @Override
     public User getUser(int id) {
-        // TODO SECURITY
         return FacadeController.getInstance().getUser(id);
     }
 
     @Override
     public List<User> getAllUsers() {
-        // TODO SECURITY
         return FacadeController.getInstance().getAllUsers();
     }
 
     @Override
     public boolean createUser(String username, String password) {
-        // TODO SECURITY
-        if(username.length()>252 ||password.length()>252) //dont want too large names into database
+        // invalid values
+        if(username == null || password == null || username.length() > 31 || password.length() > 252) //dont want too large names into database
             return false;
+        
+        // existing user
+        if(DBConnection.getUser(username) != null) return false;
+        
         return FacadeController.getInstance().createUser(username, password);
     }
 
     @Override
     public boolean updatePassword(String username, String password) {
         // Check length of values
-        if(username.length() > 31 || password.length() > 255)
+        if(username == null || password == null || username.length() > 31 || password.length() > 255)
             return false;
-        
-        // TODO SECURITY
+
         return FacadeController.getInstance().updatePassword(username, password);
     }
 
@@ -113,38 +116,88 @@ public class SecurityController implements Controller {
     @Override
     public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType) {
         //check if both users exists and relationship type exists
+        User u1 = getUser(currentUserName);
+        User u2 = getUser(otherUserName);
+        if (u1 == null || u2 == null) return false;
+        
+        // check if relationshiptype exists
+        List<RelationshipType> types = DBConnection.getAllRelationshipTypes();
+        boolean found = false;
+        for(RelationshipType rt : types){
+            if(rt.getId() == relationshipType)
+                found = true;
+        }
+        if(!found) return false;
+        
         return FacadeController.getInstance().setRelationship(currentUserName, otherUserName, relationshipType);
     }
     
     @Override
     public List<Relationship> getRelationships(String username) {
-        //check if username exists?
+        //check if both users exists and relationship type exists
+        User u1 = getUser(username);
+        if (u1 == null) return null;
+        
         return FacadeController.getInstance().getRelationships(username);
     }
 
     @Override
     public List<User> getAllUsersNotFriends(String username) {
-        //perhaps check if username exists?
-       return FacadeController.getInstance().getAllUsersNotFriends(username);
+        // invalid username
+        if(username == null) return null;
+        
+        // nonexisting user
+        if(DBConnection.getUser(username) == null) return null;
+        
+        return FacadeController.getInstance().getAllUsersNotFriends(username);
     }
 
     @Override
     public List<User> getHugs(String username) {
+        // invalid username
+        if(username == null) return null;
+        
+        // nonexisting user
+        if(DBConnection.getUser(username) == null) return null;
+        
         return FacadeController.getInstance().getHugs(username);
     }
 
     @Override
     public boolean giveHug(String fromUsername, String toUsername) {
+        // check for existing hug
+        List<User> huggers = DBConnection.getHugUsers(toUsername);
+        boolean found = false;
+        for(User u : huggers){
+            if(u.getUsername().equals(fromUsername))
+                found = true;
+        }
+        if(found) return false;
+        
+        // invalid values
+        if(fromUsername == null || toUsername == null) return false;
+        
+        // invalid users
+        if(fromUsername.equals(toUsername) || DBConnection.getUser(fromUsername) == null || DBConnection.getUser(toUsername) == null) return false;
+        
         return FacadeController.getInstance().giveHug(fromUsername, toUsername);
     }
 
     @Override
     public boolean removeHugs(String username, List<User> users) {
+        // invalid values
+        if(username == null || users == null) return false;
+        
+        // nothing to do
+        if(users.isEmpty()) return true;
+        
         return FacadeController.getInstance().removeHugs(username, users);
     }
 
     @Override
     public boolean delete(String usernameToDelete, String admin, String password) {
+        if(usernameToDelete == null || admin == null || password == null) return false;
+        
         if(authenticateAdmin(admin,password))
         {
             return FacadeController.getInstance().delete(usernameToDelete, admin, password);
