@@ -847,7 +847,7 @@ public class DBConnection {
     public static int getAdminSalt(String username) throws Exception {
         try {
             
-            PreparedStatement stmt = getPreparedStatement("SELECT salt FROM `Admin`.`User` WHERE `username` = ?;", getUserConnection());
+            PreparedStatement stmt = getPreparedStatement("SELECT salt FROM `Sassy`.`Admin` WHERE `username` = ?;", getAdminConnection());
 
             stmt.setString(1, username);
             ResultSet set1 = stmt.executeQuery();
