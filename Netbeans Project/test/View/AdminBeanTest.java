@@ -6,6 +6,7 @@
 
 package View;
 
+import Controller.ControllerFactory;
 import Database.DBConnection;
 import Model.User;
 import org.junit.After;
@@ -46,7 +47,7 @@ public class AdminBeanTest {
         ab.setInformationBean(ib);
 
         DBConnection.deleteUser("testUser");
-        boolean worked = DBConnection.createUser("testUser", "password", 123456);
+        boolean worked = ControllerFactory.getController().createUser("testUser", "password");
         assertTrue("AdminBeanTest setUp failed", worked);
     }
     

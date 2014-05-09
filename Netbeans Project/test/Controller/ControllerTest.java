@@ -45,8 +45,9 @@ public class ControllerTest {
         
         DBConnection.deleteUser("testUser");
         DBConnection.deleteUser("testOtherUser");
-        boolean worked = DBConnection.createUser("testUser", "password",123456);
-        boolean worked2 = DBConnection.createUser("testOtherUser", "password2",123456);
+        
+        boolean worked = ControllerFactory.getController().createUser("testUser", "password");
+        boolean worked2 = ControllerFactory.getController().createUser("testOtherUser", "password2");
         boolean worked3 = DBConnection.updateUserInfo("testUser", "testName", "testAddress", "testHobbies", "testFriends");
         boolean worked4 = DBConnection.updateUserInfo("testOtherUser", "testOtherName", "testOtherAddress", "testOtherHobbies", "testOtherFriends");
         
@@ -199,6 +200,8 @@ public class ControllerTest {
         boolean result = c.updatePassword("testUser", "password2");
         
         assertTrue("update password success",result);
+        assertTrue("update password changed",c.authenticate("testUser", "password2"));
+        assertFalse("update password changed",c.authenticate("testUser", "password"));
     }
     
     @Test
@@ -206,6 +209,7 @@ public class ControllerTest {
         boolean result = c.updatePassword("testUser", null);
         
         assertFalse("update password with null",result);
+        assertTrue("update password null - no change",c.authenticate("testUser", "password"));
     }
     
     @Test

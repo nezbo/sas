@@ -6,6 +6,7 @@
 
 package View;
 
+import Controller.ControllerFactory;
 import Database.DBConnection;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -38,7 +39,7 @@ public class SecurityBeanTest {
         sb = new SecurityBean();
         
         DBConnection.deleteUser("testUser");
-        boolean worked = DBConnection.createUser("testUser", "password",123456);
+        boolean worked = ControllerFactory.getController().createUser("testUser", "password");
         assertTrue("AdminBeanTest setUp failed", worked);
     }
     

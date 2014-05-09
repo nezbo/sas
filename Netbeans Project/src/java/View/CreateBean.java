@@ -105,8 +105,10 @@ public class CreateBean implements java.io.Serializable {
         BufferedReader br = new BufferedReader(new InputStreamReader(urlcon.getInputStream()));
         String result = br.readLine().toLowerCase();
         br.close();
-       
-        return result.startsWith("true");
+        
+        boolean validated = result.startsWith("true");
+        System.out.println("CAPTCHA Validation result: "+validated);
+        return validated;
     }
     
     public SecurityBean getLoginBean()

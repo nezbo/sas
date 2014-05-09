@@ -6,6 +6,7 @@
 
 package View;
 
+import Controller.ControllerFactory;
 import Database.DBConnection;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,8 +43,8 @@ public class ViewUserBeanTest {
         
         DBConnection.deleteUser("testUser");
         DBConnection.deleteUser("testOtherUser");
-        boolean worked = DBConnection.createUser("testUser", "password",123456);
-        boolean worked2 = DBConnection.createUser("testOtherUser", "password2",123456);
+        boolean worked = ControllerFactory.getController().createUser("testUser", "password");
+        boolean worked2 = ControllerFactory.getController().createUser("testOtherUser", "password2");
         boolean worked3 = DBConnection.updateUserInfo("testUser", "testName", "testAddress", "testHobbies", "testFriends");
         boolean worked4 = DBConnection.updateUserInfo("testOtherUser", "testOtherName", "testOtherAddress", "testOtherHobbies", "testOtherFriends");
         
