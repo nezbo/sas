@@ -38,7 +38,7 @@ public class FacadeController implements Controller {
         try{
             int salt = DBConnection.getSalt(username);
             String hashPassword =hashPassword(salt,password);
-            return DBConnection.validUserLogin(username, password);
+            return DBConnection.validUserLogin(username, hashPassword);
         }
         catch(Exception e)
         {
