@@ -54,7 +54,7 @@ public class serviceReference {
     public String getUsers(@PathParam("id") int id ){
         User u = ControllerFactory.getController().getUser(id);
         if(u==null) return "{}";
-        StringBuilder b = new StringBuilder("{ \"name\" : \""+u.getName()+"\", \"address\" : \""+u.getAddress()+"\", \"hobbies\" : \""+u.getHobbies()+"\"");
+        StringBuilder b = new StringBuilder("{ \"name\" : \""+u.getName()+"\", \"hobbies\" : \""+u.getHobbies()+"\"");
         
         List<String> strings = new ArrayList<>();
         for (Relationship r : ControllerFactory.getController().getRelationships(u.getUsername())) {
