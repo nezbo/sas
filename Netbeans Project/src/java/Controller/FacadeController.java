@@ -215,5 +215,5 @@ public class FacadeController implements Controller {
          MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest((salt+password).getBytes("UTF-8"));
             return new String(hash);
-    } 
+    }
 }

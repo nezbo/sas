@@ -55,7 +55,11 @@
                             Address:
                             <h:inputText id="address" class="form-control" size="15" maxlength="255" value="#{ViewUserBean.address}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
                             Hobbies:
-                            <h:inputText id="hobbies" class="form-control" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
+                            <h:inputText id="hobbies" class="form-control" size="15" maxlength="255" value="#{ViewUserBean.hobbies}" disabled="#{ViewUserBean.isNotMyself}" /><br/><br/>
+                            New Password:
+                            <h:inputSecret id="newPass" class="form-control" size="150" maxlength="255" value="#{SecurityBean.newPassword}" disabled="#{ViewUserBean.isNotMyself}" />
+                            Repeat Password:
+                            <h:inputSecret id="newPass2" class="form-control" size="150" maxlength="255" value="#{SecurityBean.newPassword2}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
                             <h:commandButton id="btnSaveUserInfo" class="btn btn-lg btn-primary" value="Save" action="#{ViewUserBean.save}"/>
                             <h:commandButton id="btnFindFriends" class="btn btn-lg btn-primary" value="Find Others" action="findFriends"/>
                     </h:form>

@@ -53,16 +53,15 @@
                         <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="dataItem">
                             <h:column>
                                 <f:facet name="header"/>                                                                   
-                                <!--<h:commandLink value="#{dataItem.username}" action="#{RelationshipBean.addRelationShip(dataItem)}"/>    -->
-                                <h:commandLink value="#{dataItem.username}" onclick="showDropdown()"/>
+                                <h:commandLink value="#{dataItem.name}" action="#{ViewUserBean.goToFriend(dataItem)}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="dropdown"/>
                                 <!--<div id="dropdownDiv" class="dropdown-backdrop">-->
-                                <h:selectOneMenu value="#{RelationshipBean.selectedRelationshipType}">
-                                    <f:selectItem itemValue="#{null}" itemLabel="-- relationship type --"/>
+                                <!--<h:selectOneMenu value="#{RelationshipBean.selectedRelationshipType}">
+                                    <f:selectItem itemValue="#{null}" itemLabel=" relationship type "/>
                                     <f:selectItems value="#{RelationshipBean.relationshipTypes}"/>
-                                </h:selectOneMenu>
+                                </h:selectOneMenu>-->
                                 <!--</div>-->
                             </h:column>
                             <h:column>

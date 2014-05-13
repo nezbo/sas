@@ -62,6 +62,7 @@ public class ViewUserBean implements java.io.Serializable {
     
    public String goToFriend(User user)
    {
+       System.out.println("going to: "+user);
        informationBean.setShowUser(user);
        return "user";
    }
@@ -165,10 +166,9 @@ public class ViewUserBean implements java.io.Serializable {
     public String save()
     {
         if(this.isIsMyself())
-        {    
-            //ControllerFactory.getController().updateUser("dante", securityBean.getUserName(), name, address, hobbies, "");
-            
+        {              
             ControllerFactory.getController().updateUserInfo(securityBean.getUserName(), name, address, hobbies, "");//@TODO: implement friends
+            getSecurityBean().changePassword();
         }
         
         return "user";//missing some more security handling

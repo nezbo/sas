@@ -68,9 +68,7 @@ public class CreateBean implements java.io.Serializable {
             if(validateCaptcha()){
                 boolean result = ControllerFactory.getController().createUser(username, password);
                 if(result){
-                    //loginBean.setUserName(username); //cannot do it this way
-                    //loginBean.setPassword(password);
-                    //loginBean.login();
+                    loginBean.setLoginUserName(username);
                     return "index";
                 }
             }

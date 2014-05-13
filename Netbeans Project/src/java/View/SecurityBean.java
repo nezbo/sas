@@ -27,7 +27,10 @@ public class SecurityBean implements java.io.Serializable {
     private boolean UserLogin = false;
     private boolean AdminLogin = false;
     private String logOut = "loggedOut";
-
+    
+    // password change
+    private String newPassword = "";
+    private String newPassword2 = "";
     
     public String logOut()
     {
@@ -48,10 +51,10 @@ public class SecurityBean implements java.io.Serializable {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    /*public void setUserName(String userName) {
         if(!authed)
             this.userName = userName;
-    }
+    }*/
 
     public String getPassword() {
         return password;
@@ -61,6 +64,25 @@ public class SecurityBean implements java.io.Serializable {
         if(!authed)
             this.password = password;
     }
+    
+    // change password
+    public String getNewPassword(){
+        return newPassword;
+    }
+    
+    public void setNewPassword(String newPw){
+        this.newPassword = newPw;
+    }
+    
+    public String getNewPassword2(){
+        return newPassword2;
+    }
+    
+    public void setNewPassword2(String newPw){
+        this.newPassword2 = newPw;
+    }
+    
+    // actions
     
     public String login()
     {
@@ -84,7 +106,14 @@ public class SecurityBean implements java.io.Serializable {
         return authed ? "login" : "adminLogin";
     }
     
-    
+    public void changePassword(){
+        if(newPassword.length() > 0 && authed && newPassword.equals(newPassword2)){
+            boolean result = ControllerFactory.getController().updatePassword(userName, newPassword);
+            newPassword = "";
+            newPassword2 = "";
+            System.out.println(userName+ " password Changed: "+result);
+        }
+    }
     
     
     

@@ -23,16 +23,18 @@
             <to-view-id>create.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>user.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
     </navigation-rule>
-     <navigation-rule>
+    <navigation-rule>
         <from-view-id>/adminLogin.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>login</from-outcome>
@@ -49,39 +51,22 @@
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>login</from-outcome>
-            <to-view-id>index.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
         <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>user.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>findFriends</from-outcome>
             <to-view-id>findFriends.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule> <!--adding 'search' feature-->
-        <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>search</from-outcome>
             <to-view-id>userInfo.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-    </navigation-rule>
-    <navigation-rule> <!--adding 'search' feature-->
-        <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>addRelationship</from-outcome>
             <to-view-id>addRelationship.xhtml</to-view-id>
@@ -93,6 +78,14 @@
         <navigation-case>
             <from-outcome>user</from-outcome>
             <to-view-id>index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+     </navigation-rule>
+     <navigation-rule>
+        <from-view-id>/findFriends.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>user</from-outcome>
+            <to-view-id>userInfo.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
      </navigation-rule>
