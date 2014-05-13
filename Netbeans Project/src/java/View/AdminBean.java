@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package View;
-
 
 import javax.inject.Named;
 import Controller.ControllerFactory;
@@ -23,20 +21,21 @@ import javax.faces.component.UIForm;
 
 /**
  * Holds administrative functions as delete and edit user
+ *
  * @author dst
  */
-
 @Named("AdminBean")
 @RequestScoped
 public class AdminBean implements java.io.Serializable {
-        
-     @ManagedProperty(value="#{SecurityBean}")
-    private SecurityBean securityBean; 
-     @ManagedProperty(value="#{InformationBean}")
-    private InformationBean informationBean; 
-     private List<User> currentListOfUsers;     
+
+    @ManagedProperty(value = "#{SecurityBean}")
+    private SecurityBean securityBean;
+    @ManagedProperty(value = "#{InformationBean}")
+    private InformationBean informationBean;
+    private List<User> currentListOfUsers;
     private String password;
-      //<editor-fold desc="beans">
+
+    //<editor-fold desc="beans">
     public SecurityBean getSecurityBean() {
         return securityBean;
     }
@@ -54,7 +53,7 @@ public class AdminBean implements java.io.Serializable {
     }
 
     //</editor-fold>
-    public List<User> getCurrentListOfUsers() {        
+    public List<User> getCurrentListOfUsers() {
         currentListOfUsers = ControllerFactory.getController().getAllUsers();
         return currentListOfUsers;
     }
@@ -65,22 +64,18 @@ public class AdminBean implements java.io.Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }        
-    
-    public String delete(User user)
-    {        
-        if(securityBean.isLoggedIn())
-        {
-            if(ControllerFactory.getController().delete(user.getUsername(), securityBean.getUserName(), password))
-            {
+    }
+
+    public String delete(User user) {
+        if (securityBean.isLoggedIn()) {
+            if (ControllerFactory.getController().delete(user.getUsername(), securityBean.getUserName(), password)) {
                 return "usersTrue";
             }
         }
         return "usersFalse";
     }
-    
-    public String edit(User user)
-    {
+
+    public String edit(User user) {
         return "editUser";
     }
 }
