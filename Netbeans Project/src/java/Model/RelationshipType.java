@@ -16,4 +16,6 @@ public class RelationshipType {
     public String getType() {
         return type;
     }
+    
+    
 }

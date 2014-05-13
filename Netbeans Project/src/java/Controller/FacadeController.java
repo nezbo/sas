@@ -141,6 +141,18 @@ public class FacadeController implements Controller {
     }
     
     @Override
+    public boolean removeRelationship(String currentUsername, String otherUsername)
+    {
+        try {
+            return DBConnection.deleteRelationship(currentUsername, otherUsername);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+    
+    @Override
     public List<Relationship> getRelationships(String username) {
         try {
             return DBConnection.getRelationshipsFromUser(username);
