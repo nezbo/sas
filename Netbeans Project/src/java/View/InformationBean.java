@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
 import Model.User;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +62,5 @@ public class InformationBean implements java.io.Serializable {
     public void setShowUser(User showUser) {
         this.showUser = showUser;
     }
-
-    
    
 }

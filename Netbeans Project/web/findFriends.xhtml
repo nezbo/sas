@@ -50,6 +50,7 @@
                     <br/>
                     <h2 class="form-signin-heading">Add your relationships here</h2> 
                     <h:form>
+                        <!-- OUR OWN DATA -->
                         <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="user">
                             <h:column>
                                 <f:facet name="header"/>                                                                   
@@ -57,7 +58,6 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="dropdown"/>
-                                <!--<div id="dropdownDiv" class="dropdown-backdrop">-->
                                 <h:selectOneMenu value="#{RelationshipBean.selectedRelationshipResult}" 
                                                  onchange="submit()" 
                                                  valueChangeListener="#{RelationshipBean.addRelationShip(user)}" 
@@ -65,11 +65,16 @@
                                     <f:selectItem itemValue="#{null}" itemLabel="--relationship type--"/>
                                     <f:selectItems value="#{RelationshipBean.relationshipTypes}"/>
                                 </h:selectOneMenu>
-                                <!--</div>-->
                             </h:column>
+                        </h:dataTable>
+                        <br/>
+                        External Users: <br/>
+                        
+                        <!-- EXTERNAL DATA -->
+                        <h:dataTable value="#{RelationshipBean.externalUsers}" var="user">
                             <h:column>
-                                <f:facet name="addfriend"/>
-                                
+                                <f:facet name="header"/>                                                                   
+                                <h:commandLink value="#{user.name}" action="#{ViewUserBean.goToFriend(user)}"/>
                             </h:column>
                         </h:dataTable>
                         
