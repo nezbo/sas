@@ -56,7 +56,11 @@
                             Address:
                             <h:inputText id="address" class="form-control" size="15" maxlength="255" value="#{AdminEditUserBean.address}" /><br/>
                             Hobbies:
-                            <h:inputText id="hobbies" class="form-control" size="15" maxlength="255" value="#{AdminEditUserBean.hobbies}" /><br/>
+                            <h:inputText id="hobbies" class="form-control" size="15" maxlength="255" value="#{AdminEditUserBean.hobbies}" /><br/><br/>
+                            New Password:
+                            <h:inputSecret id="newPass" class="form-control" size="150" maxlength="255" value="#{AdminEditUserBean.newPassword}" />
+                            Repeat Password:
+                            <h:inputSecret id="newPass2" class="form-control" size="150" maxlength="255" value="#{AdminEditUserBean.newPassword2}" /><br/>
                             <h:commandButton id="btnSaveUserInfo" class="btn btn-lg btn-primary" value="Save" action="#{AdminEditUserBean.save}"/>
                     </h:form>
                 </div>

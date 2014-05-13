@@ -35,6 +35,9 @@ public class AdminEditUserBean implements java.io.Serializable {
     private String name = "";
     private String address = "";
     private String hobbies = "";
+    
+    private String newPassword = "";
+    private String newPassword2 = "";
 
     public void getUser() {
         
@@ -111,6 +114,22 @@ public class AdminEditUserBean implements java.io.Serializable {
     public void setHobbies(String hobbies) {
         this.hobbies = hobbies;
     }
+    
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getNewPassword2() {
+        return newPassword2;
+    }
+
+    public void setNewPassword2(String newPassword2) {
+        this.newPassword2 = newPassword2;
+    }
 
     /**
      * saves the data on user page
@@ -119,7 +138,16 @@ public class AdminEditUserBean implements java.io.Serializable {
      */
     public String save() {
         ControllerFactory.getController().updateUserInfo(username, name, address, hobbies, "");//@TODO: implement friends
+        changePassword();
         return "user";//missing some more security handling
     }
 
+    public void changePassword(){
+        if(newPassword.length() > 0 && securityBean.isAdmin() && newPassword.equals(newPassword2)){
+            boolean result = ControllerFactory.getController().updatePassword(username, newPassword);
+            newPassword = "";
+            newPassword2 = "";
+            System.out.println(username+ " password Changed: "+result);
+        }
+    }
 }
