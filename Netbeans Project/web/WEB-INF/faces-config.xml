@@ -49,6 +49,14 @@
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
+        <from-view-id>/adminUsers.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>editUser</from-outcome>
+            <to-view-id>adminEditUser.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>login</from-outcome>
@@ -134,6 +142,34 @@
         <managed-property>
             <property-name>informationBean</property-name>
             <value>#{InformationBean}</value>
+        </managed-property>
+        <!--
+        <managed-property>
+            <property-name>relationshipBean</property-name>
+            <value>#{RelationshipBean}</value>
+        </managed-property>
+        -->
+    </managed-bean> 
+    
+    <!-- AdminEditUserBean --> 
+    <managed-bean>
+        <managed-bean-name>AdminEditUserBean</managed-bean-name>
+        <managed-bean-class>View.AdminEditUserBean</managed-bean-class> 
+        <managed-bean-scope>request</managed-bean-scope>
+        
+        <managed-property> 
+            <property-name>securityBean</property-name> 
+            <value>#{SecurityBean}</value> 
+        </managed-property>
+        
+        <managed-property>
+            <property-name>informationBean</property-name>
+            <value>#{InformationBean}</value>
+        </managed-property>
+        
+        <managed-property> 
+            <property-name>username</property-name> 
+            <value>#{param.id}</value> 
         </managed-property>
         <!--
         <managed-property>

@@ -33,6 +33,7 @@ public class SecurityBean implements java.io.Serializable {
     {
        userName="";
        authed=false;
+       AdminLogin = false;
        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
        return logOut;
     }
@@ -95,4 +96,8 @@ public class SecurityBean implements java.io.Serializable {
     
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+
+    boolean isAdmin() {
+        return AdminLogin;
+    }
 }
