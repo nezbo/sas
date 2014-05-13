@@ -520,28 +520,10 @@ public class ControllerTest {
     // admin delete success
     @Test
     public void testAdminDeleteSuccess(){
-        boolean result = c.delete("testUser", "testAdmin", "password");
+        boolean result = c.delete("testUser");
         
         assertTrue("admin delete success", result);
         assertNull("admin delete success - removed", DBConnection.getUser("testUser"));
-    }
-    
-    // admin delete (not admin)
-    @Test
-    public void testAdminDeleteNotAdmin(){
-        boolean result = c.delete("testUser", "testUser", "password");
-        
-        assertFalse("admin delete - not admin", result);
-        assertNotNull("not admin delete - not removed", DBConnection.getUser("testUser"));
-    }
-    
-    // admin delete wrong password
-    @Test
-    public void testAdminDeleteWrongPassword(){
-        boolean result = c.delete("testUser", "testAdmin", "passwordxxx");
-        
-        assertFalse("admin delete - wrong password", result);
-        assertNotNull("wrong password delete - not removed", DBConnection.getUser("testUser"));
     }
     
     // admin delete self (fail) - DO NOT RUN UNTIL IF WE CANT CREATE BY CODE
@@ -553,29 +535,11 @@ public class ControllerTest {
         assertNotNull("admin delete self - not removed", DBConnection.getUser("testAdmin"));
     }*/
     
-    // null admin delete
-    @Test
-    public void testAdminDeleteNullAdmin(){
-        boolean result = c.delete("testUser", null, "password");
-        
-        assertFalse("admin delete - null admin", result);
-        assertNotNull("null admin delete - not removed", DBConnection.getUser("testUser"));
-    }
-    
-    // null password delete
-    @Test
-    public void testAdminDeleteNullPassword(){
-        boolean result = c.delete("testUser", "testAdmin", null);
-        
-        assertFalse("admin delete - null password", result);
-        assertNotNull("null password delete - not removed", DBConnection.getUser("testUser"));
-    }
-    
     // admin delete null user
     @Test
     public void testAdminDeleteNullUser(){
         int size = DBConnection.getAllUsers().size();
-        boolean result = c.delete(null, "testAdmin", "password");
+        boolean result = c.delete(null);
         
         assertFalse("admin delete - null user", result);
         assertTrue("null password delete - none removed", DBConnection.getAllUsers().size() == size);
@@ -585,7 +549,7 @@ public class ControllerTest {
     @Test
     public void testAdminDeleteWrongUser(){
         int size = DBConnection.getAllUsers().size();
-        boolean result = c.delete("testWrongUser", "testAdmin", "password");
+        boolean result = c.delete("testWrongUser");
         
         assertFalse("admin delete - wrong user", result);
         assertTrue("wrong user delete - none removed", DBConnection.getAllUsers().size() == size);

@@ -51,6 +51,14 @@
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
+        <from-view-id>/adminUsers.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>refresh</from-outcome>
+            <to-view-id>adminUsers.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
         <from-view-id>/user.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>user</from-outcome>
