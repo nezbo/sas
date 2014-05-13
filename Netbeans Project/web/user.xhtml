@@ -78,6 +78,10 @@
                                 <f:facet name="header"/>
                                 <h:commandLink value="#{relationship.toUser.name} (#{relationship.relationshipType.type})" action="#{ViewUserBean.goToFriend(relationship.toUser)}"/>
                             </h:column>
+                            <h:column>
+                                <f:facet name="remove_friend"/>
+                                <h:commandLink value="(remove)" action="#{RelationshipBean.removeRelationship(relationship.toUser)}"/>
+                            </h:column>
                         </h:dataTable>
                     </h:form>
                 </div>

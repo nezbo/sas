@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 
 /**
  *
@@ -44,7 +47,7 @@ public class RelationshipBean implements java.io.Serializable {
      // Relationships
      private List<Relationship> relationships;          // All relationship this user has to other users
      private Map<String, Object> relationshipTypes;
-     private String selectedRelationshipType;
+     private RelationshipType selectedRelationshipResult;
 
      /**
       * Adds a hug from the current user to 'user'
@@ -129,9 +132,14 @@ public class RelationshipBean implements java.io.Serializable {
         return relationshipTypes;
     }
     
-    public String getSelectedRelationshipType()
+    public RelationshipType getSelectedRelationshipResult()
     {
-        return selectedRelationshipType;
+        return selectedRelationshipResult;
+    }
+    
+    public void setSelectedRelationshipResult(RelationshipType type)
+    {
+        selectedRelationshipResult = type;
     }
 
     public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
@@ -156,18 +164,46 @@ public class RelationshipBean implements java.io.Serializable {
     
     public String addRelationShip(User user)
     {        
+        System.err.println("In AddRelationship for " + user.getName());
+        System.out.println("In addRelationship, selectedRelationshipResult == null: " + selectedRelationshipResult == null);
+        //int typeId = selectedRelationshipResult.getId();
         if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  1))
         {
-            return "added";
+            System.out.println("Adding relationship between " + user.getName() + " and " + securityBean.getUserName());
+            return "user";
         }
         else
-            return securityBean.getUserName()+user.getUsername();
-
-//if(securityBean.isLoggedIn()){
-        
-            //ControllerFactory.getController().addRelationShip(securityBean.getUserName(), informationBean.getCurrentListOfUsers().get(id), )
-        
+            return "user";
     }
     
+    public String removeRelationship(User user)
+    {
+        String myUsername = securityBean.getUserName();
+        String hisUsername = user.getUsername();
+        if (ControllerFactory.getController().removeRelationship(myUsername, hisUsername))
+        {
+            return "user"; 
+        }
+        else
+            return "user";
+    }
     
+    public Converter getConverter()
+    {
+        return new Converter(){
+
+            @Override
+            public Object getAsObject(FacesContext context, UIComponent component, String value) {
+                
+                return getRelationshipTypes().get(value);
+            }
+
+            @Override
+            public String getAsString(FacesContext context, UIComponent component, Object value) {
+                if (value == null) return "";
+                RelationshipType type = (RelationshipType)value;
+                return type.getType()+"";
+            }
+        };
+    }
 }

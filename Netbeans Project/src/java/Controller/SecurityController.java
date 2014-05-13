@@ -89,6 +89,8 @@ public class SecurityController implements Controller {
 
     @Override
     public boolean updatePassword(String username, String password) {
+        if(username == null || password == null) return false;
+        
         // Check length of values
         if(username == null || password == null || username.length() > 31 || password.length() > 255)
             return false;
@@ -131,6 +133,12 @@ public class SecurityController implements Controller {
         if(!found) return false;
         
         return FacadeController.getInstance().setRelationship(currentUserName, otherUserName, relationshipType);
+    }
+    
+    @Override
+    public boolean removeRelationship(String currentUsername, String otherUsername)
+    {
+        return FacadeController.getInstance().removeRelationship(currentUsername, otherUsername);
     }
     
     @Override

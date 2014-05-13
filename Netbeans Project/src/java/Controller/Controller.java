@@ -77,6 +77,7 @@ public interface Controller {
     
     public boolean setRelationship(String currentUserName, String otherUserName, int relationshipType);
     
+    public boolean removeRelationship(String currentUsername, String otherUsername);
     
     /**
      * gets the hugs for a specific user

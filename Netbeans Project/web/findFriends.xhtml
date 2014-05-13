@@ -50,7 +50,7 @@
                     <br/>
                     <h2 class="form-signin-heading">Add your relationships here</h2> 
                     <h:form>
-                        <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="dataItem">
+                        <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="user">
                             <h:column>
                                 <f:facet name="header"/>                                                                   
                                 <h:commandLink value="#{dataItem.name}" action="#{ViewUserBean.goToFriend(dataItem)}"/>
@@ -58,10 +58,13 @@
                             <h:column>
                                 <f:facet name="dropdown"/>
                                 <!--<div id="dropdownDiv" class="dropdown-backdrop">-->
-                                <!--<h:selectOneMenu value="#{RelationshipBean.selectedRelationshipType}">
-                                    <f:selectItem itemValue="#{null}" itemLabel=" relationship type "/>
+                                <h:selectOneMenu value="#{RelationshipBean.selectedRelationshipResult}" 
+                                                 onchange="submit()" 
+                                                 valueChangeListener="#{RelationshipBean.addRelationShip(user)}" 
+                                                 converter="#{RelationshipBean.converter}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--relationship type--"/>
                                     <f:selectItems value="#{RelationshipBean.relationshipTypes}"/>
-                                </h:selectOneMenu>-->
+                                </h:selectOneMenu>
                                 <!--</div>-->
                             </h:column>
                             <h:column>

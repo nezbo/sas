@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author marcher89
+ * @author Martin Marcher & Jonas Breindahl
  */
 public class DBConnection {
 
@@ -82,6 +82,9 @@ public class DBConnection {
         for (RelationshipType rt : getAllRelationshipTypes()) {
             System.out.println("RelationshipType: [id: " + rt.getId() + ", type: " + rt.getType() + "]");
         }
+        
+        for (Relationship r : getRelationshipsFromUser("user"))
+            System.out.println(r.getFromUser().getName() + " - " + r.getToUser().getName());
     }
 
     //<editor-fold desc="Login">
@@ -320,7 +323,7 @@ public class DBConnection {
                         "UPDATE Relationship "
                       + "SET Relationship.relationship_type=? "
                       + "WHERE Relationship.from_id = ? "
-                      + "AND Relationship.to_id = ?", getUserConnection());
+                      + "AND Relationship.to_id = ?;", getUserConnection());
             stmt.setInt(1, relationshipTypeId);
             stmt.setInt(2, u1.getId());
             stmt.setInt(3, u2.getId());
@@ -330,7 +333,7 @@ public class DBConnection {
             
             // Create Relationship
             stmt = getPreparedStatement(
-                    "INSERT INTO Relationship (from_id, to_id, relationship_type)"
+                    "INSERT INTO Relationship (from_id, to_id, relationship_type) "
                   + "VALUES (?, ?, ?);", getUserConnection());
             stmt.setInt(1, u1.getId());
             stmt.setInt(2, u2.getId());
@@ -398,11 +401,11 @@ public class DBConnection {
         
         try {
             PreparedStatement stmt = getPreparedStatement(
-                            "DELETE FROM Relationship"
-                          + "WHERE from_id = ?"
+                            "DELETE FROM Relationship "
+                          + "WHERE from_id = ? "
                           + "AND to_id = ?;", getUserConnection());
-            stmt.setString(1, fromUsername);
-            stmt.setString(2, toUsername);
+            stmt.setInt(1, u1.getId());
+            stmt.setInt(2, u2.getId());
             
             return stmt.executeUpdate() == 1;
         }
