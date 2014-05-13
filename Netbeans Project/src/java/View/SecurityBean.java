@@ -115,9 +115,6 @@ public class SecurityBean implements java.io.Serializable {
             System.out.println(userName+ " password Changed: "+result);
         }
     }
-    
-    
-    
 
     public boolean isLoggedIn(){
         return authed;
