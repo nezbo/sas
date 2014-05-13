@@ -200,12 +200,13 @@ public class FacadeController implements Controller {
     }
 
     @Override
-    public boolean delete(String usernameToDelete, String admin, String password) {
+    public boolean delete(String username) {
         try{                      
-                return DBConnection.deleteUser(usernameToDelete);           
+                return DBConnection.deleteUser(username);           
         }
         catch(Exception e)
         {
+            System.err.println(e);
             return false;
         }
     }

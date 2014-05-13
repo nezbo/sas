@@ -67,12 +67,11 @@ public class AdminBean implements java.io.Serializable {
     }
 
     public String delete(User user) {
-        if (securityBean.isLoggedIn()) {
-            if (ControllerFactory.getController().delete(user.getUsername(), securityBean.getUserName(), password)) {
-                return "usersTrue";
-            }
+        if (securityBean.isAdmin()) {
+            boolean result = ControllerFactory.getController().delete(user.getUsername());
+            System.out.println("Admin delete user \""+user.getUsername()+"\": "+result);
         }
-        return "usersFalse";
+        return "refresh";
     }
 
     public String edit(User user) {

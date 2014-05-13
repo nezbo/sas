@@ -32,7 +32,7 @@ public interface Controller {
      * @param username
      * @return 
      */
-    public boolean delete(String usernameToDelete, String admin, String password);
+    public boolean delete(String username);
     /**
      * Checks if a username and password is a valid admin account
      * It is assumed that you come from the adminLogin page when calling this method

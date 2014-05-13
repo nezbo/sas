@@ -196,15 +196,9 @@ public class SecurityController implements Controller {
     }
 
     @Override
-    public boolean delete(String usernameToDelete, String admin, String password) {
-        if(usernameToDelete == null || admin == null || password == null) return false;
-        
-        if(authenticateAdmin(admin,password))
-        {
-            return FacadeController.getInstance().delete(usernameToDelete, admin, password);
-        }else{
-            return false;
-        }
-            
+    public boolean delete(String usernameToDelete) {
+        if(usernameToDelete == null) return false;
+
+        return FacadeController.getInstance().delete(usernameToDelete);          
     }
 }
