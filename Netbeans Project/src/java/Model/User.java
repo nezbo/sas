@@ -12,7 +12,7 @@ package Model;
  */
 public class User {
         private String name;
-        private int id;
+        private int id = -1;
         private String username;
         private String address;
         private String hobbies;

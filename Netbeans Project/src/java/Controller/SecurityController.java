@@ -11,6 +11,7 @@ import static Database.DBConnection.getUser;
 import Model.RelationshipType;
 import Model.Relationship;
 import Model.User;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -208,5 +209,49 @@ public class SecurityController implements Controller {
         if(usernameToDelete == null) return false;
 
         return FacadeController.getInstance().delete(usernameToDelete);          
+    }
+
+    @Override
+    public List<User> getExternalUsers() {
+        List<User> result = FacadeController.getInstance().getExternalUsers();
+        
+        if(result == null) result = new ArrayList<User>();
+        
+        return result;
+    }
+
+    @Override
+    public User getExternalUser(String key) {
+        User defaultUser = new User("<missing name>",key,"<missing address>","<missing hobbies>",key);
+        if(key == null || key.length() == 0) return defaultUser;
+        
+        User result = FacadeController.getInstance().getExternalUser(key);
+        
+        if(result == null) result = defaultUser;
+        result = sanitize(result);
+        
+        return result;
+    }
+    
+    private User sanitize(User user){
+        // strip for tags
+        String name = sanitize(user.getName());
+        String username = sanitize(user.getUsername());
+        String address = sanitize(user.getAddress());
+        String hobbies = sanitize(user.getHobbies());
+        int id = user.getId();
+        String key = user.getKey();
+        
+        if(id == -1){
+            return new User(name,username,address,hobbies,key);
+        }
+        return new User(name,username,address,hobbies,id);
+    }
+    
+    private String sanitize(String str){
+        return str.replace("<script>", "[script]")
+                .replace("<object>", "[object]")
+                .replace("<embed>", "[embed]")
+                .replace("<link>", "[link]");
     }
 }

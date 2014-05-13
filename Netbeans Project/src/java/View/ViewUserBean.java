@@ -68,7 +68,7 @@ public class ViewUserBean implements java.io.Serializable {
                     this.setHobbies("");
                 }
             }else{ // external
-                user = loadDetailedExternal(user);
+                user = ControllerFactory.getController().getExternalUser(user.getKey());
                 if(user != null){
                     this.setIsNotMyself(true);
                     this.setAddress(user.getAddress());
@@ -77,24 +77,6 @@ public class ViewUserBean implements java.io.Serializable {
                 }
             }
         }
-    }
-    
-    private User loadDetailedExternal(User user){
-        try {
-            JSONObject json = RelationshipBean.httpGetJSON("https://192.237.211.45/service/users/"+user.getKey());
-            JSONArray hobbies = json.getJSONArray("hobbies");
-            String sHobbies = "";
-            for(int i = 0; i < hobbies.length(); i++){
-                sHobbies += hobbies.getString(i)+"\n";
-            }
-            User newUser = new User(user.getName(),user.getUsername(),user.getAddress(),sHobbies,user.getKey());
-            
-            return newUser;
-                    
-        } catch (JSONException ex) {
-            Logger.getLogger(ViewUserBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
     
    public String goToFriend(User user)

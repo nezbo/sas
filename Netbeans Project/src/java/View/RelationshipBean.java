@@ -132,76 +132,9 @@ public class RelationshipBean implements java.io.Serializable {
      */
     public List<User> getExternalUsers(){
         if(external == null){
-            try{
-                JSONObject all_external = RelationshipBean.httpGetJSON("https://192.237.211.45/service/users/");
-                ArrayList<User> result = new ArrayList<User>();
-
-                JSONArray arr = all_external.getJSONArray("users");
-                for(int i = 0; i < arr.length(); i++){
-                    String user = arr.getString(i);
-                    result.add(new User(user,user,"<no address>","<no hobbies>",user));
-                }
-
-                external = result;
-                return result;
-            }catch(JSONException ex){
-                System.out.println(ex);
-            }
+            external = ControllerFactory.getController().getExternalUsers();
         }
         return external;
-    }
-    
-    public static JSONObject httpGetJSON(String string_url){
-        try {
-            // ssl bypassing
-            TrustManager trm = new X509TrustManager() {
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-                @Override
-                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
-                @Override
-                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
-                
-                
-            };
-            
-            HostnameVerifier allHostsValid = new HostnameVerifier(){
-                @Override
-                public boolean verify(String string, SSLSession ssls) {
-                    return true; // all good
-                }
-            };
-             
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, new TrustManager[] { trm }, new java.security.SecureRandom());
-            //HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-            // apply ssl bypassing only on current request
-            URL url = new URL(string_url);
-            URLConnection conn = url.openConnection();
-            HttpsURLConnection httpsconn = (HttpsURLConnection)conn;
-            httpsconn.setSSLSocketFactory(sc.getSocketFactory());
-            httpsconn.setHostnameVerifier(allHostsValid);
-            
-            // actual http get
-            Scanner scanner = new Scanner(conn.getInputStream());
-            String response = scanner.useDelimiter("\\Z").next();
-            JSONObject json = new JSONObject(response);
-            scanner.close();
-
-            return json;
-             
-        } catch ( NoSuchAlgorithmException | KeyManagementException ex) {
-            Logger.getLogger(RelationshipBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            System.out.println("EX:"+ex);
-        } catch ( IOException | JSONException ex) {
-            System.out.println("EX:"+ex);
-        }
-        // something went wrong, nothing to get
-        return null;
     }
     
      /**
