@@ -63,6 +63,7 @@ public class RelationshipBean implements java.io.Serializable {
              // TODO: REMOVE A HUG YOU HAVE "RE-HUGGED"
              //ControllerFactory.getController().removeHugs(securityBean.getUserName(), l); //wanna delete it but does not work
          }
+         
          return "user";
      }
      
@@ -143,7 +144,7 @@ public class RelationshipBean implements java.io.Serializable {
     }
 
     public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
-        this.currentListOfUsersNotFriends = currentListOfUsersNotFriends;
+        this.currentListOfUsersNotFriends = currentListOfUsers;
     }
      
     public SecurityBean getSecurityBean() {
@@ -170,10 +171,10 @@ public class RelationshipBean implements java.io.Serializable {
         if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  1))
         {
             System.out.println("Adding relationship between " + user.getName() + " and " + securityBean.getUserName());
-            return "user";
+            return "myuser";
         }
         else
-            return "user";
+            return "myuser";
     }
     
     public String removeRelationship(User user)
@@ -185,7 +186,7 @@ public class RelationshipBean implements java.io.Serializable {
             return "user"; 
         }
         else
-            return "user";
+            return "fail";
     }
     
     public Converter getConverter()

@@ -323,7 +323,7 @@ public class DBConnection {
                         "UPDATE relationship "
                       + "SET relationship.relationship_type=? "
                       + "WHERE relationship.from_id = ? "
-                      + "AND relationship.to_id = ?", getUserConnection());
+                      + "AND relationship.to_id = ?;", getUserConnection());
             stmt.setInt(1, relationshipTypeId);
             stmt.setInt(2, u1.getId());
             stmt.setInt(3, u2.getId());
@@ -333,7 +333,7 @@ public class DBConnection {
             
             // Create Relationship
             stmt = getPreparedStatement(
-                    "INSERT INTO relationship (from_id, to_id, relationship_type)"
+                    "INSERT INTO relationship (from_id, to_id, relationship_type) "
                   + "VALUES (?, ?, ?);", getUserConnection());
             stmt.setInt(1, u1.getId());
             stmt.setInt(2, u2.getId());
@@ -401,15 +401,15 @@ public class DBConnection {
         
         try {
             PreparedStatement stmt = getPreparedStatement(
-                            "DELETE FROM relationship"
-                          + "WHERE from_id = ?"
+                            "DELETE FROM relationship "
+                          + "WHERE from_id = ? "
                           + "AND to_id = ?;", getUserConnection());
             stmt.setInt(1, u1.getId());
             stmt.setInt(2, u2.getId());
             
             return stmt.executeUpdate() == 1;
         }
-        catch (Exception e) {
+        catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -625,7 +625,7 @@ public class DBConnection {
         try{
             int from = getUser(username).getId();
             int to = getUser(toUsername).getId();
-            PreparedStatement stmt = getPreparedStatement("insert into hug(from_id, to_id) values (?,?)", getUserConnection());
+            PreparedStatement stmt = getPreparedStatement("insert into hug(from_id, to_id) values (?,?);", getUserConnection());
             stmt.setInt(1, from);
             stmt.setInt(2, to);                    
             return stmt.executeUpdate() == 1;

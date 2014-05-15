@@ -80,7 +80,7 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="remove_friend"/>
-                                <h:commandLink value="(remove)" action="#{RelationshipBean.removeRelationship(relationship.toUser)}"/>
+                                <h:commandButton id="btnRemoveFriend" class="btn btn-group-lg btn-primary" value="Remove" action="#{RelationshipBean.removeRelationship(relationship.toUser)}"/>
                             </h:column>
                         </h:dataTable>
                     </h:form>
@@ -101,7 +101,7 @@
                             <h:column>
                                 <f:facet name="header"/>                                                                   
                                 <h:outputText value="#{user.name}"/>
-                                <h:commandButton value="Hug!" action="#{RelationshipBean.hug(user)}" />
+                                <h:commandButton value="Hug!" class="btn btn-group-lg btn-primary" action="#{RelationshipBean.hug(user)}" />
                             </h:column>
                         </h:dataTable>
                     </h:form>             

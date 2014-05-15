@@ -148,6 +148,7 @@ public class FacadeController implements Controller {
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
             return false;
         }
     }
