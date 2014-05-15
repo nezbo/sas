@@ -554,4 +554,27 @@ public class ControllerTest {
         assertFalse("admin delete - wrong user", result);
         assertTrue("wrong user delete - none removed", DBConnection.getAllUsers().size() == size);
     }
+    
+    @Test
+    public void testGetExternalUsersNotNull() {
+        List<User> result = c.getExternalUsers();
+        for(User u : result) assertNotNull(u);
+    }
+    
+    @Test
+    public void testGetExternalUserExists(){
+        List<User> result = c.getExternalUsers();
+        for(User u : result) assertNotNull(c.getExternalUser(u.getKey()));
+    }
+    
+    @Test
+    public void testGetExternalUserNotExist(){
+        String[] testArr = new String[]{"a", "b", "c", "d"};
+        for (String s : testArr) assertNull(c.getExternalUser(s));
+    }
+    
+    @Test
+    public void testGetExternalUserNull(){
+        assertNull(c.getExternalUser(null));
+    }
 }
