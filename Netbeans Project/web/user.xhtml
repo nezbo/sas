@@ -48,6 +48,7 @@
                     
                     <br/>
                     <h2 class="form-signin-heading">Here you can edit your profile</h2> 
+                    
                     <h:form class="form-signin">
         
                             Name:
@@ -60,6 +61,7 @@
                             <h:inputSecret id="newPass" class="form-control" size="150" maxlength="255" value="#{SecurityBean.newPassword}" disabled="#{ViewUserBean.isNotMyself}" />
                             Repeat Password:
                             <h:inputSecret id="newPass2" class="form-control" size="150" maxlength="255" value="#{SecurityBean.newPassword2}" disabled="#{ViewUserBean.isNotMyself}" /><br/>
+                    <h:outputLabel>Your password must contain at least 8 character, capital and non-capital letters as well as numbers and symbols.</h:outputLabel><br/><br/>        
                             <h:commandButton id="btnSaveUserInfo" class="btn btn-lg btn-primary" value="Save" action="#{ViewUserBean.save}"/>
                             <h:commandButton id="btnFindFriends" class="btn btn-lg btn-primary" value="Find Others" action="findFriends"/>
                     </h:form>

@@ -36,7 +36,7 @@ public class CreateBean implements java.io.Serializable {
     private static final String RECAPTCHA_PRIVATE_KEY = "6LeJQvESAAAAAAM4WMQUzf-3vBXCdHCx7chdu9YB";
     
     @ManagedProperty(value="#{loginBean}")
-    private SecurityBean loginBean; // +setter
+    private SecurityBean loginBean; // +setter    
     
     private String username;
     private String password;
@@ -80,36 +80,26 @@ public class CreateBean implements java.io.Serializable {
     public String createUser(){
         try{
             if(validateCaptcha()){
-                Pattern p = Pattern.compile("(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*");//works a bit diferently than javascript. this works, javascript version does not : ^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$
-                java.util.regex.Matcher m = p.matcher(password);
-                
-                 if (m.find()) {
-                     if(password.equals(password2)){
-                         if(!username.equals(password)){
-                            //needs minimum 8 chars, capital letters, non-capital letters, numbers and special characters.
+               String error = loginBean.validatePassword(username, password, password2);
+               if(error.equals(""))
+               {//needs minimum 8 chars, capital letters, non-capital letters, numbers and special characters.
                             boolean result = ControllerFactory.getController().createUser(username, password);
                             if(result){
                                 loginBean.setLoginUserName(username);
                                 return "index";
                             }
                             else
-                                errorMessage ="Unable to create user at this time, please try again later";
-                         }
-                         else
-                             errorMessage = "Username and password must not match";
-                     }
-                     else
-                          errorMessage ="The passwords typed in must match";
-                }
-                 else
-                    errorMessage ="Please input a password which contains, at least 8 character, capital and non-capital letters as well as numbers and symbols. Allowed symbols are !\\\"#¤%&/()=`^*_:;@£$€{<>\\\\+¨~";
+                                errorMessage ="Unable to create user at this time, please try again later[IN]";                        
+               }
+               else
+                   errorMessage= error;
             }
             else
                 errorMessage ="Invalid captcha, please try again.";
             
         }catch(IOException e){
             System.out.println(e.toString());
-            errorMessage ="Unable to create user at this time, please try again later";
+            errorMessage ="Unable to create user at this time, please try again later [CA]";
         }
         return "create";
     }

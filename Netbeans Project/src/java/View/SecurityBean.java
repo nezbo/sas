@@ -9,6 +9,8 @@ package View;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import Controller.ControllerFactory;
+import java.io.IOException;
+import java.util.regex.Pattern;
 import javax.faces.context.FacesContext;
 
 /**
@@ -108,11 +110,19 @@ public class SecurityBean implements java.io.Serializable {
     }
     
     public void changePassword(){
-        if(newPassword.length() > 0 && authed && newPassword.equals(newPassword2)){
-            boolean result = ControllerFactory.getController().updatePassword(userName, newPassword);
-            newPassword = "";
-            newPassword2 = "";
-            System.out.println(userName+ " password Changed: "+result);
+        String error= validatePassword(userName, newPassword, newPassword2);
+        if(error.equals(""))
+        {
+            if(newPassword.length() > 0 && authed && newPassword.equals(newPassword2)){
+                boolean result = ControllerFactory.getController().updatePassword(userName, newPassword);
+                newPassword = "";
+                newPassword2 = "";
+                System.out.println(userName+ " password Changed: "+result);
+            }
+        }
+        else
+        {
+            //@TODO:output error to form
         }
     }
 
@@ -126,4 +136,28 @@ public class SecurityBean implements java.io.Serializable {
     boolean isAdmin() {
         return AdminLogin;
     }
+    
+    public String validatePassword(String username, String password, String password2)
+    {                
+                Pattern p = Pattern.compile("(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*");//works a bit diferently than javascript. this works, javascript version does not : ^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$
+                java.util.regex.Matcher m = p.matcher(password);
+                
+                 if (m.find()) {
+                     if(password.equals(password2)){
+                         if(!username.equals(password)){
+                            //needs minimum 8 chars, capital letters, non-capital letters, numbers and special characters.
+                            return "";
+                            
+                            
+                         }
+                         else
+                             return "Username and password must not match";
+                     }
+                     else
+                          return "The passwords typed in must match";
+                }
+                 else
+                    return "Please input a password which contains, at least 8 character, capital and non-capital letters as well as numbers and symbols. Allowed symbols are !\\\"#¤%&/()=`^*_:;@£$€{<>\\\\+¨~";                                        
+    }
+            
 }
