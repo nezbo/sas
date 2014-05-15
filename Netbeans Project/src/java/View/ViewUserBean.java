@@ -8,11 +8,16 @@ package View;
 
 import Controller.ControllerFactory;
 import Model.User;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.inject.Named;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -33,30 +38,44 @@ public class ViewUserBean implements java.io.Serializable {
 
     private String name="";
     private String address="";
-    private String hobbies="";   
+    private String hobbies="";
     
-    public void getUser(String userName)
-    {        
-        if(userName!=null){
-            User user = ControllerFactory.getController().getUser(userName);
-            if(user!=null)
-            {
-                if(userName.equals(securityBean.getUserName())){
-                    this.setAddress(user.getAddress());
+    public void getUser(String username){
+        getUser(ControllerFactory.getController().getUser(username));
+    }
+    
+    public void getUser(User user)
+    {
+        System.out.println(user);
+        if(user!=null){
+            if(!user.isExternal()){
+                // update
+                user = ControllerFactory.getController().getUser(user.getUsername());
+                if(user!=null)
+                {
+                    if(user.getUsername().equals(securityBean.getUserName())){
+                        this.setAddress(user.getAddress());
+                    }
+
+                    this.setName(user.getName());
+                    this.setUsername(user.getUsername());
+
+                    this.setHobbies(user.getHobbies());
                 }
-
-                this.setName(user.getName());
-                this.setUsername(user.getUsername());
-
-                this.setHobbies(user.getHobbies());
+                else{//remove the user found before if no user is found
+                    this.setName("");
+                    this.setAddress("");
+                    this.setHobbies("");
+                }
+            }else{ // external
+                user = ControllerFactory.getController().getExternalUser(user.getKey());
+                if(user != null){
+                    this.setIsNotMyself(true);
+                    this.setAddress(user.getAddress());
+                    this.setName(user.getName());
+                    this.setHobbies(user.getHobbies());
+                }
             }
-            else{//remove the user found before if no user is found
-                userName="";
-                this.setName("");
-                this.setAddress("");
-                this.setHobbies("");
-            }
-            //perhaps show a no user page?
         }
     }
     
@@ -92,16 +111,6 @@ public class ViewUserBean implements java.io.Serializable {
     {
         this.informationBean = informationBean;
     }
-    
-    
-/*    public boolean getisMyself(){
-        // look at loginBean.isLoggedIn() and check username matches
-        
-            
-        
-        return true;                      
-    }
-  */
     
     public boolean isIsMyself()
     {
@@ -183,6 +192,4 @@ public class ViewUserBean implements java.io.Serializable {
         this.getUser(this.getShowUser());
         return "search";
     }
-    
-    
 }

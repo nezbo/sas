@@ -12,16 +12,36 @@ import Controller.ControllerFactory;
 import Model.Relationship;
 import Model.RelationshipType;
 import Model.User;
-import java.util.AbstractList;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -43,6 +63,7 @@ public class RelationshipBean implements java.io.Serializable {
      // Users
      private List<User> currentListOfUsers;
      private List<User> currentListOfUsersNotFriends;
+     private List<User> external = null;
      
      // Relationships
      private List<Relationship> relationships;          // All relationship this user has to other users
@@ -104,6 +125,17 @@ public class RelationshipBean implements java.io.Serializable {
 
     public void setRelationships(List<Relationship> relationships) {
         this.relationships = relationships;
+    }
+    
+    /**
+     * Gets the users from an external service.
+     * @return A list of the users packed as our own
+     */
+    public List<User> getExternalUsers(){
+        if(external == null){
+            external = ControllerFactory.getController().getExternalUsers();
+        }
+        return external;
     }
     
      /**

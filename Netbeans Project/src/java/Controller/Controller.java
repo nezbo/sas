@@ -57,10 +57,25 @@ public interface Controller {
     public User getUser(int id);
     
     /**
+     * Fetches a user from the external API of Group 5 with the
+     * given key.
+     * @param key The unique identifier of the user.
+     * @return A complete user object (relative to their values)
+     */
+    public User getExternalUser(String key);
+    
+    /**
      * Gets information for all users in the database, for searching etc.
      * @return An array of User objects.
      */
     public List<User> getAllUsers();
+    
+    /**
+     * Fetches all the (shallow) users from external API of Group 5.
+     * @return A list of users, missing hobbies
+     */
+    public List<User> getExternalUsers();
+    
     public List<Relationship> getRelationships(String username);
     public List<User> getAllUsersNotFriends(String username);
     public boolean createUser(String username, String password);

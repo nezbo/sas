@@ -10,11 +10,32 @@ import Database.DBConnection;
 import Model.RelationshipType;
 import Model.Relationship;
 import Model.User;
+import View.RelationshipBean;
+import View.ViewUserBean;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Serves as the entry point to all other controllers, for the view class, through SecurityController
@@ -223,11 +244,104 @@ public class FacadeController implements Controller {
             return false;
         }
     }
+    
+    @Override 
+    public List<User> getExternalUsers(){
+        try{
+            JSONObject all_external = httpGetJSON("https://192.237.211.45/service/users/");
+            ArrayList<User> result = new ArrayList<User>();
+
+            JSONArray arr = all_external.getJSONArray("users");
+            for(int i = 0; i < arr.length(); i++){
+                String user = arr.getString(i);
+                result.add(new User(user,user,"<no address>","<no hobbies>",user));
+            }
+            return result;
+        }catch(JSONException ex){
+            System.out.println(ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public User getExternalUser(String key){
+            try {
+            JSONObject json = httpGetJSON("https://192.237.211.45/service/users/"+key);
+            JSONArray hobbies = json.getJSONArray("hobbies");
+            String sHobbies = "";
+            for(int i = 0; i < hobbies.length(); i++){
+                sHobbies += hobbies.getString(i)+"\n";
+            }
+            User newUser = new User(key,key,"",sHobbies,key);
+            
+            return newUser;
+                    
+        } catch (JSONException ex) {
+            Logger.getLogger(ViewUserBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public String hashPassword(int salt, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         
          MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest((salt+password).getBytes("UTF-8"));
             return new String(hash);
+    }
+    
+    // PRIVATE HELPER METHODS
+    
+    private JSONObject httpGetJSON(String string_url){
+        try {
+            // ssl bypassing
+            TrustManager trm = new X509TrustManager() {
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
+                @Override
+                public void checkServerTrusted(X509Certificate[] xcs, String string) throws CertificateException {}
+                
+                
+            };
+            
+            HostnameVerifier allHostsValid = new HostnameVerifier(){
+                @Override
+                public boolean verify(String string, SSLSession ssls) {
+                    return true; // all good
+                }
+            };
+             
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, new TrustManager[] { trm }, new java.security.SecureRandom());
+            //HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+            // apply ssl bypassing only on current request
+            URL url = new URL(string_url);
+            URLConnection conn = url.openConnection();
+            HttpsURLConnection httpsconn = (HttpsURLConnection)conn;
+            httpsconn.setSSLSocketFactory(sc.getSocketFactory());
+            httpsconn.setHostnameVerifier(allHostsValid);
+            
+            // actual http get
+            Scanner scanner = new Scanner(conn.getInputStream());
+            String response = scanner.useDelimiter("\\Z").next();
+            JSONObject json = new JSONObject(response);
+            scanner.close();
+
+            return json;
+             
+        } catch ( NoSuchAlgorithmException | KeyManagementException ex) {
+            Logger.getLogger(RelationshipBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            System.out.println("EX:"+ex);
+        } catch ( IOException | JSONException ex) {
+            System.out.println("EX:"+ex);
+        }
+        // something went wrong, nothing to get
+        return null;
     }
 }
