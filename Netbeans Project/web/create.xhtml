@@ -7,7 +7,11 @@
         <meta charset="utf-8"></meta>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+        <script src="js/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
         <link href="css/bootstrap.min.css" rel="stylesheet"></link>
+         <link href="css/passwordTest.css" rel="stylesheet"></link>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,9 +20,34 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function($) {
+             $('#form-signin\\:passstrength').value="asds123";
+            //http://jsfiddle.net/aleem/KE3RB/8/
+        $('#form-signin\\:password').keyup(function(e) {
+     var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+     var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+     var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+     if (false == enoughRegex.test($(this).val())) {
+             $('#form-signin\\:passstrength').html('More Characters');
+             $('#form-signin\\:passstrength').attr('class', 'error');
+     } else if (strongRegex.test($(this).val())) {
+             $('#form-signin\\:passstrength').attr('class',  'ok');
+             $('#form-signin\\:passstrength').html('Strong password!');
+     } else if (mediumRegex.test($(this).val())) {
+             $('#form-signin\\:passstrength').attr('class', 'alert');
+             $('#form-signin\\:passstrength').html('Medium password!');
+     } else {
+             $('#form-signin\\:passstrength').attr('class', 'error');
+             $('#form-signin\\:passstrength').html('Weak password!');
+     }
+     return true;
+    });
+})
+        
+    </script>
+    
     </h:head>
     <h:body>
         <!--topmenu-->
@@ -43,12 +72,14 @@
                     
                     <br/>
                     <h2 class="form-signin-heading">Please create user</h2> 
-                    <h:form class="form-signin">
+                    <h:form id="form-signin" class="form-signin">
+                        <h:outputLabel class="error" value="#{CreateBean.errorMessage}"></h:outputLabel>
+                        <br/>
                         Username:
                         <h:inputText  class="form-control" required='true' id="username" size="15" maxlength="31" value="#{CreateBean.username}"/>
                         <br/>
                         Password:
-                        <h:inputSecret class="form-control" required='true'  id="password" size="15" maxlength="255" value="#{CreateBean.password}"/>
+                        <h:inputSecret class="form-control" required='true'  id="password" size="15" maxlength="255" value="#{CreateBean.password}"/><h:outputLabel id="passstrength"></h:outputLabel>
                         <br/>
                         Repeat Password:
                         <h:inputSecret class="form-control" required='true'  id="password2" size="15" maxlength="255" value="#{CreateBean.password2}"/>

@@ -17,9 +17,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.tomcat.util.file.Matcher;
+import sun.misc.Regexp;
 
 /**
  *
@@ -38,6 +41,13 @@ public class CreateBean implements java.io.Serializable {
     private String username;
     private String password;
     private String password2;
+    private String errorMessage ="";
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    
 
     public String getUsername() {
         return username;
@@ -63,17 +73,43 @@ public class CreateBean implements java.io.Serializable {
         this.password2 = password2;
     }
     
+    /**
+     * Creates a user if all requirements are met.
+     * @return 
+     */
     public String createUser(){
         try{
             if(validateCaptcha()){
-                boolean result = ControllerFactory.getController().createUser(username, password);
-                if(result){
-                    loginBean.setLoginUserName(username);
-                    return "index";
+                Pattern p = Pattern.compile("(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*");//works a bit diferently than javascript. this works, javascript version does not : ^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$
+                java.util.regex.Matcher m = p.matcher(password);
+                
+                 if (m.find()) {
+                     if(password.equals(password2)){
+                         if(!username.equals(password)){
+                            //needs minimum 8 chars, capital letters, non-capital letters, numbers and special characters.
+                            boolean result = ControllerFactory.getController().createUser(username, password);
+                            if(result){
+                                loginBean.setLoginUserName(username);
+                                return "index";
+                            }
+                            else
+                                errorMessage ="Unable to create user at this time, please try again later";
+                         }
+                         else
+                             errorMessage = "Username and password must not match";
+                     }
+                     else
+                          errorMessage ="The passwords typed in must match";
                 }
+                 else
+                    errorMessage ="Please input a password which contains, at least 8 character, capital and non-capital letters as well as numbers and symbols. Allowed symbols are !\\\"#¤%&/()=`^*_:;@£$€{<>\\\\+¨~";
             }
+            else
+                errorMessage ="Invalid captcha, please try again.";
+            
         }catch(IOException e){
             System.out.println(e.toString());
+            errorMessage ="Unable to create user at this time, please try again later";
         }
         return "create";
     }

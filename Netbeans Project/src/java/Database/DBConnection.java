@@ -770,7 +770,26 @@ public class DBConnection {
             }
             return preparedStmts.get(sql);*/
         } catch (SQLException ex) {
-            return null; //TODO: Do something cleverer! But what?
+            System.out.println(ex.getStackTrace());
+            try{
+            if(conn!=null)
+            {
+                    if(conn.isClosed())
+                    {
+                        System.out.println("Database Error - Connection is closed.");     
+                        
+                    }
+                    
+            }
+            else
+                        System.out.println("Database Error - Connection has not been initialized");
+            }
+            catch(SQLException ex2)
+            {
+                System.out.println("Database Error - Please check status of database");
+                return null; //TODO: Do something cleverer! But what?
+            }
+            return null; //@TODO: add handling to reload database connections.
         }
     }
     //</editor-fold>
