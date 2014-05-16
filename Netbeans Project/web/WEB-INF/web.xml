@@ -16,7 +16,6 @@
  <error-page>
         <exception-type>java.lang.Exception</exception-type>
         <location>/errorpage.jsp</location>
-   
  </error-page> 
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>

@@ -50,6 +50,15 @@
                     <br/>
                     <h2 class="form-signin-heading">Add your relationships here</h2> 
                     <h:form>
+                        <h:selectOneMenu value="#{RelationshipBean.selectedRelationshipResult}" 
+                                                 onchange="submit()"                                                  
+                                                 converter="#{RelationshipBean.converter}">
+                                    <f:selectItem itemValue="#{null}" itemLabel="--relationship type--"/>
+                                    <f:selectItems value="#{RelationshipBean.relationshipTypes}"/>
+                                </h:selectOneMenu>
+                    </h:form>
+                        
+                    <h:form>
                         <!-- OUR OWN DATA -->
                         <h:dataTable value="#{RelationshipBean.currentListOfUsersNotFriends}" var="user">
                             <h:column>
@@ -57,14 +66,8 @@
                                 <h:commandLink value="#{user.name}" action="#{ViewUserBean.goToFriend(user)}"/>
                             </h:column>
                             <h:column>
-                                <f:facet name="dropdown"/>
-                                <h:selectOneMenu value="#{RelationshipBean.selectedRelationshipResult}" 
-                                                 onchange="submit()" 
-                                                 valueChangeListener="#{RelationshipBean.addRelationShip(user)}" 
-                                                 converter="#{RelationshipBean.converter}">
-                                    <f:selectItem itemValue="#{null}" itemLabel="--relationship type--"/>
-                                    <f:selectItems value="#{RelationshipBean.relationshipTypes}"/>
-                                </h:selectOneMenu>
+                                <f:facet name="Add"/>                                
+                                <h:commandButton value="Add" action="#{RelationshipBean.addRelationShip(user)}" ></h:commandButton>
                             </h:column>
                         </h:dataTable>
                         <br/>

@@ -12,36 +12,16 @@ import Controller.ControllerFactory;
 import Model.Relationship;
 import Model.RelationshipType;
 import Model.User;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
+import javax.enterprise.context.SessionScoped;
+
 
 /**
  *
@@ -49,7 +29,7 @@ import org.codehaus.jettison.json.JSONObject;
  */
 
 @Named("RelationshipBean")
-@RequestScoped
+@SessionScoped
 public class RelationshipBean implements java.io.Serializable {
      // Properties
      @ManagedProperty(value="#{SecurityBean}")
@@ -69,6 +49,8 @@ public class RelationshipBean implements java.io.Serializable {
      private List<Relationship> relationships;          // All relationship this user has to other users
      private Map<String, Object> relationshipTypes;
      private RelationshipType selectedRelationshipResult;
+     private int selected;
+     
 
      /**
       * Adds a hug from the current user to 'user'
@@ -161,19 +143,25 @@ public class RelationshipBean implements java.io.Serializable {
             for(RelationshipType type : ControllerFactory.getController().getRelationShipTypes())
                 relationshipTypes.put(type.getType(), type);
         }
-        System.out.println(relationshipTypes.size());
+        //System.out.println(relationshipTypes.size());
         return relationshipTypes;
     }
-    
-    public RelationshipType getSelectedRelationshipResult()
-    {
+
+    public RelationshipType getSelectedRelationshipResult() {
         return selectedRelationshipResult;
     }
-    
-    public void setSelectedRelationshipResult(RelationshipType type)
-    {
-        selectedRelationshipResult = type;
+
+    public void setSelectedRelationshipResult(RelationshipType selectedRelationshipResult) {
+        selected = selectedRelationshipResult.getId();
+        informationBean.anInt=selected;                
+        System.out.println(selected);
+        System.out.println("set"+selectedRelationshipResult.getType());
+        
+        this.selectedRelationshipResult = selectedRelationshipResult;
     }
+    
+  
+   
 
     public void setCurrentListOfUsersNotFriends(List<User> currentListOfUsers) {
         this.currentListOfUsersNotFriends = currentListOfUsers;
@@ -196,17 +184,23 @@ public class RelationshipBean implements java.io.Serializable {
     }
     
     public String addRelationShip(User user)
-    {        
-        System.err.println("In AddRelationship for " + user.getName());
-        System.out.println("In addRelationship, selectedRelationshipResult == null: " + selectedRelationshipResult == null);
-        //int typeId = selectedRelationshipResult.getId();
-        if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  1))
+    {                
+        System.out.println(informationBean.anInt);
+        selected = informationBean.anInt;
+        if(selected>0)        
         {
-            System.out.println("Adding relationship between " + user.getName() + " and " + securityBean.getUserName());
-            return "myuser";
+            
+            if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  selected))
+            {
+                System.out.println("Adding relationship between " + user.getName() + " and " + securityBean.getUserName());
+                return "myuser";
+            }
+            else{
+                System.out.print(user.getName() + " and " + securityBean.getUserName());
+            }
+                return "myuser";
         }
-        else
-            return "myuser";
+        return "mysuser";
     }
     
     public String removeRelationship(User user)

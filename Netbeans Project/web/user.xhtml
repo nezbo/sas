@@ -81,6 +81,10 @@
                                 <h:commandLink value="#{relationship.toUser.name} (#{relationship.relationshipType.type})" action="#{ViewUserBean.goToFriend(relationship.toUser)}"/>
                             </h:column>
                             <h:column>
+                                <f:facet name="hug_friend"/>
+                                <h:commandButton id="btnHugFriend" class="btn btn-group-lg btn-primary" value="hug" action="#{RelationshipBean.hug(relationship.toUser)}"/>
+                            </h:column>
+                            <h:column>
                                 <f:facet name="remove_friend"/>
                                 <h:commandButton id="btnRemoveFriend" class="btn btn-group-lg btn-primary" value="Remove" action="#{RelationshipBean.removeRelationship(relationship.toUser)}"/>
                             </h:column>
