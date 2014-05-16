@@ -13,9 +13,14 @@
     <transport-guarantee>CONFIDENTIAL</transport-guarantee>
   </user-data-constraint>
 </security-constraint>
+ <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/errorpage.jsp</location>
+   
+ </error-page> 
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>Production</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
