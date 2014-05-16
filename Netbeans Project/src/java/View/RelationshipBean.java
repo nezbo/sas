@@ -143,7 +143,6 @@ public class RelationshipBean implements java.io.Serializable {
             for(RelationshipType type : ControllerFactory.getController().getRelationShipTypes())
                 relationshipTypes.put(type.getType(), type);
         }
-        //System.out.println(relationshipTypes.size());
         return relationshipTypes;
     }
 
@@ -153,9 +152,7 @@ public class RelationshipBean implements java.io.Serializable {
 
     public void setSelectedRelationshipResult(RelationshipType selectedRelationshipResult) {
         selected = selectedRelationshipResult.getId();
-        informationBean.anInt=selected;                
-        System.out.println(selected);
-        System.out.println("set"+selectedRelationshipResult.getType());
+        informationBean.selectedRelType=selected;                
         
         this.selectedRelationshipResult = selectedRelationshipResult;
     }
@@ -185,22 +182,16 @@ public class RelationshipBean implements java.io.Serializable {
     
     public String addRelationShip(User user)
     {                
-        System.out.println(informationBean.anInt);
-        selected = informationBean.anInt;
+        selected = informationBean.selectedRelType;
         if(selected>0)        
         {
             
             if(ControllerFactory.getController().setRelationship(securityBean.getUserName(), user.getUsername(),  selected))
             {
-                System.out.println("Adding relationship between " + user.getName() + " and " + securityBean.getUserName());
                 return "myuser";
             }
-            else{
-                System.out.print(user.getName() + " and " + securityBean.getUserName());
-            }
-                return "myuser";
         }
-        return "mysuser";
+        return "myuser";
     }
     
     public String removeRelationship(User user)

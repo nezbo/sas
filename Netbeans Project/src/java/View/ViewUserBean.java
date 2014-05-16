@@ -46,7 +46,6 @@ public class ViewUserBean implements java.io.Serializable {
     
     public void getUser(User user)
     {
-        System.out.println(user);
         if(user!=null){
             if(!user.isExternal()){
                 // update
@@ -81,9 +80,8 @@ public class ViewUserBean implements java.io.Serializable {
     
    public String goToFriend(User user)
    {
-       System.out.println("going to: "+user);
        informationBean.setShowUser(user);
-       return "user";
+       return "userInfo";
    }
     
     public boolean isIsNotMyself() {

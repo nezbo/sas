@@ -117,7 +117,6 @@ public class SecurityBean implements java.io.Serializable {
                 boolean result = ControllerFactory.getController().updatePassword(userName, newPassword);
                 newPassword = "";
                 newPassword2 = "";
-                System.out.println(userName+ " password Changed: "+result);
             }
         }
         else

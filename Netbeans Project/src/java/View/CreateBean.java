@@ -98,7 +98,7 @@ public class CreateBean implements java.io.Serializable {
                 errorMessage ="Invalid captcha, please try again.";
             
         }catch(IOException e){
-            System.out.println(e.toString());
+            System.err.println(e.toString());
             errorMessage ="Unable to create user at this time, please try again later [CA]";
         }
         return "create";
@@ -131,7 +131,6 @@ public class CreateBean implements java.io.Serializable {
         br.close();
         
         boolean validated = result.startsWith("true");
-        System.out.println("CAPTCHA Validation result: "+validated);
         return validated;
     }
     

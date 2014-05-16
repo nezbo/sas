@@ -169,7 +169,7 @@ public class FacadeController implements Controller {
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }
@@ -217,7 +217,7 @@ public class FacadeController implements Controller {
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            System.err.println(e);
             return false;
         }
     }
@@ -258,7 +258,7 @@ public class FacadeController implements Controller {
             }
             return result;
         }catch(JSONException ex){
-            System.out.println(ex);
+            System.err.println(ex);
         }
         return null;
     }
@@ -337,9 +337,9 @@ public class FacadeController implements Controller {
         } catch ( NoSuchAlgorithmException | KeyManagementException ex) {
             Logger.getLogger(RelationshipBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
-            System.out.println("EX:"+ex);
+            System.err.println("EX:"+ex);
         } catch ( IOException | JSONException ex) {
-            System.out.println("EX:"+ex);
+            System.err.println("EX:"+ex);
         }
         // something went wrong, nothing to get
         return null;

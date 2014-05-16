@@ -147,7 +147,6 @@ public class AdminEditUserBean implements java.io.Serializable {
             boolean result = ControllerFactory.getController().updatePassword(username, newPassword);
             newPassword = "";
             newPassword2 = "";
-            System.out.println(username+ " password Changed: "+result);
         }
     }
 }

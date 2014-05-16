@@ -114,7 +114,7 @@ public class DBConnection {
             int count = stmt.getResultSet().getInt(1);
             return count > 0;
         } catch (SQLException ex) {
-            System.out.println(ex.toString());
+            System.err.println(ex.toString());
             return false;
         }
     }
@@ -312,12 +312,7 @@ public class DBConnection {
         try {
             User u1 = getUser(fromUsername);
             User u2 = getUser(toUsername);
-            /*// Check if the new relationshiptype id exists in the table RelationshipType
-            PreparedStatement stmt = getPreparedStatement("SELECT * FROM RelationshipType WHERE id=?;", getUserConnection());
-            stmt.setInt(1, relationshipTypeId);
-            if (!stmt.executeQuery().first()) return false;
-                    System.out.println(2);*/
-            
+
             // Update Relationship
             PreparedStatement stmt = getPreparedStatement(
                         "UPDATE relationship "
@@ -343,8 +338,8 @@ public class DBConnection {
         }
         catch (Exception e) {
             // TODO: Handle error
-            System.out.println(fromUsername +" -> "+toUsername+" = "+relationshipTypeId);
-            System.out.println("error: " + e.getMessage());
+            System.err.println(fromUsername +" -> "+toUsername+" = "+relationshipTypeId);
+            System.err.println("error: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -750,8 +745,7 @@ public class DBConnection {
         try {
             con = DriverManager.getConnection("jdbc:mysql://" + url + ":" + port + "/" + database, roles.get(role)[0], roles.get(role)[1]);
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            //TODO: Error handling
+            System.err.println(ex.getMessage());
         }
         return con;
     }
@@ -770,23 +764,23 @@ public class DBConnection {
             }
             return preparedStmts.get(sql);*/
         } catch (SQLException ex) {
-            System.out.println(ex.getStackTrace());
+            System.err.println(ex.getStackTrace());
             try{
             if(conn!=null)
             {
                     if(conn.isClosed())
                     {
-                        System.out.println("Database Error - Connection is closed.");     
+                        System.err.println("Database Error - Connection is closed.");     
                         
                     }
                     
             }
             else
-                        System.out.println("Database Error - Connection has not been initialized");
+                        System.err.println("Database Error - Connection has not been initialized");
             }
             catch(SQLException ex2)
             {
-                System.out.println("Database Error - Please check status of database");
+                System.err.println("Database Error - Please check status of database");
                 return null; //TODO: Do something cleverer! But what?
             }
             return null; //@TODO: add handling to reload database connections.
