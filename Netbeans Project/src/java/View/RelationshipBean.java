@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.enterprise.context.SessionScoped;
 
 
 /**
@@ -29,7 +29,7 @@ import javax.enterprise.context.SessionScoped;
  */
 
 @Named("RelationshipBean")
-@SessionScoped
+@RequestScoped
 public class RelationshipBean implements java.io.Serializable {
      // Properties
      @ManagedProperty(value="#{SecurityBean}")
@@ -76,10 +76,12 @@ public class RelationshipBean implements java.io.Serializable {
       */
      public List<User> getUsersWhoHuggedMe() 
      {
-         usersWhoHuggedMe = ControllerFactory.getController().getHugs(securityBean.getUserName());
-         if (usersWhoHuggedMe == null){
-             // TODO: HANDLE THIS CASE
-             usersWhoHuggedMe = new ArrayList<User>();
+         if(usersWhoHuggedMe!=null){
+            usersWhoHuggedMe = ControllerFactory.getController().getHugs(securityBean.getUserName());
+            if (usersWhoHuggedMe == null){
+                // TODO: HANDLE THIS CASE
+                usersWhoHuggedMe = new ArrayList<User>();
+            }
          }
          
          return usersWhoHuggedMe;

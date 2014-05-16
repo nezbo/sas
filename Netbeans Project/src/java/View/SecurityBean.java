@@ -34,6 +34,19 @@ public class SecurityBean implements java.io.Serializable {
     private String newPassword = "";
     private String newPassword2 = "";
     
+    
+     public void redirectIfNotLoggedInUser() throws IOException
+    {
+        if(!authed)
+        {FacesContext.getCurrentInstance().getExternalContext().redirect("/ssasf14");        }
+    }
+    
+    public void redirectIfNotLoggedInAdmin() throws IOException
+    {
+        if(!authed || !AdminLogin)
+        {FacesContext.getCurrentInstance().getExternalContext().redirect("/ssasf14");        }
+    }
+    
     public String logOut()
     {
        userName="";

@@ -4,7 +4,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-    <f:metadata>        
+    <f:metadata>   
+        <f:event type="preRenderView" listener="#{SecurityBean.redirectIfNotLoggedInUser()}"/>
         <f:event type="preRenderView" listener="#{ViewUserBean.getUser(InformationBean.showUser)}"/>
     </f:metadata>
     
