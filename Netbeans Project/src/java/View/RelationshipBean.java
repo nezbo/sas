@@ -117,7 +117,11 @@ public class RelationshipBean implements java.io.Serializable {
         if(external == null){
             external = ControllerFactory.getController().getExternalUsers();
         }
-        return external;
+        
+        if(securityBean.isLoggedIn()){
+            return external;
+        }
+        return new ArrayList<User>();
     }
     
      /**

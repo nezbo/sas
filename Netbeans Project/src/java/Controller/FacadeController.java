@@ -24,6 +24,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,6 +57,8 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean authenticate(String username, String password) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s authenticate: %s", new Date(), username));
         try{
             int salt = DBConnection.getSalt(username);
             String hashPassword =hashPassword(salt,password);
@@ -71,6 +74,8 @@ public class FacadeController implements Controller {
     
     @Override
     public boolean authenticateAdmin(String username, String password) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s authenticateAdmin: %s", new Date(), username));
         try{
             int salt = DBConnection.getAdminSalt(username);
             String hashPassword = hashPassword(salt,password);
@@ -86,12 +91,16 @@ public class FacadeController implements Controller {
     
     @Override
     public User getUser(String username) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getUser: %s", new Date(), username));
         //@todo: handle bad user
         return DBConnection.getUser(username);
     }
     
     @Override
     public User getUser(int id) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getUser: %s", new Date(), id));
         //@todo: handle bad user
         return DBConnection.getUser(id);
     }
@@ -103,6 +112,9 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean createUser(String username, String password) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s createUser: %s", new Date(), username));
+        
         try{
             //hash password
             //@Todo: use salts https://crackstation.net/hashing-security.htm#properhashing
@@ -120,11 +132,15 @@ public class FacadeController implements Controller {
    
     @Override
     public boolean updateUserInfo(String oldUsername, String name, String address, String hobbies, String friends) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s updateUserInfo: %s, %s, %s, %s, %s", new Date(), oldUsername,name,address,hobbies,friends));
         return DBConnection.updateUserInfo(oldUsername, name, address, hobbies, friends);
     }
 
     @Override
     public boolean updatePassword(String userName, String password) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s updatePassword: %s", new Date(), userName));
         try{
             int salt = (int)(Math.random()*Integer.MAX_VALUE);
             String passwordHash = hashPassword(salt,password);
@@ -151,9 +167,10 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean setRelationship(String currentUserName, String addedFriendUserName, int relationshipType) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s setRelationship: %s -> %s = %s", new Date(), currentUserName, addedFriendUserName, relationshipType));
         try{
             return DBConnection.setRelationship(currentUserName, addedFriendUserName, relationshipType);
-            
         }
         catch(Exception e)
         {
@@ -164,6 +181,8 @@ public class FacadeController implements Controller {
     @Override
     public boolean removeRelationship(String currentUsername, String otherUsername)
     {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s removeRelationship: %s -> %s", new Date(), currentUsername, otherUsername));
         try {
             return DBConnection.deleteRelationship(currentUsername, otherUsername);
         }
@@ -176,6 +195,8 @@ public class FacadeController implements Controller {
     
     @Override
     public List<Relationship> getRelationships(String username) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getRelationships: %s", new Date(), username));
         try {
             return DBConnection.getRelationshipsFromUser(username);
         }
@@ -188,6 +209,8 @@ public class FacadeController implements Controller {
 
     @Override
     public List<User> getAllUsersNotFriends(String username) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getAllUsersNotFriends: %s", new Date(), username));
         try{
             
             return DBConnection.getAllUsersNotFriends(username);
@@ -201,6 +224,8 @@ public class FacadeController implements Controller {
 
     @Override
     public List<User> getHugs(String username) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getHugs: %s", new Date(), username));
         try{
         return DBConnection.getHugUsers(username);
         }
@@ -212,6 +237,8 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean giveHug(String fromUsername, String toUsername) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s giveHug: %s -> %s", new Date(), fromUsername,toUsername));
         try{
             return DBConnection.addHug(fromUsername, toUsername);
         }
@@ -224,6 +251,8 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean removeHugs(String username, List<User> users) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s removeHugs: %s -> [%s]", new Date(), username, users));
         try{
         return DBConnection.removeHugs(username, users);
         }
@@ -235,6 +264,8 @@ public class FacadeController implements Controller {
 
     @Override
     public boolean delete(String username) {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s delete: %s", new Date(), username));
         try{                      
                 return DBConnection.deleteUser(username);           
         }
@@ -247,6 +278,8 @@ public class FacadeController implements Controller {
     
     @Override 
     public List<User> getExternalUsers(){
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getExternalUsers", new Date()));
         try{
             JSONObject all_external = httpGetJSON("https://192.237.211.45/service/users/");
             ArrayList<User> result = new ArrayList<User>();
@@ -265,7 +298,9 @@ public class FacadeController implements Controller {
     
     @Override
     public User getExternalUser(String key){
-            try {
+        Logger.getLogger(FacadeController.class.getName()).log(Level.INFO, 
+                String.format("%s getExternalUser: %s", new Date(), key));
+        try {
             JSONObject json = httpGetJSON("https://192.237.211.45/service/users/"+key);
             JSONArray hobbies = json.getJSONArray("hobbies");
             String sHobbies = "";
@@ -282,15 +317,15 @@ public class FacadeController implements Controller {
         return null;
     }
     
-    public String hashPassword(int salt, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    // PRIVATE HELPER METHODS
+    
+    private String hashPassword(int salt, String password) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         
          MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest((salt+password).getBytes("UTF-8"));
             return new String(hash);
     }
-    
-    // PRIVATE HELPER METHODS
     
     private JSONObject httpGetJSON(String string_url){
         try {

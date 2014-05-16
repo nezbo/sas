@@ -80,16 +80,20 @@ public class SecurityController implements Controller {
     public boolean createUser(String username, String password) {
         // invalid values
         try{
-        if(username == null || password == null || username.length() > 31 || password.length() > 252 || username=="") //dont want too large names into database
-            return false;
-        
-        // existing user
-        if(DBConnection.getUser(username) != null) return false;
-        
-        return FacadeController.getInstance().createUser(username, password);
+            if(username == null || password == null || username.length() > 31 || password.length() > 252 || username==""){ //dont want too large names into database
+                return false;
+            }
+
+            // existing user
+            if(DBConnection.getUser(username) != null){
+                return false;
+            }
+
+            return FacadeController.getInstance().createUser(username, password);
         }
         catch(Exception e)
         {
+            System.err.println(e);
             return false;//error
         }
     }
