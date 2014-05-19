@@ -76,13 +76,11 @@ public class RelationshipBean implements java.io.Serializable {
       */
      public List<User> getUsersWhoHuggedMe() 
      {
-         if(usersWhoHuggedMe!=null){
-            usersWhoHuggedMe = ControllerFactory.getController().getHugs(securityBean.getUserName());
-            if (usersWhoHuggedMe == null){
-                // TODO: HANDLE THIS CASE
-                usersWhoHuggedMe = new ArrayList<User>();
-            }
-         }
+        usersWhoHuggedMe = ControllerFactory.getController().getHugs(securityBean.getUserName());
+        if (usersWhoHuggedMe == null){
+            // TODO: HANDLE THIS CASE
+            usersWhoHuggedMe = new ArrayList<User>();
+        }
          
          return usersWhoHuggedMe;
      }

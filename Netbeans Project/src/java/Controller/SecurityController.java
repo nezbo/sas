@@ -232,13 +232,12 @@ public class SecurityController implements Controller {
 
     @Override
     public User getExternalUser(String key) {
-        User defaultUser = new User("<missing name>",key,"<missing address>","<missing hobbies>",key);
+        User defaultUser = null; //new User("<missing name>",key,"<missing address>","<missing hobbies>",key);
         if(key == null || key.length() == 0) return defaultUser;
         
         User result = FacadeController.getInstance().getExternalUser(key);
         
-        if(result == null) result = defaultUser;
-        result = sanitize(result);
+        if(result != null) result = sanitize(result);
         
         return result;
     }

@@ -65,7 +65,7 @@ public class AdminBeanTest {
         User user = DBConnection.getUser("testUser");
         String result = ab.delete(user);
         
-        assertEquals("Deleting user without admin auth", "usersFalse", result);
+        assertEquals("Deleting user without admin auth", "refresh", result);
     }
     
     @Test
@@ -78,7 +78,7 @@ public class AdminBeanTest {
         
         String result = ab.delete(user);
         
-        assertEquals("Deleting user correctly (testAdmin must exist)", "usersTrue", result);
+        assertEquals("Deleting user correctly (testAdmin must exist)", "refresh", result);
     }
     
     @Test
@@ -92,6 +92,6 @@ public class AdminBeanTest {
         ab.delete(user);
         String result = ab.delete(user);
         
-        assertEquals("Deleting non-existing user (testAdmin must exist)", "usersFalse", result);
+        assertEquals("Deleting non-existing user (testAdmin must exist)", "refresh", result);
     }
 }
